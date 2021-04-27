@@ -109,6 +109,15 @@ const asyncRoutes = [
           title: 'Role Permission',
           roles: ['admin']
         }
+      },
+      {
+        path: 'AddressList',
+        component: 'views/permission/AddressList',
+        name: 'AddressList',
+        meta: {
+          title: 'Address Lisst',
+          roles: ['admin']
+        }
       }
     ]
   },
