@@ -1,5 +1,10 @@
 <template>
   <div class="dashboard-editor-container">
+    <div class="chart-wrapper">
+      <el-drag-select v-model="value" style="width:100%;" multiple placeholder="Catalog">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+      </el-drag-select>
+    </div>
     <el-row :gutter="8">
       <el-col :xs="{span: 6}" :sm="{span: 6}" :md="{span: 6}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
         <product-card />
@@ -42,6 +47,9 @@
         <product-card />
       </el-col>
     </el-row>
+    <div class="chart-wrapper">
+      <pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    </div>
   </div>
 </template>
 
@@ -56,6 +64,8 @@
 // import TodoList from './components/TodoList'
 // import BoxCard from './components/BoxCard'
 import ProductCard from './components/ProductCard'
+import ElDragSelect from '@/components/DragSelect' // base on element-ui
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 const lineChartData = {
   newVisitis: {
@@ -88,17 +98,60 @@ export default {
     // TransactionTable,
     // TodoList,
     // BoxCard,
-    ProductCard
+    ProductCard,
+    ElDragSelect,
+    Pagination
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      lineChartData: lineChartData.newVisitis,
+      total: 10,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        importance: undefined,
+        title: undefined,
+        type: undefined,
+        sort: '+id'
+      },
+      value: [],
+      options: [{
+        value: 'Mobile Phones',
+        label: 'Mobile Phones'
+      }, {
+        value: 'Tablets',
+        label: 'Tablets'
+      }, {
+        value: 'Portable Electronics',
+        label: 'Portable Electronics'
+      }, {
+        value: 'Home Appliances',
+        label: 'Home Appliances'
+      }, {
+        value: 'TV & Home Theater',
+        label: 'TV & Home Theater'
+      }]
     }
+  },
+  created() {
+    this.getList()
   },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
     }
+    // getList() {
+    //   this.listLoading = true
+    //   fetchList(this.listQuery).then(response => {
+    //     this.list = response.data.items
+    //     this.total = response.data.total
+
+    //     // Just to simulate the time of the request
+    //     setTimeout(() => {
+    //       this.listLoading = false
+    //     }, 1.5 * 1000)
+    //   })
+    // }
   }
 }
 </script>
@@ -117,8 +170,7 @@ export default {
   }
 
   .chart-wrapper {
-    background: #fff;
-    padding: 16px 16px 0;
+    padding: 0px 10px 0;
     margin-bottom: 32px;
   }
 }

@@ -12,13 +12,14 @@
       <div class="description-item">
         <span>Almost new IPhone XS. Original Pack. White. </span>
       </div>
-      <div>
-        <mallki class="start-item" text="Start:" />
-        <mallki class="time-item" text="2021 May 25 12:00 A.M." />
+      <div class="start-item">
+        <Countdown deadline="2021/05/13" />
       </div>
-      <mallki class="start-item" text="End:" />
-      <mallki class="time-item" text="2021 April 25 12:00 A.M." />
-
+      <div>
+        <el-button style="width: 100%" type="primary" @click.prevent.stop="guide">
+          Bid
+        </el-button>
+      </div>
     </div>
   </el-card>
 </template>
@@ -27,9 +28,10 @@
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import Mallki from '@/components/TextHoverEffect/Mallki'
+import Countdown from 'vuejs-countdown'
 
 export default {
-  components: { PanThumb, Mallki },
+  components: { PanThumb, Mallki, Countdown },
 
   filters: {
     statusFilter(status) {
@@ -128,10 +130,10 @@ export default {
     font-weight: bold;
   }
 
-  .time-item {
+.end-item {
     position: relative;
-    float: right;
-    color: #d6882f;
+    text-align: left;
+        color: #2fd690;
     top: 0px;
     right: 0px;
     font-size: 16px;
