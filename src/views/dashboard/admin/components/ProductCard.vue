@@ -5,7 +5,7 @@
     </div>
     <div style="position:relative;">
       <pan-thumb :image="avatar" class="panThumb" />
-      <mallki class-name="mallki-text" text="$100" />
+      <span class="price">$100.00</span>
       <div style="padding-top:35px;" class="title-item">
         <span>IPhone XS</span>
       </div>
@@ -13,12 +13,13 @@
         <span>Almost new IPhone XS. Original Pack. White. </span>
       </div>
       <div class="start-item">
-        <Countdown deadline="2021/05/13" />
+        <Countdown deadline="2021/08/13" />
       </div>
       <div>
-        <el-button style="width: 100%" type="primary" @click.prevent.stop="guide">
+        <el-button style="width: 90%" type="primary" @click.prevent.stop="guide">
           Bid
         </el-button>
+        <el-button class="svg-icon" style="background: star" />
       </div>
     </div>
   </el-card>
@@ -27,11 +28,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
-import Mallki from '@/components/TextHoverEffect/Mallki'
 import Countdown from 'vuejs-countdown'
 
 export default {
-  components: { PanThumb, Mallki, Countdown },
+  components: { PanThumb, Countdown },
 
   filters: {
     statusFilter(status) {
@@ -145,5 +145,34 @@ export default {
       display: none;
     }
   }
+
+.svg-icon {
+      position: absolute;
+      align-self: center;
+      margin-top: 10px;
+      margin-left: 10px;
+
+    }
+
+.username {
+    position: relative;
+    text-align: left;
+        color: #000000;
+    top: 0px;
+    margin-left: 70px;
+    right: 0px;
+    font-size: 16px;
+  }
+
+  .price {
+    position: absolute;
+    text-align: right;
+    color: #1ec9ba;
+    top: 0px;
+    right: 0px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
 }
 </style>

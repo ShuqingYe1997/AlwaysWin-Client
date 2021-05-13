@@ -5,10 +5,15 @@
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="Address Name" width="220">
         <template slot-scope="scope">
+          {{ scope.row.key }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Reciver Name" width="220">
+        <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Description">
+      <el-table-column align="center" label="Address">
         <template slot-scope="scope">
           {{ scope.row.description }}
         </template>
@@ -28,10 +33,13 @@
 
     <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
       <el-form :model="role" label-width="80px" label-position="left">
+        <el-form-item label="Address Description">
+          <el-input v-model="role.key" placeholder="Address Description" />
+        </el-form-item>
         <el-form-item label="Name">
           <el-input v-model="role.name" placeholder="Role Name" />
         </el-form-item>
-        <el-form-item label="Desc">
+        <el-form-item label="Address Details">
           <el-input
             v-model="role.description"
             :autosize="{ minRows: 2, maxRows: 4}"
@@ -42,17 +50,6 @@
         <el-form-item label="Phone">
           <el-input v-model="role.phone" placeholder="Phone Number" />
         </el-form-item>
-        <!-- <el-form-item label="Menus">
-          <el-tree
-            ref="tree"
-            :check-strictly="checkStrictly"
-            :data="routesData"
-            :props="defaultProps"
-            show-checkbox
-            node-key="path"
-            class="permission-tree"
-          />
-        </el-form-item> -->
       </el-form>
       <div style="text-align:right;">
         <el-button type="danger" @click="dialogVisible=false">Cancel</el-button>
@@ -71,6 +68,7 @@ const defaultRole = {
   key: '',
   name: '',
   description: '',
+  phone: '',
   routes: []
 }
 
@@ -172,7 +170,7 @@ export default {
       })
     },
     handleDelete({ $index, row }) {
-      this.$confirm('Confirm to remove the role?', 'Warning', {
+      this.$confirm('Confirm to remove the address?', 'Warning', {
         confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'warning'
@@ -224,15 +222,16 @@ export default {
         this.rolesList.push(this.role)
       }
 
-      const { description, key, name } = this.role
+      const { description, key, name, phone } = this.role
       this.dialogVisible = false
       this.$notify({
         title: 'Success',
         dangerouslyUseHTMLString: true,
         message: `
-            <div>Role Key: ${key}</div>
-            <div>Role Name: ${name}</div>
-            <div>Description: ${description}</div>
+            <div>Address Key: ${key}</div>
+            <div>Reciver Name: ${name}</div>
+            <div>Address Details: ${description}</div>
+            <div>Phone: ${phone}</div>
           `,
         type: 'success'
       })
