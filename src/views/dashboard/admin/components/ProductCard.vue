@@ -1,28 +1,30 @@
 <template>
-  <el-card class="box-card-component" style="margin-left:8px;">
-    <div slot="header" class="box-card-header">
-      <img src="https://ss7.vzw.com/is/image/VerizonWireless/iphone-12-pro-pacific-blue">
-    </div>
-    <div style="position:relative;">
-      <pan-thumb :image="avatar" class="panThumb" />
-      <span class="price">$100.00</span>
-      <div style="padding-top:35px;" class="title-item">
-        <span>IPhone XS</span>
+  <router-link :to="'/_id'">
+    <el-card class="box-card-component" style="margin-left:8px;">
+      <div slot="header" class="box-card-header">
+        <img src="https://ss7.vzw.com/is/image/VerizonWireless/iphone-12-pro-pacific-blue">
       </div>
-      <div class="description-item">
-        <span>Almost new IPhone XS. Original Pack. White. </span>
+      <div style="position:relative;">
+        <pan-thumb :image="avatar" class="panThumb" />
+        <span class="price">$100.00</span>
+        <div style="padding-top:35px;" class="title-item">
+          <span>IPhone XS</span>
+        </div>
+        <div class="description-item">
+          <span>Almost new IPhone XS. Original Pack. White. </span>
+        </div>
+        <div class="start-item">
+          <Countdown deadline="2021/08/13" />
+        </div>
+        <div>
+          <el-button style="width: 90%" type="primary" @click.prevent.stop="guide">
+            Bid
+          </el-button>
+          <el-button class="svg-icon" style="background: star" />
+        </div>
       </div>
-      <div class="start-item">
-        <Countdown deadline="2021/08/13" />
-      </div>
-      <div>
-        <el-button style="width: 90%" type="primary" @click.prevent.stop="guide">
-          Bid
-        </el-button>
-        <el-button class="svg-icon" style="background: star" />
-      </div>
-    </div>
-  </el-card>
+    </el-card>
+  </router-link>
 </template>
 
 <script>
