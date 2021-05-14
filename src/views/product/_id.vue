@@ -8,26 +8,33 @@
           </el-carousel-item>
         </el-carousel>
       </div>
-      <div class="product-info">
-        <!-- <h1>{{ product.name }}</h1> -->
-        <h1>Product Name</h1>
-        <!-- <h4 class="price">{{ product.price | dollar }}</h4> -->
-        <h4 class="price">$100.00</h4>
-        <!-- <p>{{ product.description }}</p> -->
-        <p>Display: 6.7 inches Super Retina XDR OLED, Scratch-resistant ceramic glass, oleophobic coating - Resoultion: 1284 x 2778 pixels
-          Memory: 256GB 6GB RAM
-          Quad: 12 MP + 12 MP + 12 MP + TOF 3D LiDAR scanner w/ Dual-LED dual-tone flash, HDR (photo/panorama) -- Selfie Camera: Dual
-          12MP + SL 3D, (depth/biometrics sensor)
-          Platform: iOS 14.1 -- Apple A14 Bionic -- Hexa-core (2x3.1 GHz Firestorm + 4x1.8 GHz Icestorm) -- Apple GPU (4-core graphics)
-          Battery: Li-Ion 3687 mAh, non-removable - Qi fast wireless charging 15W</p>
-        <div>
+      <div class="chart-wrapper">
+        <div class="chart-wrapper">
+          <!-- <h1>{{ product.name }}</h1> -->
+          <h1>Product Name</h1>
+          <!-- <h4 class="price">{{ product.price | dollar }}</h4> -->
+          <h4 class="price">$100.00</h4>
+          <!-- <p>{{ product.description }}</p> -->
+          <p>Display: 6.7 inches Super Retina XDR OLED, Scratch-resistant ceramic glass, oleophobic coating - Resoultion: 1284 x 2778 pixels
+            Memory: 256GB 6GB RAM
+            Quad: 12 MP + 12 MP + 12 MP + TOF 3D LiDAR scanner w/ Dual-LED dual-tone flash, HDR (photo/panorama) -- Selfie Camera: Dual
+            12MP + SL 3D, (depth/biometrics sensor)
+            Platform: iOS 14.1 -- Apple A14 Bionic -- Hexa-core (2x3.1 GHz Firestorm + 4x1.8 GHz Icestorm) -- Apple GPU (4-core graphics)
+            Battery: Li-Ion 3687 mAh, non-removable - Qi fast wireless charging 15W</p>
+        </div>
+        <div class="chart-wrapper">
           <div class="start-item">
             <Countdown deadline="2021/08/13" />
           </div>
+        </div>
+        <div class="chart-wrapper">
           <el-button style="width: 30%" type="primary" @click.prevent.stop="guide">
             Bid
           </el-button>
           <el-button class="svg-icon" style="background: star" />
+        </div>
+        <div class="chart-wrapper">
+          <bid-list />
         </div>
       </div>
     </div>
@@ -37,13 +44,15 @@
 <script>
 import { mapState } from 'vuex'
 import Countdown from 'vuejs-countdown'
+import BidList from './BidList'
 
 const avatarPrefix = '?imageView2/1/w/80/h/80'
 const carouselPrefix = '?imageView2/2/h/440'
 
 export default {
   components: {
-    Countdown
+    Countdown,
+    BidList
   },
 
   data() {
@@ -195,4 +204,7 @@ select {
     font-weight: bold;
   }
 
+   .user-images {
+      padding-top: 20px;
+    }
 </style>
