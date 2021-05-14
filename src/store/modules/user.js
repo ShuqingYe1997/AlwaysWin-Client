@@ -4,9 +4,9 @@ import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
+  uid: '',
+  username: '',
+  portrait: '',
   roles: []
 }
 
@@ -14,14 +14,14 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
+  SET_UID: (state, uid) => {
+    state.uid = uid
   },
-  SET_NAME: (state, name) => {
-    state.name = name
+  SET_USERNAME: (state, username) => {
+    state.username = username
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+  SET_PORTRAIT: (state, portrait) => {
+    state.portrait = portrait
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
@@ -54,7 +54,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { roles, uid, username, portrait } = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -62,9 +62,9 @@ const actions = {
         }
 
         commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
+        commit('SET_UID', uid)
+        commit('SET_USERNAME', username)
+        commit('SET_PORTRAIT', portrait)
         resolve(data)
       }).catch(error => {
         reject(error)
