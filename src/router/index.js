@@ -167,6 +167,15 @@ export const asyncRoutes = [
           title: 'Role Permission',
           roles: ['admin']
         }
+      },
+      {
+        path: 'AddressList',
+        component: () => import('@/views/permission/AddressList'),
+        name: 'AddressList',
+        meta: {
+          title: 'Address List',
+          roles: ['admin']
+        }
       }
     ]
   },
@@ -222,6 +231,25 @@ export const asyncRoutes = [
     ]
   },
 
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/_id',
+    name: 'Product',
+    meta: {
+      title: 'Product',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        // path: '/_id/:id(\\d+)',
+        path: '/_id',
+        component: () => import('@/views/product/_id'),
+        name: 'ProductPage',
+        meta: { title: 'product', noCache: true, activeMenu: '/product/_id' }
+      }
+    ]
+  },
   {
     path: '/tab',
     component: Layout,
