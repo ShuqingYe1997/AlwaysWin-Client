@@ -232,6 +232,25 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/_id',
+    name: 'Product',
+    meta: {
+      title: 'Product',
+      icon: 'el-icon-s-help'
+    },
+    children: [
+      {
+        // path: '/_id/:id(\\d+)',
+        path: '/_id',
+        component: () => import('@/views/product/_id'),
+        name: 'ProductPage',
+        meta: { title: 'product', noCache: true, activeMenu: '/product/_id' }
+      }
+    ]
+  },
+  {
     path: '/tab',
     component: Layout,
     children: [
