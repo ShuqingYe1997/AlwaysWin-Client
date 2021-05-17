@@ -13,8 +13,8 @@
         </el-tooltip>
       </template>
 
-      <!--todo: login or not login-->
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+      <!-- logged in -->
+      <el-dropdown v-show="roles.includes('user')" class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="portrait" class="user-avatar">
           <i class="el-icon-caret-bottom" />
@@ -29,6 +29,19 @@
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">Log Out</span>
           </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <!-- not logged in -->
+      <el-dropdown v-show="!roles.includes('user')" class="avatar-container right-menu-item hover-effect" trigger="click">
+        <div class="avatar-wrapper">
+          <img :src="portrait" class="user-avatar">
+          <i class="el-icon-caret-bottom" />
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <router-link to="/login">
+            <el-dropdown-item>login</el-dropdown-item>
+          </router-link>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -49,11 +62,16 @@ export default {
     SizeSelect,
     Search
   },
+  data() {
+    return {
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
       'portrait',
-      'device'
+      'device',
+      'roles'
     ])
   },
   methods: {
