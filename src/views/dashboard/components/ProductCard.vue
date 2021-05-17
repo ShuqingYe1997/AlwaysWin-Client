@@ -17,10 +17,14 @@
           <Countdown deadline="2021/08/13" />
         </div>
         <div>
-          <el-button style="width: 90%" type="primary" @click.prevent.stop="guide">
-            Bid
+          <el-button v-if="bidAction === 'Place An Offer'" style="width: 90%" type="primary" @click.prevent.stop="guide">
+            {{ bidAction }}
           </el-button>
-          <i class="el-icon-star-off" />
+          <el-button v-else style="width: 90%" type="info" disabled>
+            {{ bidAction }}
+          </el-button>
+          <i v-if="isFav" class="el-icon-star-on" />
+          <i v-else class="el-icon-star-off" />
         </div>
       </div>
     </el-card>
@@ -31,6 +35,7 @@
 import PanThumb from '@/components/PanThumb'
 import Countdown from 'vuejs-countdown'
 import { productDetail } from '@/api/product.js'
+import { productStatuOption } from '@/api/enum.js'
 
 const defaultProductForm = {
   pid: 8,
@@ -89,22 +94,37 @@ export default {
   data() {
     return {
       productForm: Object.assign({}, defaultProductForm),
-      sellerInfo: Object.assign({}, defaultSellerInfo)
+      sellerInfo: Object.assign({}, defaultSellerInfo),
+      bidAction: 'Wait',
+      isFav: true
     }
   },
   created() {
-    const id = 1
-    this.fetchData(id)
+    const pid = 2
+    this.fetchData(pid)
+    this.ProcessData()
   },
-
   methods: {
-    fetchData(id) {
-      productDetail(id).then(response => {
+    fetchData(pid) {
+      productDetail(pid).then(response => {
         this.productForm = response.data
         console.log(this.productForm.name)
       }).catch(err => {
         console.log(err)
       })
+    },
+    ProcessData() {
+      if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['waiting']) {
+        this.bidAction = 'Wait For Start'
+      } else if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['broughtIn']) {
+        this.bidAction = 'Place An Offer'
+      } else {
+        this.bidAction = 'End'
+      }
+      this.isFav = true /* checkDuplicate(uid, pid);*/
+    },
+    AddToFav() {},
+    RemoveFromFav() {
     }
   }
 }
