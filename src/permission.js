@@ -69,7 +69,7 @@ router.beforeEach(async(to, from, next) => {
   //   }
   // }
 
-//  不走登录，保证token存在
+  //  不走登录，保证token存在
   const hasToken = 'user-token'
   const role = ['user']
   if (hasToken) {
