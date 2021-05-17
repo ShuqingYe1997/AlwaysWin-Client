@@ -71,10 +71,10 @@ router.beforeEach(async(to, from, next) => {
 
   //  不走登录，保证token存在
   const hasToken = 'user-token'
-  const role = ['user']
+  const roles = ['user']
   if (hasToken) {
     next()
-    const accessRoutes = await store.dispatch('permission/generateRoutes', role)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
   }

@@ -6,8 +6,8 @@ const state = {
   token: getToken(),
   uid: '',
   username: '',
-  portrait: '',
-  roles: []
+  portrait: 'https://alwayswin-figures.s3.amazonaws.com/icon/default-icon.png',
+  roles: ['visitor']
 }
 
 const mutations = {
@@ -31,11 +31,11 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, loginForm) {
-    const { username, password } = loginForm
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login(loginForm).then(response => {
+        console.log('token' + response.data)
         commit('SET_TOKEN', response.data)
-        commit('SET_USERNAME', username)
+        commit('SET_USERNAME', loginForm.username.trim())
         setToken(response.data)
         resolve()
       }).catch(error => {
@@ -74,7 +74,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout().then(() => {
         commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
+        commit('SET_ROLES', ['visitor'])
         removeToken()
         resetRouter()
 
@@ -93,7 +93,7 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
+      commit('SET_ROLES', ['visitor'])
       removeToken()
       resolve()
     })
