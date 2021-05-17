@@ -14,7 +14,7 @@
       </template>
 
       <!-- logged in -->
-      <el-dropdown v-show="roles.includes('user')" class="avatar-container right-menu-item hover-effect" trigger="click" >
+      <el-dropdown v-show="roles.includes('user')" class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="portrait" class="user-avatar">
           <i class="el-icon-caret-bottom" />
