@@ -30,7 +30,7 @@ export function updateAddress(aid, data) {
   })
 }
 
-export function deleteRole(aid) {
+export function deleteAddress(aid) {
   return request({
     url: `/user/address/delete/${aid}`,
     method: 'delete'
