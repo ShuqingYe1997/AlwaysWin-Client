@@ -21,14 +21,13 @@
     </el-table>
     <footer class="footer">
       <ul class="filters">
-        <a :class="{ selected: this.show_all === true}" @click="fetchList()">show all</a>
+        <!--<a :class="{ selected: this.show_all === true}" @click="fetchList()">show all</a>-->
       </ul>
     </footer>
   </section>
 </template>
 
 <script>
-import { transactionList } from '@/api/remote-search'
 
 export default {
   filters: {
@@ -53,20 +52,7 @@ export default {
     this.fetchData()
   },
   methods: {
-    fetchData() {
-      transactionList().then(response => {
-        this.list = response.data.items
-        this.filterlist = this.list.slice(0, 3)
-      })
-    },
-    fetchList() {
-      this.show_all = !this.show_all
-      if (this.show_all === true) {
-        this.filterlist = this.list
-      } else {
-        this.filterlist = this.list.slice(0, 3)
-      }
-    }
+
   }
 }
 </script>
