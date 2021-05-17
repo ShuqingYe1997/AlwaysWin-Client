@@ -10,14 +10,14 @@ export function overview(data) {
 
 export function productDetail(pid) {
   return request({
-    url: '/product/${pid}',
+    url: `/product/${pid}`,
     method: 'get'
   })
 }
 
 export function cancelProduct(pid) {
   return request({
-    url: '/product/cancel/${pid}',
+    url: `/product/cancel/${pid}`,
     method: 'put'
   })
 }
@@ -54,7 +54,7 @@ export function getMyProducts() {
 
 export function getProductStatus(pid) {
   return request({
-    url: '/productStatus/${pid}',
+    url: `/productStatus/${pid}`,
     method: 'get'
   })
 }

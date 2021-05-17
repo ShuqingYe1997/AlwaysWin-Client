@@ -6,7 +6,7 @@
       </div>
       <div style="position:relative;">
         <pan-thumb :image="sellerInfo.portrait" class="panThumb" />
-        <span class="price"> {{ productForm.productStatus.price }} </span>
+        <span class="price"> ${{ productForm.productStatus.price }} </span>
         <div style="padding-top:35px;" class="title-item">
           <span> {{ productForm.title }}</span>
         </div>
@@ -20,7 +20,7 @@
           <el-button style="width: 90%" type="primary" @click.prevent.stop="guide">
             Bid
           </el-button>
-          <el-button class="svg-icon" style="background: star" />
+          <i class="el-icon-star-off" />
         </div>
       </div>
     </el-card>
@@ -50,7 +50,7 @@ const defaultProductForm = {
   productStatus: {
     psid: 8,
     pid: 8,
-    price: 100.0,
+    price: 0.0,
     status: '',
     endTime: ''
   },
@@ -93,14 +93,15 @@ export default {
     }
   },
   created() {
-    const id = this.$route.params && this.$route.params.id
+    const id = 1
     this.fetchData(id)
   },
 
   methods: {
     fetchData(id) {
       productDetail(id).then(response => {
-        this.productName = response.data
+        this.productForm = response.data
+        console.log(this.productForm.name)
       }).catch(err => {
         console.log(err)
       })
