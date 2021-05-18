@@ -129,17 +129,16 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/product/_id',
     name: 'Product',
+    hidden: true,
     meta: {
-      title: 'Product',
-      icon: 'el-icon-s-help'
+      title: 'Product'
     },
     children: [
       {
-        // path: '/_id/:id(\\d+)',
-        path: '/_id',
+        path: '/product/:id(\\d+)',
         component: () => import('@/views/product/_id'),
         name: 'ProductPage',
-        meta: { title: 'product', noCache: true, activeMenu: '/product/_id' }
+        meta: { title: 'product', noCache: true }
       }
     ]
   },
