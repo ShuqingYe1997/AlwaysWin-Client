@@ -1,47 +1,58 @@
 <template>
-  <router-link :to="`/${productForm.pid}`">
-    <el-card class="box-card-component" style="margin-left:8px;">
-      <div slot="header" class="box-card-header">
-        <img :src="`${productForm.thumbnail.thumbnail}`">
-      </div>
-      <div style="position:relative;">
-        <pan-thumb :image="sellerInfo.portrait" class="panThumb" />
-        <span class="price"> ${{ productForm.productStatus.price }} </span>
-        <div style="padding-top:35px;" class="title-item">
-          <span> {{ productForm.title }}</span>
+  <el-card class="box-card-component" style="margin-left:8px;">
+    <router-link :to="`/product/${productForm.pid}`">
+      <div>
+        <div slot="header" class="box-card-header">
+          <img :src="`${productForm.thumbnail.thumbnail}`">
         </div>
-        <div class="description-item">
-          <span>{{ productForm.description }} </span>
-        </div>
-        <div class="start-item">
-          <Countdown deadline="2021/08/13" />
-        </div>
-        <div>
-          <el-button v-if="bidAction === 'Place An Offer'" style="width: 90%" type="primary" @click.prevent.stop="guide">
-            {{ bidAction }}
-          </el-button>
-          <el-button v-else style="width: 90%" type="info" disabled>
-            {{ bidAction }}
-          </el-button>
-          <i v-if="isFav" class="el-icon-star-on" />
-          <i v-else class="el-icon-star-off" />
+        <div style="position:relative;">
+          <pan-thumb :image="sellerInfo.portrait" class="panThumb" />
+          <span class="price"> ${{ productForm.productStatus.price }} </span>
+          <div style="padding-top:35px;" class="title-item">
+            <span> {{ pid }}{{ productForm.title }}</span>
+          </div>
+          <div class="description-item">
+            <span>{{ productForm.description }} </span>
+          </div>
+          <div v-if="bidAction === 'Place An Offer'" class="end-item">
+            <Countdown :deadline="timecountdown" />
+          </div>
+          <div v-else class="start-item">
+            <Countdown :deadline="timecountdown" />
+          </div>
         </div>
       </div>
-    </el-card>
-  </router-link>
+    </router-link>
+    <div style="position:relative;">
+      <el-button v-if="bidAction === 'Place An Offer'" style="width: 90%" type="primary" @click.prevent.stop="guide">
+        {{ bidAction }}
+      </el-button>
+      <el-button v-else style="width: 90%" type="info" disabled>
+        {{ bidAction }}
+      </el-button>
+      <el-button v-if="isFav" class="icon-button" @click="RemoveFromFav()">
+        <i class="el-icon-star-on" />
+      </el-button>
+      <el-button v-else class="icon-button" @click="AddToFav()">
+        <i class="el-icon-star-off" />
+      </el-button>
+    </div>
+  </el-card>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import Countdown from 'vuejs-countdown'
 import { productDetail } from '@/api/product.js'
+import { addToWishList, checkInWishList } from '@/api/wishlist.js'
 import { productStatuOption } from '@/api/enum.js'
 
 const defaultProductForm = {
   pid: 8,
   uid: 1,
-  title: '',
-  description: '',
+  title: 'Iphone 10 Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10',
+  description: 'test txt a lot of text test txt a lot of text test txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of text',
   cate1: '',
   cate2: '',
   cate3: '',
@@ -90,41 +101,83 @@ const defaultSellerInfo =
 
 export default {
   components: { PanThumb, Countdown },
-
+  props: {
+    pid: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
       productForm: Object.assign({}, defaultProductForm),
       sellerInfo: Object.assign({}, defaultSellerInfo),
       bidAction: 'Wait',
-      isFav: true
+      isFav: true,
+      timecountdown: new Date()
     }
   },
+  computed: {
+    ...mapGetters([
+      'roles',
+      'uid'
+    ])
+  },
   created() {
-    const pid = 2
-    this.fetchData(pid)
-    this.ProcessData()
+    this.fetchData(this.pid)
+    this.ProcessData(this.pid)
   },
   methods: {
-    fetchData(pid) {
-      productDetail(pid).then(response => {
+    fetchData(passed_pid) {
+      productDetail(passed_pid).then(response => {
         this.productForm = response.data
         console.log(this.productForm.name)
       }).catch(err => {
         console.log(err)
       })
     },
-    ProcessData() {
+    ProcessData(passed_pid) {
+      // Handle Product Status
       if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['waiting']) {
         this.bidAction = 'Wait For Start'
+        this.timecountdown = this.productForm.startTime
       } else if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['broughtIn']) {
         this.bidAction = 'Place An Offer'
+        this.timecountdown = this.productForm.endTime
       } else {
         this.bidAction = 'End'
+        this.timecountdown = new Date()
       }
-      this.isFav = true /* checkDuplicate(uid, pid);*/
+      // Handle WishList
+      this.isFav = false
+      if (this.uid !== '') {
+        checkInWishList(this.uid, passed_pid).then(response => {
+          this.isFav = response.data == null
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+      // TODO:Handle Seller Info
     },
-    AddToFav() {},
+    AddToFav() {
+      if (this.uid !== '') {
+        const request_data = '{"uid": ' + this.uid + ',"pid": ' + this.pid + '}'
+        addToWishList(request_data).then(response => {
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        // TODO: pop out error or request login
+      }
+    },
     RemoveFromFav() {
+      if (this.uid !== '') {
+        addToWishList(this.uid, this.pid).then(response => {
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        // TODO: pop out error or request login
+      }
     }
   }
 }
@@ -135,6 +188,8 @@ export default {
   .el-card__header {
     padding: 0px!important;
   }
+  min-width: 24px;
+  margin-right: 32px ;
 }
 </style>
 <style lang="scss" scoped>
@@ -193,17 +248,17 @@ export default {
   .start-item {
     position: relative;
     text-align: left;
-        color: #d6882f;
+        color: #b6350ec2;
     top: 0px;
     right: 0px;
     font-size: 16px;
     font-weight: bold;
   }
 
-.end-item {
+  .end-item {
     position: relative;
     text-align: left;
-        color: #2fd690;
+        color: #6cd62f;
     top: 0px;
     right: 0px;
     font-size: 16px;
@@ -244,5 +299,18 @@ export default {
     font-weight: bold;
   }
 
+  .icon-button,
+  .icon-button:hover,
+  .icon-button:active,
+  .icon-button:after
+  {
+    padding: 0px;
+    margin: 10px;
+    border: none;
+    min-width: 6px;
+    position: absolute;
+    align-self: right;
+    background: transparent;
+  }
 }
 </style>

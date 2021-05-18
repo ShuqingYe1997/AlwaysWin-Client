@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function overview(data) {
+export function overview() {
   return request({
     url: '/product/overview',
-    method: 'get',
-    data
+    method: 'get'
   })
 }
 

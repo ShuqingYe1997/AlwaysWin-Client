@@ -9,3 +9,20 @@ export const productStatuOption = [
   { key: 'success', value: 7 },
   { key: 'canceled', value: 8 }
 ]
+
+export const productCat = [{
+  value: 'Mobile Phones',
+  label: 'Mobile Phones'
+}, {
+  value: 'Tablets',
+  label: 'Tablets'
+}, {
+  value: 'Portable Electronics',
+  label: 'Portable Electronics'
+}, {
+  value: 'Home Appliances',
+  label: 'Home Appliances'
+}, {
+  value: 'TV & Home Theater',
+  label: 'TV & Home Theater'
+}]
