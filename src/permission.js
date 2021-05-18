@@ -1,15 +1,13 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 // todo: more urls in white list
-const whiteList = ['/', '/login', '/auth-redirect', '/register'] // no redirect whitelist
+// const whiteList = ['/', '/login', '/auth-redirect', '/register'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -71,10 +69,10 @@ router.beforeEach(async(to, from, next) => {
 
   //  不走登录，保证token存在
   const hasToken = 'user-token'
-  const role = ['user']
+  const roles = ['visitor']
   if (hasToken) {
     next()
-    const accessRoutes = await store.dispatch('permission/generateRoutes', role)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
   }

@@ -6,7 +6,7 @@
       </div>
     </div>
     <!-- eslint-disable-next-line -->
-    <div :style="{backgroundImage: `url(${image})`}" class="pan-thumb"></div>
+    <div class="pan-thumb"></div>
   </div>
 </template>
 
@@ -58,6 +58,8 @@ export default {
   border-radius: 50%;
   overflow: hidden;
   position: absolute;
+  transform-origin: 95% 40%;
+  transition: all 0.3s ease-in-out;
 }
 
 /* .pan-thumb:after {
@@ -130,7 +132,7 @@ export default {
 }
 
 .pan-item:hover .pan-thumb {
-  transform: rotate(-0deg);
+  transform: rotate(-110deg);
 }
 
 .pan-item:hover .pan-info p a {
