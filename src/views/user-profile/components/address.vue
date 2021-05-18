@@ -58,7 +58,7 @@
 
     <!--  pop up window  -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 350px; margin-left:50px;">
         <el-form-item label="Name" prop="name">
           <el-input v-model="temp.name" placeholder="Please input the receiver's name" />
         </el-form-item>
@@ -155,7 +155,7 @@ const stateOptions = [
 ]
 
 export default {
-  name: 'AddressTable',
+  name: 'Address',
   components: { Pagination },
   data() {
     return {

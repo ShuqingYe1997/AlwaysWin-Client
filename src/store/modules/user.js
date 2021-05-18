@@ -23,8 +23,8 @@ const mutations = {
   SET_PORTRAIT: (state, portrait) => {
     state.portrait = portrait
   },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles
+  SET_ROLES: (state, role) => {
+    state.roles.push(role) // roles must be a non-empty array
   }
 }
 
@@ -33,10 +33,20 @@ const actions = {
   login({ commit }, loginForm) {
     return new Promise((resolve, reject) => {
       login(loginForm).then(response => {
-        console.log('token' + response.data)
-        commit('SET_TOKEN', response.data)
-        commit('SET_USERNAME', loginForm.username.trim())
-        setToken(response.data)
+        const { data } = response
+
+        commit('SET_TOKEN', data.token)
+        commit('SET_USERNAME', data.username)
+        commit('SET_ROLES', data.role)
+        commit('SET_UID', data.uid)
+        commit('SET_PORTRAIT', data.portrait)
+
+        setToken(data.token)
+
+        console.log('token ' + state.token)
+        console.log('username ' + state.username)
+        console.log('roles ' + state.roles)
+
         resolve()
       }).catch(error => {
         reject(error)
@@ -53,13 +63,6 @@ const actions = {
         }
 
         const { uid, portrait } = response.data
-        const roles = ['user']
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-
-        commit('SET_ROLES', roles)
         commit('SET_UID', uid)
         commit('SET_PORTRAIT', portrait)
         resolve()
