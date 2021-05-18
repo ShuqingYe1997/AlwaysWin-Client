@@ -10,11 +10,14 @@
         <el-col :span="18" :xs="24">
           <el-card>
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="AddFund" name="addFund">
-                <addFund :user="user" />
+              <el-tab-pane label="Wallet" name="wallet">
+                <wallet :user="user" />
               </el-tab-pane>
-              <el-tab-pane label="Account" name="account">
-                <account :user="user" />
+              <el-tab-pane label="Timeline" name="timeline">
+                <timeline :user="user" />
+              </el-tab-pane>
+              <el-tab-pane label="Change Password" name="account">
+                <account />
               </el-tab-pane>
             </el-tabs>
           </el-card>
@@ -26,15 +29,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { getInfo } from '@/api/user'
 import UserCard from './components/UserCard'
-import AddFund from './components/AddFund'
+import Wallet from './components/Wallet'
 import Account from './components/Account'
+import Timeline from './components/Timeline'
 
 export default {
   name: 'Profile',
-  components: { UserCard, AddFund, Account },
+  components: { UserCard, Wallet, Account, Timeline },
   data() {
     return {
       user: {
@@ -46,39 +49,26 @@ export default {
         gender: '',
         birthday: '',
         regisDate: '',
-        balance: ''
+        balance: 0
       },
-      activeTab: 'activity'
+      activeTab: 'wallet'
     }
   },
-  computed: {
-    ...mapGetters([
-      'uid',
-      'username',
-      'portrait',
-      'roles'
-    ])
-  },
+
   created() {
-    this.getUser()
+    this.getUserInfo()
   },
   methods: {
-    getUser() {
+    getUserInfo() {
       getInfo().then(response => {
-        this.list = response.data
-
-        // Just to simulate the time of the request
+        console.log('data ' + response.data.regisDate)
+        this.user = { ...response.data }
         setTimeout(() => {
-          this.listLoading = false
         }, 1.5 * 1000)
       })
-      this.user = {
-        uid: this.uid,
-        username: this.username,
-        role: this.roles.join(' | '),
-        email: 'admin@test.com',
-        portrait: this.portrait
-      }
+      console.log('user ' + this.user.regisDate)
+      console.log('user ' + this.user.birthday)
+      this.user.username = this.$store.getters.username
     }
   }
 }

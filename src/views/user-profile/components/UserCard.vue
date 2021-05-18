@@ -1,14 +1,15 @@
 <template>
   <el-card style="margin-bottom:20px;">
     <div slot="header" class="clearfix">
-      <span>About me</span>
+      <span>Hello, {{ user.username }}</span>
     </div>
 
     <div class="user-profile">
       <div class="box-center">
         <pan-thumb :image="user.portrait" :height="'100px'" :width="'100px'" :hoverable="false">
-          <div>Hello</div>
-          {{ user.username }}
+          <div>
+            <el-button icon="el-icon-upload" @click="imagecropperShow = true" />
+          </div>
         </pan-thumb>
       </div>
       <div class="box-center">
@@ -16,34 +17,50 @@
       </div>
     </div>
 
+    <image-cropper
+      v-show="imagecropperShow"
+      :key="imagecropperKey"
+      :width="300"
+      :height="300"
+      url="http://44.192.52.170:8080//user/my-info/upload-icon"
+      lang-type="en"
+      @close="close"
+      @crop-upload-success="cropSuccess"
+    />
+
     <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
+        <div class="user-bio-section-header"><svg-icon icon-class="people" /><span>Gender</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
-            JS in Computer Science from the University of Technology
+            {{ user.gender }}
           </div>
         </div>
       </div>
 
-      <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>Skills</span></div>
+      <div class="user-education user-bio-section">
+        <div class="user-bio-section-header"><svg-icon icon-class="email" /><span>Email</span></div>
         <div class="user-bio-section-body">
-          <div class="progress-item">
-            <span>Vue</span>
-            <el-progress :percentage="70" />
+          <div class="text-muted">
+            {{ user.email }}
           </div>
-          <div class="progress-item">
-            <span>JavaScript</span>
-            <el-progress :percentage="18" />
+        </div>
+      </div>
+
+      <div class="user-education user-bio-section">
+        <div class="user-bio-section-header"><i class="el-icon-phone" /><span>Phone</span></div>
+        <div class="user-bio-section-body">
+          <div class="text-muted">
+            {{ user.phone }}
           </div>
-          <div class="progress-item">
-            <span>Css</span>
-            <el-progress :percentage="12" />
-          </div>
-          <div class="progress-item">
-            <span>ESLint</span>
-            <el-progress :percentage="100" status="success" />
+        </div>
+      </div>
+
+      <div class="user-education user-bio-section">
+        <div class="user-bio-section-header"><i class="el-icon-date" /><span>Birthday</span></div>
+        <div class="user-bio-section-body">
+          <div class="text-muted">
+            {{ user.birthday }}
           </div>
         </div>
       </div>
@@ -53,19 +70,43 @@
 
 <script>
 import PanThumb from '@/components/PanThumb'
+import ImageCropper from '@/components/ImageCropper'
+
 export default {
-  components: { PanThumb },
+  components: { PanThumb, ImageCropper },
   props: {
     user: {
       type: Object,
       default: () => {
         return {
+          uid: undefined,
           username: '',
-          email: '',
           portrait: '',
-          role: ''
+          phone: '',
+          email: '',
+          gender: '',
+          birthday: '',
+          regisDate: '',
+          balance: 0
         }
       }
+    }
+  },
+  data() {
+    return {
+      imagecropperShow: false,
+      imagecropperKey: 0,
+      image: this.user.portrait
+    }
+  },
+  methods: {
+    cropSuccess(resData) {
+      this.imagecropperShow = false
+      this.imagecropperKey = this.imagecropperKey + 1
+      this.image = resData.files.avatar
+    },
+    close() {
+      this.imagecropperShow = false
     }
   }
 }
