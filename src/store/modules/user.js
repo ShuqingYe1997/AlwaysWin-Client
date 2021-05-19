@@ -2,11 +2,13 @@ import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
+const default_portrait = 'https://alwayswin-figures.s3.amazonaws.com/icon/default-icon.png'
+
 const state = {
   token: getToken(),
   uid: '',
   username: '',
-  portrait: 'https://alwayswin-figures.s3.amazonaws.com/icon/default-icon.png',
+  portrait: default_portrait,
   roles: ['visitor']
 }
 
@@ -24,7 +26,7 @@ const mutations = {
     state.portrait = portrait
   },
   SET_ROLES: (state, role) => {
-    state.roles.push(role) // roles must be a non-empty array
+    state.roles = [role] // roles must be a non-empty array
   }
 }
 
@@ -43,7 +45,6 @@ const actions = {
 
         setToken(data.token)
 
-        console.log('token ' + state.token)
         console.log('username ' + state.username)
         console.log('roles ' + state.roles)
 
@@ -76,7 +77,10 @@ const actions = {
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout().then(() => {
+        commit('SET_PORTRAIT', default_portrait)
+        commit('SET_USERNAME', '')
         commit('SET_TOKEN', '')
+        commit('SET_UID', '')
         commit('SET_ROLES', ['visitor'])
         removeToken()
         resetRouter()
@@ -84,6 +88,9 @@ const actions = {
         // reset visited views and cached views
         // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
         dispatch('tagsView/delAllViews', null, { root: true })
+
+        // reset router
+        dispatch('permission/generateRoutes', state.roles)
 
         resolve()
       }).catch(error => {

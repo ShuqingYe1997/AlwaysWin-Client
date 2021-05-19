@@ -21,28 +21,28 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Phone" width="110px" align="center">
+      <el-table-column label="Phone" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Location" min-width="150px">
+      <el-table-column label="Location" min-width="250px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.location }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="State" min-width="150px">
+      <el-table-column label="State" min-width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.state }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="ZipCode" min-width="150px">
+      <el-table-column label="ZipCode" min-width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.zipCode }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             Edit
@@ -54,27 +54,27 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
     <!--  pop up window  -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 350px; margin-left:50px;">
         <el-form-item label="Name" prop="name">
-          <el-input v-model="temp.name" placeholder="Please input the receiver's name" />
+          <el-input v-model="temp.name" placeholder="Please input the receiver's name" width="200px" />
         </el-form-item>
         <el-form-item label="Phone" prop="phone">
-          <el-input v-model="temp.phone" placeholder="Please input the receiver's phone" />
+          <el-input v-model="temp.phone" placeholder="Please input the receiver's phone" width="200px" />
         </el-form-item>
         <el-form-item label="Location" prop="location">
-          <el-input v-model="temp.location" :autosize="{ minRows: 2, maxRows: 6}" type="textarea" placeholder="Please input your address" />
+          <el-input v-model="temp.location" :autosize="{ minRows: 2, maxRows: 6}" type="textarea" width="200px" placeholder="Please input your address" />
         </el-form-item>
         <el-form-item label="State" prop="state">
-          <el-select v-model="temp.state" class="filter-item" placeholder="Please select the state">
+          <el-select v-model="temp.state" class="filter-item" placeholder="Please select the state" width="200px">
             <el-option v-for="item in stateOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="ZipCode" prop="zipCode">
-          <el-input v-model="temp.zipCode" placeholder="Please input the zip code" />
+          <el-input v-model="temp.zipCode" placeholder="Please input the zip code" width="200px" />
         </el-form-item>
 
       </el-form>
@@ -166,7 +166,7 @@ export default {
       // 暂时没用上
       listQuery: {
         page: 1,
-        limit: 20
+        pageSize: 10
       },
       temp: {
         aid: undefined,
@@ -184,15 +184,13 @@ export default {
         update: 'Edit',
         create: 'Create'
       },
-      dialogPvVisible: false,
       rules: {
-        name: [{ required: true, message: 'Receiver\'s name is required', trigger: 'blur' }],
-        phone: [{ required: true, message: 'Phone number is required', trigger: 'blur' }],
-        location: [{ required: true, message: 'Your address is required', trigger: 'blur' }],
+        name: [{ required: true, pattern: /^[a-zA-Z]{1}[a-zA-Z\s]{0,28}[a-zA-Z]{1}$/, essage: 'Receiver\'s name is required', trigger: 'blur' }],
+        phone: [{ required: true, pattern: /^[0-9]*$/, min: 6, max: 12, message: 'Phone number is required', trigger: 'blur' }],
+        location: [{ required: true, max: 256, message: 'Your address is required', trigger: 'blur' }],
         state: [{ required: true, message: 'State is required', trigger: 'change' }],
-        zipCode: [{ required: true, message: 'Zipcode is required', trigger: 'blur' }]
-      },
-      downloadLoading: false
+        zipCode: [{ required: true, pattern: /^\d{5}(?:[-\s]\d{4})?$/, message: 'Zipcode is required', trigger: 'blur' }]
+      }
     }
   },
   created() {
@@ -202,12 +200,12 @@ export default {
     getList() {
       this.listLoading = true
       addressAPI.getMyAddress().then(response => {
-        this.list = response.data
-
+        this.list = response.data.list
+        this.total = response.data.total
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1.5 * 1000)
+        }, 200)
       })
     },
     handleFilter() {
@@ -216,7 +214,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        aid: undefined,
+        aid: 0,
         uid: this.$store.getters.uid,
         name: '',
         phone: '',
@@ -257,6 +255,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {

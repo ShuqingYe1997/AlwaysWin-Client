@@ -7,10 +7,11 @@ export function getAddressByAid(aid) {
   })
 }
 
-export function getMyAddress() {
+export function getMyAddress(params) {
   return request({
     url: '/user/address',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

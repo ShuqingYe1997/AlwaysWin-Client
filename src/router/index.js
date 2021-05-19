@@ -106,7 +106,7 @@ export const asyncRoutes = [
       },
       {
         path: 'address',
-        component: () => import('@/views/user-profile/components/address'),
+        component: () => import('@/views/address/index'),
         name: 'Address',
         meta: { title: 'Address', icon: 'list' }
       }
