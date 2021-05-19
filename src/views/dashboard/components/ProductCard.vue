@@ -14,27 +14,24 @@
           <div class="description-item">
             <span>{{ productForm.description }} </span>
           </div>
-          <div v-if="bidAction === 'Place An Offer'" class="end-item">
+          <div v-if="bidAction === 'Place Your Offer'" class="end-item">
             <Countdown :deadline="timecountdown" />
           </div>
           <div v-else class="start-item">
-            <Countdown deadline="2021/08/29 18:00:00 GMT+0300" />
+            <Countdown :deadline="timecountdown" />
           </div>
         </div>
       </div>
     </router-link>
     <div style="position:relative;">
-      <el-button v-if="bidAction === 'Place An Offer'" style="width: 90%" type="primary" @click.prevent.stop="guide">
+      <el-button v-if="bidAction === 'Place Your Offer'" style="width: 90%" type="primary" @click.prevent.stop="guide">
         {{ bidAction }}
       </el-button>
       <el-button v-else style="width: 90%" type="info" disabled>
         {{ bidAction }}
       </el-button>
-      <el-button v-if="isFav" class="icon-button" @click="RemoveFromFav()">
-        <i class="el-icon-star-on" />
-      </el-button>
-      <el-button v-else class="icon-button" @click="AddToFav()">
-        <i class="el-icon-star-off" />
+      <el-button class="icon-button" @click="AddToFav()">
+        <i :class="isFav? 'el-icon-star-on' : 'el-icon-star-off'" />
       </el-button>
     </div>
   </el-card>
@@ -45,8 +42,9 @@ import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import Countdown from 'vuejs-countdown'
 import { productDetail } from '@/api/product.js'
-import { addToWishList, checkInWishList } from '@/api/wishlist.js'
+import { addToWishList, checkInWishList, deleteFromWishList } from '@/api/wishlist.js'
 import { productStatuOption } from '@/api/enum.js'
+import { getSellerInfo } from '@/api/user.js'
 
 const defaultProductForm = {
   pid: 8,
@@ -94,9 +92,11 @@ const defaultProductForm = {
 
 const defaultSellerInfo =
 {
-  uid: undefined,
-  name: 'TestName',
-  portrait: 'https://ss7.vzw.com/is/image/VerizonWireless/iphone-12-pro-pacific-blue'
+  uid: 1,
+  username: 'Arthur',
+  role: 'user',
+  portrait: 'https://alwayswin-figures.s3.amazonaws.com/icon/default-icon.png',
+  token: ''
 }
 
 export default {
@@ -124,12 +124,12 @@ export default {
   },
   created() {
     this.fetchData(this.pid)
-    this.ProcessData(this.pid)
   },
   methods: {
     fetchData(passed_pid) {
       productDetail(passed_pid).then(response => {
         this.productForm = response.data
+        this.ProcessData(this.pid)
         console.log(this.productForm.name)
       }).catch(err => {
         console.log(err)
@@ -139,44 +139,50 @@ export default {
       // Handle Product Status
       if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['waiting']) {
         this.bidAction = 'Wait For Start'
-        this.timecountdown = this.productForm.startTime
+        this.timecountdown = this.productForm.startTime.replace(/T/, ' ').replace(/\..+/, '')
+        // console.log(this.timecountdown)
       } else if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['broughtIn']) {
-        this.bidAction = 'Place An Offer'
-        this.timecountdown = this.productForm.endTime
+        this.bidAction = 'Place Your Offer'
+        this.timecountdown = this.productForm.endTime.replace(/T/, ' ').replace(/\..+/, '')
+        // console.log(this.timecountdown)
       } else {
         this.bidAction = 'End'
-        this.timecountdown = new Date()
+        this.timecountdown = '2011-01-01 00:00:00'
       }
       // Handle WishList
       this.isFav = false
       if (this.uid !== '') {
+        console.log('start check fav:' + this.uid)
         checkInWishList(this.uid, passed_pid).then(response => {
-          this.isFav = response.code === '500'
+          this.isFav = false
         }).catch(err => {
+          this.isFav = true
           console.log(err)
         })
       }
       // TODO:Handle Seller Info
+      getSellerInfo(this.productForm.uid).then(response => {
+        this.sellerInfo = response.data
+      })
     },
     AddToFav() {
       if (this.uid !== '') {
-        const request_data = '{"uid": ' + this.uid + ',"pid": ' + this.pid + '}'
-        addToWishList(request_data).then(response => {
-        }).catch(err => {
-          console.log(err)
-        })
+        if (this.isFav === false) {
+          const request_data = { uid: this.uid, pid: this.pid }
+          addToWishList(request_data).then(response => {
+            this.isFav = true
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          deleteFromWishList(this.uid, this.pid).then(response => {
+            this.isFav = false
+          }).catch(err => {
+            console.log(err)
+          })
+        }
       } else {
-        // TODO: pop out error or request login
-      }
-    },
-    RemoveFromFav() {
-      if (this.uid !== '') {
-        addToWishList(this.uid, this.pid).then(response => {
-        }).catch(err => {
-          console.log(err)
-        })
-      } else {
-        // TODO: pop out error or request login
+        console.log('Please Login firist.')
       }
     }
   }

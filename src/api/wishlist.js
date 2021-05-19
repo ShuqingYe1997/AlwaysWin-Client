@@ -25,7 +25,7 @@ export function addToWishList(data) {
 export function deleteFromWishListByWid(wid) {
   return request({
     url: `/wishlist/delete/${wid}`,
-    method: 'del'
+    method: 'delete'
   })
 }
 
@@ -39,7 +39,7 @@ export function checkInWishList(uid, pid) {
 export function deleteFromWishList(uid, pid) {
   return request({
     url: `/wishlist/${uid}/${pid}`,
-    method: 'del'
+    method: 'delete'
   })
 }
 
