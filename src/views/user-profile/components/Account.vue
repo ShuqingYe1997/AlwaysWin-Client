@@ -51,13 +51,6 @@ import { changePassword } from '@/api/user'
 
 export default {
   data() {
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 characters'))
-      } else if (value.length > 20) {
-        callback(new Error('The password can not be more than 20 characters'))
-      }
-    }
     return {
       temp: {
         oldPassword: '',
@@ -65,9 +58,9 @@ export default {
         newPassword2: ''
       },
       rules: {
-        oldPassword: [{ required: true, message: 'Old password is required', trigger: 'blur', validator: validatePassword }],
-        newPassword1: [{ required: true, message: 'New password is required', trigger: 'blur', validator: validatePassword }],
-        newPassword2: [{ required: true, message: 'Input your new password again', trigger: 'blur', validator: validatePassword }]
+        oldPassword: [{ required: true, min: 6, max: 20, message: 'Old password is required', trigger: 'blur' }],
+        newPassword1: [{ required: true, min: 6, max: 20, pattren: /^[a-zA-Z0-9_]+$/, message: 'New password is required', trigger: 'blur' }],
+        newPassword2: [{ required: true, min: 6, max: 20, pattren: /^[a-zA-Z0-9_]+$/, message: 'Input your new password again', trigger: 'blur' }]
       }
     }
   },

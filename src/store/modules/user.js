@@ -26,7 +26,7 @@ const mutations = {
     state.portrait = portrait
   },
   SET_ROLES: (state, role) => {
-    state.roles.push(role) // roles must be a non-empty array
+    state.roles = [role] // roles must be a non-empty array
   }
 }
 
@@ -45,7 +45,6 @@ const actions = {
 
         setToken(data.token)
 
-        console.log('token ' + state.token)
         console.log('username ' + state.username)
         console.log('roles ' + state.roles)
 

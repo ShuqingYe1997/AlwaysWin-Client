@@ -54,7 +54,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
     <!--  pop up window  -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -166,7 +166,7 @@ export default {
       // 暂时没用上
       listQuery: {
         page: 1,
-        limit: 20
+        pageSize: 10
       },
       temp: {
         aid: undefined,
@@ -184,13 +184,12 @@ export default {
         update: 'Edit',
         create: 'Create'
       },
-      dialogPvVisible: false,
       rules: {
-        name: [{ required: true, message: 'Receiver\'s name is required', trigger: 'blur' }],
-        phone: [{ required: true, message: 'Phone number is required', trigger: 'blur' }],
-        location: [{ required: true, message: 'Your address is required', trigger: 'blur' }],
+        name: [{ required: true, pattern: /^[a-zA-Z]{1}[a-zA-Z\s]{0,28}[a-zA-Z]{1}$/, essage: 'Receiver\'s name is required', trigger: 'blur' }],
+        phone: [{ required: true, pattern: /^[0-9]*$/, min: 6, max: 12, message: 'Phone number is required', trigger: 'blur' }],
+        location: [{ required: true, max: 256, message: 'Your address is required', trigger: 'blur' }],
         state: [{ required: true, message: 'State is required', trigger: 'change' }],
-        zipCode: [{ required: true, message: 'Zipcode is required', trigger: 'blur' }]
+        zipCode: [{ required: true, pattern: /^\d{5}(?:[-\s]\d{4})?$/, message: 'Zipcode is required', trigger: 'blur' }]
       }
     }
   },
@@ -201,12 +200,12 @@ export default {
     getList() {
       this.listLoading = true
       addressAPI.getMyAddress().then(response => {
-        this.list = response.data
-
+        this.list = response.data.list
+        this.total = response.data.total
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1.5 * 1000)
+        }, 200)
       })
     },
     handleFilter() {
@@ -215,7 +214,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        aid: undefined,
+        aid: 0,
         uid: this.$store.getters.uid,
         name: '',
         phone: '',
@@ -256,6 +255,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {

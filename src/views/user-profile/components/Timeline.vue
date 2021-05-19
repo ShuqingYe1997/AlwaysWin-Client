@@ -12,39 +12,33 @@
 </template>
 
 <script>
+import { getInfo } from '@/api/user'
+
 export default {
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          uid: undefined,
-          username: '',
-          portrait: '',
-          phone: '',
-          email: '',
-          gender: '',
-          birthday: '',
-          regisDate: '',
-          balance: 0
-        }
-      }
-    }
-  },
   data() {
     return {
-      timeline: [
-        {
-          timestamp: '2021-5-17',
-          title: 'First purchase',
-          content: 'You made your first bid on 2021-5-17'
-        },
-        {
-          timestamp: this.user.regisDate,
-          title: 'Welcome to AlwaysWin!',
-          content: 'You became a member of AlwaysWin on ' + this.user.regisDate
-        }
-      ]
+      timeline: null,
+      regisDate: null
+    }
+  },
+  created() {
+    this.getTimeline()
+  },
+  methods: {
+    getTimeline() {
+      getInfo().then(response => {
+        this.regisDate = response.data.regisDate
+      })
+      this.timeline = [{
+        timestamp: '2021-5-17',
+        title: 'First purchase',
+        content: 'You made your first bid on 2021-05-17'
+      },
+      {
+        timestamp: this.regisDate,
+        title: 'Welcome to AlwaysWin!',
+        content: 'You became a member of AlwaysWin!'
+      }]
     }
   }
 }

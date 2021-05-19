@@ -1,20 +1,20 @@
 <template>
   <div class="app-container">
-    <div v-if="user">
+    <div>
       <el-row :gutter="20">
 
         <el-col :span="6" :xs="24">
-          <user-card :user="user" />
+          <user-card :username="username" />
         </el-col>
 
         <el-col :span="18" :xs="24">
           <el-card>
             <el-tabs v-model="activeTab">
               <el-tab-pane label="Wallet" name="wallet">
-                <wallet :user="user" />
+                <wallet />
               </el-tab-pane>
               <el-tab-pane label="Timeline" name="timeline">
-                <timeline :user="user" />
+                <timeline />
               </el-tab-pane>
               <el-tab-pane label="Change Password" name="account">
                 <account />
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getInfo } from '@/api/user'
+import { mapGetters } from 'vuex'
 import UserCard from './components/UserCard'
 import Wallet from './components/Wallet'
 import Account from './components/Account'
@@ -40,36 +40,16 @@ export default {
   components: { UserCard, Wallet, Account, Timeline },
   data() {
     return {
-      user: {
-        uid: undefined,
-        username: '',
-        portrait: '',
-        phone: '',
-        email: '',
-        gender: '',
-        birthday: '',
-        regisDate: '',
-        balance: 0
-      },
       activeTab: 'wallet'
     }
   },
-
-  created() {
-    this.getUserInfo()
+  computed: {
+    ...mapGetters([
+      'username'
+    ])
   },
   methods: {
-    getUserInfo() {
-      getInfo().then(response => {
-        console.log('data ' + response.data.regisDate)
-        this.user = { ...response.data }
-        setTimeout(() => {
-        }, 1.5 * 1000)
-      })
-      console.log('user ' + this.user.regisDate)
-      console.log('user ' + this.user.birthday)
-      this.user.username = this.$store.getters.username
-    }
+
   }
 }
 </script>

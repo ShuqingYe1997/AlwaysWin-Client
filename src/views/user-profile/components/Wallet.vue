@@ -19,9 +19,9 @@
 
     <!--  pop up window  -->
     <el-dialog title="Add fund" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" label-position="left" label-width="100px" style="width: 350px; margin-left:50px;">
-        <el-form-item label="Amount">
-          <el-select v-model="temp.amount" class="filter-item" placeholder="Please select the amount" width="250px">
+      <el-form ref="dataForm" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="Amount" prop="amount">
+          <el-select v-model="query.amount" class="filter-item" placeholder="Select the amount" width="300px">
             <el-option v-for="item in amountOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -42,7 +42,7 @@
 
 <script>
 import countTo from 'vue-count-to'
-import { addFund } from '@/api/user'
+import { getInfo, addFund } from '@/api/user'
 
 const amountOptions = [
   { key: '10', display_name: '$10' },
@@ -59,47 +59,61 @@ const amountOptions = [
 export default {
   name: 'Wallet',
   components: { countTo },
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          uid: undefined,
-          username: '',
-          portrait: '',
-          phone: '',
-          email: '',
-          gender: '',
-          birthday: '',
-          regisDate: '',
-          balance: 0
-        }
-      }
-    }
-  },
+  // props: {
+  //   uid: {
+  //     type: String,
+  //     default: ''
+  //   }
+  // },
   data() {
     return {
       startVal: 0,
-      endVal: this.user.balance,
-      duration: 3000,
+      endVal: 0,
+      duration: 2000,
       decimals: 0,
       separator: ',',
       prefix: '$ ',
       dialogFormVisible: false,
       amountOptions,
-      temp: {
-        balance: this.user.balance + '', // param should be a string
+      user: {
+        balance: 0
+      },
+      query: {
+        balance: 0,
         amount: ''
       }
     }
   },
+  watch: {
+    user: function() {
+      this.endVal = this.user.balance
+    }
+  },
+  created() {
+    this.getUserInfo()
+  },
   methods: {
-    updateData() {
-      addFund(this.temp).then(() => {
-        this.$message.success('Update Successfully')
+    getUserInfo() {
+      getInfo().then(response => {
+        this.user = { ...response.data }
       })
-      // fresh value
-      this.endVal = this.user.balance + parseInt(this.temp.amount)
+    },
+
+    updateData() {
+      this.query.balance = this.user.balance + '' // param has to be string
+      console.log('original balance ' + this.query.balance)
+      addFund(this.query).then(() => {
+        this.dialogFormVisible = false
+        this.$notify({
+          title: 'Success',
+          message: 'Update Successfully',
+          type: 'success',
+          duration: 2000
+        })
+        // reflesh
+        this.user.balance += parseInt(this.query.amount)
+        this.endVal = this.user.balance
+      })
     }
   }
 }
