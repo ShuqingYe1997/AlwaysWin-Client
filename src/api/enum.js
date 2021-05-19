@@ -11,18 +11,36 @@ export const productStatuOption = [
 ]
 
 export const productCat = [{
-  value: 'Mobile Phones',
+  value: 'cell phone',
   label: 'Mobile Phones'
 }, {
-  value: 'Tablets',
+  value: 'tablet',
   label: 'Tablets'
 }, {
-  value: 'Portable Electronics',
-  label: 'Portable Electronics'
+  value: 'poortable audio',
+  label: 'Portable Audio'
 }, {
-  value: 'Home Appliances',
-  label: 'Home Appliances'
+  value: 'camera',
+  label: 'Camera'
 }, {
-  value: 'TV & Home Theater',
-  label: 'TV & Home Theater'
+  value: 'accessory',
+  label: 'Accessory'
+}, {
+  value: 'computer',
+  label: 'Computer'
+}, {
+  value: 'network hardware',
+  label: 'Network Hardware'
+}, {
+  value: 'car electronics',
+  label: 'Car Electronics'
+}, {
+  value: 'game console',
+  label: 'Game Console'
+}, {
+  value: 'vr',
+  label: 'VR Device'
+}, {
+  value: 'others',
+  label: 'Others'
 }]

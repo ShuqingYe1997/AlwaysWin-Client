@@ -1,12 +1,12 @@
 <template>
   <div class="dashboard-editor-container">
     <div class="chart-wrapper">
-      <el-drag-select v-model="value" style="width:100%;" multiple placeholder="Catalog" @change="getList">
+      <el-drag-select v-model="value" style="width:100%;" multiple placeholder="Catalog" @change="getList()">
         <el-option v-for="item in productCat" :key="item.value" :label="item.label" :value="item.value" />
       </el-drag-select>
     </div>
     <el-row :gutter="8">
-      <el-col v-for="item in displayList" :key="item.pid" :xs="{span: 6}" :sm="{span: 6}" :md="{span: 6}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
+      <el-col v-for="item in productList" :key="item.pid" :xs="{span: 6}" :sm="{span: 6}" :md="{span: 6}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
         <product-card :pid="item.pid" />
       </el-col>
     </el-row>
@@ -21,7 +21,7 @@ import ProductCard from './components/ProductCard'
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { productCat } from '@/api/enum.js'
-// import { overview } from '@/api/product.js'
+import { overview, overviewByCat } from '@/api/product.js'
 
 const defaultProductList = [{
   'pid': 1,
@@ -33,53 +33,7 @@ const defaultProductList = [{
   'price': 599,
   'status': 'success',
   'url': 'https://alwayswin-figures.s3.amazonaws.com/product-figure/default-product-thumbnail.png'
-}, {
-  'pid': 2,
-  'uid': 1,
-  'title': '2Apple iPhone XR 64GB Factory Unlocked Smartphone 4G LTE iOS Smartphone',
-  'cate1': 'cell phone',
-  'endTime': '2021-06-15T23:59:59.000-07:00',
-  'autoWinPrice': 599,
-  'price': 599,
-  'status': 'success',
-  'url': 'https://alwayswin-figures.s3.amazonaws.com/product-figure/default-product-thumbnail.png' }, {
-  'pid': 6,
-  'uid': 1,
-  'title': '3Apple iPhone XR 64GB Factory Unlocked Smartphone 4G LTE iOS Smartphone',
-  'cate1': 'cell phone',
-  'endTime': '2021-06-15T23:59:59.000-07:00',
-  'autoWinPrice': 599,
-  'price': 599,
-  'status': 'success',
-  'url': 'https://alwayswin-figures.s3.amazonaws.com/product-figure/default-product-thumbnail.png' }, {
-  'pid': 3,
-  'uid': 1,
-  'title': '4Apple iPhone XR 64GB Factory Unlocked Smartphone 4G LTE iOS Smartphone',
-  'cate1': 'cell phone',
-  'endTime': '2021-06-15T23:59:59.000-07:00',
-  'autoWinPrice': 599,
-  'price': 599,
-  'status': 'success',
-  'url': 'https://alwayswin-figures.s3.amazonaws.com/product-figure/default-product-thumbnail.png' }, {
-  'pid': 4,
-  'uid': 1,
-  'title': '5Apple iPhone XR 64GB Factory Unlocked Smartphone 4G LTE iOS Smartphone',
-  'cate1': 'cell phone',
-  'endTime': '2021-06-15T23:59:59.000-07:00',
-  'autoWinPrice': 599,
-  'price': 599,
-  'status': 'success',
-  'url': 'https://alwayswin-figures.s3.amazonaws.com/product-figure/default-product-thumbnail.png' }, {
-  'pid': 5,
-  'uid': 1,
-  'title': '6Apple iPhone XR 64GB Factory Unlocked Smartphone 4G LTE iOS Smartphone',
-  'cate1': 'cell phone',
-  'endTime': '2021-06-15T23:59:59.000-07:00',
-  'autoWinPrice': 599,
-  'price': 599,
-  'status': 'success',
-  'url': 'https://alwayswin-figures.s3.amazonaws.com/product-figure/default-product-thumbnail.png' }
-]
+}]
 
 export default {
   name: 'DashboardAdmin',
@@ -99,31 +53,54 @@ export default {
   data() {
     return {
       listQuery: {
+        total: 10,
         page: 1,
-        limit: 2, // TODO: For test only, remove it later
-        total: 5
+        limit: 10
       },
-      displayList: Object.assign({}, defaultProductList),
+      productList: Object.assign({}, defaultProductList),
       productCat,
       value: []
     }
   },
   created() {
-    this.productList = defaultProductList
+    this.listQuery = {
+      total: 10,
+      page: 1,
+      limit: 10
+    }
     this.getList()
   },
   methods: {
+    updateMessage: async function() {
+      this.getList()
+    },
     getList() {
-    //   this.listLoading = true
-      // overview().then(response => {
-      this.listQuery.page = 1
-      this.listQuery.total = this.productList.length
-      this.displayList = this.productList.slice(0, this.listQuery.limit)
-      // })
+      if (this.value.length === 0) {
+        overview(1, this.listQuery.limit).then(response => {
+          this.listQuery.page = 1
+          this.productList = response.data.list
+          this.listQuery.total = response.data.total
+        })
+      } else {
+        overviewByCat(1, this.listQuery.limit, this.value[0]).then(response => {
+          this.listQuery.page = 1
+          this.productList = response.data.list
+          this.listQuery.total = response.data.total
+        })
+      }
     },
     updatePage() {
-      const startIndex = (this.listQuery.page - 1) * this.listQuery.limit
-      this.displayList = this.productList.slice(startIndex, startIndex + this.listQuery.limit)
+      if (this.value.length === 0) {
+        overview(this.listQuery.page, this.listQuery.limit).then(response => {
+          this.productList = response.data.list
+          this.listQuery.total = response.data.total
+        })
+      } else {
+        overviewByCat(this.listQuery.page, this.listQuery.limit, this.value[0]).then(response => {
+          this.productList = response.data.list
+          this.listQuery.total = response.data.total
+        })
+      }
     }
   }
 }

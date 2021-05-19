@@ -3,13 +3,13 @@
     <router-link :to="`/product/${productForm.pid}`">
       <div>
         <div slot="header" class="box-card-header">
-          <img :src="`${productForm.thumbnail.thumbnail}`">
+          <img :src="`${productForm.thumbnail.url}`">
         </div>
         <div style="position:relative;">
           <pan-thumb :image="sellerInfo.portrait" class="panThumb" />
           <span class="price"> ${{ productForm.productStatus.price }} </span>
-          <div style="padding-top:35px;" class="title-item">
-            <span> {{ pid }}{{ productForm.title }}</span>
+          <div class="title-item">
+            <span> {{ productForm.title }}</span>
           </div>
           <div class="description-item">
             <span>{{ productForm.description }} </span>
@@ -18,7 +18,7 @@
             <Countdown :deadline="timecountdown" />
           </div>
           <div v-else class="start-item">
-            <Countdown :deadline="timecountdown" />
+            <Countdown deadline="2021/08/29 18:00:00 GMT+0300" />
           </div>
         </div>
       </div>
@@ -113,7 +113,7 @@ export default {
       sellerInfo: Object.assign({}, defaultSellerInfo),
       bidAction: 'Wait',
       isFav: true,
-      timecountdown: new Date()
+      timecountdown: '2011-10-10'
     }
   },
   computed: {
@@ -151,7 +151,7 @@ export default {
       this.isFav = false
       if (this.uid !== '') {
         checkInWishList(this.uid, passed_pid).then(response => {
-          this.isFav = response.data == null
+          this.isFav = response.code === '500'
         }).catch(err => {
           console.log(err)
         })
@@ -183,16 +183,15 @@ export default {
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 .box-card-component{
   .el-card__header {
     padding: 0px!important;
   }
-  min-width: 24px;
+  min-width: 200px;
   margin-right: 32px ;
+  min-height: 500px;
 }
-</style>
-<style lang="scss" scoped>
 .box-card-component {
   .box-card-header {
     position: relative;
@@ -238,17 +237,25 @@ export default {
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top:35px;
+    margin-top: 10px;
+    height: 100px;
   }
 
   .description-item {
     margin-bottom: 10px;
     font-size: 14px;
+    height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .start-item {
     position: relative;
     text-align: left;
-        color: #b6350ec2;
+        color: #aa3816c2;
     top: 0px;
     right: 0px;
     font-size: 16px;
@@ -297,6 +304,7 @@ export default {
     right: 0px;
     font-size: 24px;
     font-weight: bold;
+    padding-top: 2px;
   }
 
   .icon-button,
