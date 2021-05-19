@@ -18,7 +18,7 @@
             <Countdown :deadline="timecountdown" />
           </div>
           <div v-else class="start-item">
-            <Countdown deadline="2021/08/29 18:00:00 GMT+0300" />
+            <Countdown :deadline="timecountdown" />
           </div>
         </div>
       </div>
@@ -47,6 +47,7 @@ import Countdown from 'vuejs-countdown'
 import { productDetail } from '@/api/product.js'
 import { addToWishList, checkInWishList } from '@/api/wishlist.js'
 import { productStatuOption } from '@/api/enum.js'
+import { getSellerInfo } from '@/api/user.js'
 
 const defaultProductForm = {
   pid: 8,
@@ -94,9 +95,11 @@ const defaultProductForm = {
 
 const defaultSellerInfo =
 {
-  uid: undefined,
-  name: 'TestName',
-  portrait: 'https://ss7.vzw.com/is/image/VerizonWireless/iphone-12-pro-pacific-blue'
+  uid: 1,
+  username: 'Arthur',
+  role: 'user',
+  portrait: 'https://alwayswin-figures.s3.amazonaws.com/icon/default-icon.png',
+  token: ''
 }
 
 export default {
@@ -124,12 +127,12 @@ export default {
   },
   created() {
     this.fetchData(this.pid)
-    this.ProcessData(this.pid)
   },
   methods: {
     fetchData(passed_pid) {
       productDetail(passed_pid).then(response => {
         this.productForm = response.data
+        this.ProcessData(this.pid)
         console.log(this.productForm.name)
       }).catch(err => {
         console.log(err)
@@ -137,6 +140,10 @@ export default {
     },
     ProcessData(passed_pid) {
       // Handle Product Status
+      console.log(this.productForm)
+      console.log(passed_pid + ' status : = ' + this.productForm.productStatus.status)
+      console.log(passed_pid + ' status value : = ' + productStatuOption[this.productForm.productStatus.status])
+      console.log('test pid' + productStatuOption['waiting'])
       if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['waiting']) {
         this.bidAction = 'Wait For Start'
         this.timecountdown = this.productForm.startTime
@@ -145,7 +152,7 @@ export default {
         this.timecountdown = this.productForm.endTime
       } else {
         this.bidAction = 'End'
-        this.timecountdown = new Date()
+        this.timecountdown = '2011-01-01'
       }
       // Handle WishList
       this.isFav = false
@@ -157,6 +164,10 @@ export default {
         })
       }
       // TODO:Handle Seller Info
+      getSellerInfo(this.productForm.uid).then(response => {
+        this.sellerInfo = response.data
+        console.log(this.sellerInfo)
+      })
     },
     AddToFav() {
       if (this.uid !== '') {

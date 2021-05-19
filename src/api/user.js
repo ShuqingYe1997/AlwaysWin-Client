@@ -53,3 +53,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getSellerInfo(sid) {
+  return request({
+    url: `/seller/${sid}`,
+    method: 'get'
+  })
+}

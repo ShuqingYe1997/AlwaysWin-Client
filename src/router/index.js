@@ -75,7 +75,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }
       }
     ]
   }
@@ -106,7 +106,7 @@ export const asyncRoutes = [
       },
       {
         path: 'address',
-        component: () => import('@/views/user-profile/components/Address'),
+        component: () => import('@/views/user-profile/components/address'),
         name: 'Address',
         meta: { title: 'Address', icon: 'list' }
       }

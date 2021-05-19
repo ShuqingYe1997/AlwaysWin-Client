@@ -1,14 +1,13 @@
-export const productStatuOption = [
-  { key: 'pending', value: 0 },
-  { key: 'waiting', value: 1 },
-  { key: 'bidding', value: 2 },
-  { key: 'extended1', value: 3 },
-  { key: 'extended2', value: 4 },
-  { key: 'extended3', value: 5 },
-  { key: 'broughtIn', value: 6 },
-  { key: 'success', value: 7 },
-  { key: 'canceled', value: 8 }
-]
+export const productStatuOption = new Map()
+productStatuOption['pending'] = 0
+productStatuOption['waiting'] = 1
+productStatuOption['bidding'] = 2
+productStatuOption['extended1'] = 3
+productStatuOption['extended2'] = 4
+productStatuOption['extended3'] = 5
+productStatuOption['broughtIn'] = 6
+productStatuOption['success'] = 7
+productStatuOption['canceled'] = 8
 
 export const productCat = [{
   value: 'cell phone',
