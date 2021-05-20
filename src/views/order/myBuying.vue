@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="statusSearch" placeholder="row Status" clearable class="filter-item" style="width: 130px;margin-right: 20px">
+      <el-select v-model="statusSearch" placeholder="Order Status" clearable class="filter-item" style="width: 130px;margin-right: 20px">
         <el-option
           v-for="item in Object.keys(orderStatus)"
           :key="orderStatus[item].value"
@@ -12,7 +12,7 @@
       <el-input
         v-model="numberSearch"
         prefix-icon="el-icon-search"
-        placeholder="Search row Number"
+        placeholder="Search Order Number"
         style="width: 300px;margin-right: 20px"
         class="filter-item"
         clearable
@@ -38,12 +38,12 @@
           <span>{{ row.number }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Created Time" width="180px" align="center" prop="createTime" sortable="custom">
+      <el-table-column label="Created Time" width="150px" align="center" prop="createTime" sortable="custom">
         <template slot-scope="{row}">
           <span>{{ row.createTime | formatDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Product Name" min-width="150px" align="center">
+      <el-table-column label="Product Name" min-width="150px">
         <template slot="header">
           <el-input
             v-model="titleSearch"
@@ -55,10 +55,10 @@
           />
         </template>
         <template slot-scope="{row}">
+          <el-image style="width: 70px; height: 70px;margin-left: 10px;margin-right: 10px" :src="row.productPreview.url" fit="cover" />
           <el-link type="primary" :href="'#/product/' + row.productPreview.pid" :underline="false">
             {{ row.productPreview.title | productTitleFilter }}
           </el-link>
-          <el-tag style="margin-left: 10px">{{ row.productPreview.cate1 }}</el-tag>
         </template>
       </el-table-column>
 
@@ -73,12 +73,19 @@
 
       <el-table-column label="Price" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>${{ row.productPreview.price }}</span>
+          <span>${{ row.productPreview.price | toThousandFilter }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Payment" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>${{ row.payment }}</span>
+          <span>${{ row.payment | toThousandFilter }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Address" width="130px" align="center">
+        <template slot-scope="{row}">
+          <el-popover trigger="hover" placement="top" :content="row.address">
+            <span slot="reference">{{ row.address | addressFilter }}</span>
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column label="Status" class-name="status-col" width="100">
@@ -165,6 +172,11 @@ export default {
     productTitleFilter(str) {
       if (str.length > 60) {
         return str.substring(0, 60) + '...'
+      } else return str
+    },
+    addressFilter(str) {
+      if (str.length > 20) {
+        return str.substring(0, 20) + '...'
       } else return str
     }
   },
