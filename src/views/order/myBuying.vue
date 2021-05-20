@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="statusSearch" placeholder="Order Status" clearable class="filter-item" style="width: 130px;margin-right: 20px">
+      <el-select v-model="statusSearch" placeholder="row Status" clearable class="filter-item" style="width: 130px;margin-right: 20px">
         <el-option
           v-for="item in Object.keys(orderStatus)"
           :key="orderStatus[item].value"
@@ -12,7 +12,7 @@
       <el-input
         v-model="numberSearch"
         prefix-icon="el-icon-search"
-        placeholder="Search Order Number"
+        placeholder="Search row Number"
         style="width: 300px;margin-right: 20px"
         class="filter-item"
         clearable
@@ -27,18 +27,18 @@
       :key="tableKey"
       v-loading="listLoading"
       :data="tableData"
-      border
+      brow
       fit
       highlight-current-row
       style="width: 100%;"
-      :default-sort="{prop: 'createTime', order: 'descending'}"
+      :default-sort="{prop: 'createTime', row: 'descending'}"
     >
       <el-table-column label="Number" width="110px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.number }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Created Time" width="150px" align="center" prop="createTime" sortable="custom" :format="formatOptions">
+      <el-table-column label="Created Time" width="180px" align="center" prop="createTime" sortable="custom">
         <template slot-scope="{row}">
           <span>{{ row.createTime | formatDate }}</span>
         </template>
@@ -108,14 +108,43 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
+    <el-dialog title="Pay My Order" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="Order Number" prop="number">
+          <el-input v-model="temp.number" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="Payment" prop="payment">
+          <el-input v-model="temp.payment" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="Address" prop="address">
+          <el-select v-model="temp.address" class="selector" placeholder="Please choose your delivery address">
+            <el-option
+              v-for="item in addressList"
+              :key="item.aid"
+              :label="item.str"
+              :value="item.str"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          Cancel
+        </el-button>
+        <el-button type="primary" @click="updateData()">
+          Pay
+        </el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { getOrderByNumber, getMyOrder, updateOrder, deleteOrder, getOrderStatus } from '@/api/order'
+import { getMyAddress } from '@/api/address'
 import { productCat } from '@/api/enum'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -154,7 +183,17 @@ export default {
       statusSearch: '',
       titleSearch: '',
       numberSearch: '',
-      formatOptions: { format: 'MM-dd-yyyy', type: 'date' }
+      dialogFormVisible: false,
+      temp: {
+        oid: '',
+        status: '',
+        payment: 0,
+        address: ''
+      },
+      addressList: [],
+      rules: {
+        address: [{ required: true, message: 'Address is required', trigger: 'change' }]
+      }
     }
   },
   computed: {
@@ -167,6 +206,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getAddress()
   },
   methods: {
     getList() {
@@ -178,6 +218,19 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 200)
+      })
+    },
+
+    getAddress() {
+      getMyAddress(this.listQuery).then(response => {
+        const addresses = response.data.list
+        for (const item of addresses) {
+          const it = {
+            aid: item.aid,
+            str: item.name + ', ' + item.phone + ', ' + item.location + ', ' + item.state + ', ' + item.zipCode
+          }
+          this.addressList.push(it)
+        }
       })
     },
 
@@ -193,44 +246,73 @@ export default {
           }, 200)
         })
       }
-    }
-  },
+    },
 
-  handleUpdate(row) {
-    this.temp = Object.assign({}, row) // copy obj
-    this.temp.timestamp = new Date(this.temp.timestamp)
-    this.dialogFormVisible = true
-    this.$nextTick(() => {
-      this.$refs['dataForm'].clearValidate()
-    })
-  },
-
-  handleDelete(row, index) {
-    this.$confirm('Delete this order for sure?', 'Warning', {
-      confirmButtonText: 'Comfirm',
-      cancelButtonText: 'Cancel',
-      type: 'danger'
-    }).then(() => {
-      deleteOrder(row.oid).then(() => {
-        this.$notify({
-          title: 'Success',
-          message: 'Delete Successfully',
-          type: 'success',
-          duration: 2000
+    handleUpdate(row) {
+    // 签收
+      if (row.status === 'shipped') {
+        this.$confirm('Mark this order as received?', 'Confirm', {
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          this.temp = { ...row } // copy obj
+          this.temp.status = 'received'
+          updateOrder(this.temp).then(() => {
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+            this.getList()
+          })
         })
-        this.list.splice(index, 1)
-      })
-    })
-  },
-
-  formatJson(filterVal) {
-    return this.list.map(v => filterVal.map(j => {
-      if (j === 'createdTime') {
-        return parseTime(v[j])
-      } else {
-        return v[j]
+      } else { // 付钱 row.status === 'placed'
+        this.temp = { ...row } // copy obj
+        this.temp.payment = row.productPreview.price
+        this.dialogFormVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+        })
       }
-    }))
+    },
+
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.temp.status = 'paid'
+          updateOrder(this.temp).then(() => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+      this.getList()
+    },
+
+    handleDelete(row, index) {
+      this.$confirm('Delete this row for sure?', 'Warning', {
+        confirmButtonText: 'Comfirm',
+        cancelButtonText: 'Cancel',
+        type: 'danger'
+      }).then(() => {
+        deleteOrder(row.oid).then(() => {
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
+          this.list.splice(index, 1)
+        })
+      })
+    }
   }
 }
 </script>
