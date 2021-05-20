@@ -76,7 +76,6 @@
         <el-form-item label="ZipCode" prop="zipCode">
           <el-input v-model="temp.zipCode" placeholder="Please input the zip code" width="200px" />
         </el-form-item>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">

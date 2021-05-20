@@ -2,7 +2,7 @@
   <div>
     <el-card style="margin-bottom:20px;">
       <div slot="header" class="clearfix">
-        <el-button type="primary" icon="el-icon-edit" @click="handleUpdate()">Edit</el-button>
+        <el-link icon="el-icon-edit" @click="handleUpdate()">Edit</el-link>
       </div>
 
       <div class="user-profile">

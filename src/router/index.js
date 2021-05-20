@@ -113,18 +113,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/icon',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'Icons', icon: 'icon', noCache: true }
-      }
-    ]
-  },
-  {
     path: '/product',
     component: Layout,
     redirect: '/product/_id',
@@ -138,45 +126,32 @@ export const asyncRoutes = [
         path: '/product/:id(\\d+)',
         component: () => import('@/views/product/_id'),
         name: 'ProductPage',
-        meta: { title: 'product', noCache: true }
+        meta: { title: 'Product details', noCache: true }
       }
     ]
   },
 
   {
-    path: '/error-log',
+    path: '/purchase',
     component: Layout,
+    name: 'UserProfile',
+    meta: {
+      title: 'My Purchase',
+      icon: 'shopping',
+      roles: ['user']
+    },
     children: [
       {
-        path: 'log',
-        component: () => import('@/views/error-log/index'),
-        name: 'ErrorLog',
-        meta: { title: 'Error Log', icon: 'bug' }
-      }
-    ]
-  },
-  {
-    path: '/theme',
-    component: Layout,
-    children: [
+        path: 'my-order',
+        component: () => import('@/views/order/myBuying'),
+        name: 'My Order',
+        meta: { title: 'My Order', icon: 'clipboard' }
+      },
       {
-        path: 'index',
-        component: () => import('@/views/theme/index'),
-        name: 'Theme',
-        meta: { title: 'Theme', icon: 'theme' }
-      }
-    ]
-  },
-
-  {
-    path: '/clipboard',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/clipboard/index'),
-        name: 'ClipboardDemo',
-        meta: { title: 'Clipboard', icon: 'clipboard' }
+        path: 'my-bid',
+        component: () => import('@/views/bid-history/index'),
+        name: 'My bid',
+        meta: { title: 'My bid', icon: 'money' }
       }
     ]
   },
