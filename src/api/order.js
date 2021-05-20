@@ -22,6 +22,14 @@ export function getMyOrder(params) {
   })
 }
 
+export function getMySellingOrder(uid, params) {
+  return request({
+    url: `/getSellingOrder/${uid}`,
+    method: 'get',
+    params
+  })
+}
+
 export function createOrder(data) {
   return request({
     url: '/order/create',

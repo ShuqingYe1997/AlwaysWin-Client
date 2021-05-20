@@ -62,15 +62,6 @@
         </template>
       </el-table-column>
 
-      <!--thumbnail-->
-      <!-- <el-table-column label="Author" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column> -->
-
-      <!--  address  -->
-
       <el-table-column label="Price" width="110px" align="center">
         <template slot-scope="{row}">
           <span>${{ row.productPreview.price | toThousandFilter }}</span>

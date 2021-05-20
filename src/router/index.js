@@ -148,7 +148,7 @@ export const asyncRoutes = [
       },
       {
         path: 'my-bid',
-        component: () => import('@/views/bid/history/index'),
+        component: () => import('@/views/bid/index'),
         name: 'Mybid',
         meta: { title: 'My bid', icon: 'money' }
       }
@@ -168,14 +168,14 @@ export const asyncRoutes = [
         path: 'my-selling-order',
         component: () => import('@/views/order/mySelling'),
         name: 'MySellingOrder',
-        meta: { title: 'My Selling Order', icon: 'el-icon-s-finance' }
-      },
-      {
-        path: 'my-product',
-        component: () => import('@/views/bid/history/index'),
-        name: 'MyProduct',
-        meta: { title: 'My Product', icon: 'el-icon-s-goods' }
+        meta: { title: 'My Selling', icon: 'el-icon-s-finance' }
       }
+      // {
+      //   path: 'my-product',
+      //   component: () => import('@/views/bid/history/index'),
+      //   name: 'MyProduct',
+      //   meta: { title: 'My Product', icon: 'el-icon-s-goods' }
+      // }
     ]
   },
 

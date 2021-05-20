@@ -64,3 +64,53 @@ export function getProductStatus(pid) {
     method: 'get'
   })
 }
+
+export function productStatus() {
+  return ({
+    'pending': {
+      value: 'pending',
+      type: 'info',
+      text: 'Pending'
+    },
+    'waiting': {
+      value: 'waiting',
+      type: 'info',
+      text: 'Waiting'
+    },
+    'bidding': {
+      value: 'bidding',
+      type: 'success',
+      text: 'Bidding'
+    },
+    'extended1': {
+      value: 'extended1',
+      type: 'success',
+      text: 'Extending Phase 1'
+    },
+    'extended2': {
+      value: 'extended2',
+      type: 'danger',
+      text: 'Extending Phase 2'
+    },
+    'extended3': {
+      value: 'extended3',
+      type: 'danger',
+      text: 'Extending Phase 3'
+    },
+    'broughtIn': {
+      value: 'broughtIn',
+      type: 'info',
+      text: 'Brought In'
+    },
+    'success': {
+      value: 'success',
+      type: 'warning',
+      text: 'Sold'
+    },
+    'canceled': {
+      value: 'canceled',
+      type: 'info',
+      text: 'Canceled'
+    }
+  })
+}

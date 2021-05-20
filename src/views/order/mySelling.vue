@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="statusSearch" placeholder="row Status" clearable class="filter-item" style="width: 130px;margin-right: 20px">
+      <el-select v-model="statusSearch" placeholder="Order Status" clearable class="filter-item" style="width: 130px;margin-right: 20px">
         <el-option
           v-for="item in Object.keys(orderStatus)"
           :key="orderStatus[item].value"
@@ -12,7 +12,7 @@
       <el-input
         v-model="numberSearch"
         prefix-icon="el-icon-search"
-        placeholder="Search row Number"
+        placeholder="Search order Number"
         style="width: 300px;margin-right: 20px"
         class="filter-item"
         clearable
@@ -62,15 +62,6 @@
         </template>
       </el-table-column>
 
-      <!--thumbnail-->
-      <!-- <el-table-column label="Author" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column> -->
-
-      <!--  address  -->
-
       <el-table-column label="Price" width="110px" align="center">
         <template slot-scope="{row}">
           <span>${{ row.productPreview.price | toThousandFilter }}</span>
@@ -109,7 +100,8 @@
 </template>
 
 <script>
-import { getOrderByNumber, getMyOrder, updateOrder, deleteOrder, getOrderStatus } from '@/api/order'
+import { mapGetters } from 'vuex'
+import { getOrderByNumber, getMySellingOrder, updateOrder, deleteOrder, getOrderStatus } from '@/api/order'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -152,6 +144,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'uid'
+    ]),
     tableData: function() {
       return this.list
         .filter(data => !this.statusSearch || data.status === this.statusSearch)
@@ -165,7 +160,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      getMyOrder(this.listQuery).then(response => {
+      getMySellingOrder(this.uid, this.listQuery).then(response => {
         this.list = response.data.list
         this.total = response.data.total
         // Just to simulate the time of the request
@@ -190,7 +185,7 @@ export default {
     },
 
     handleUpdate(row) {
-    // 签收
+    // 发货
       if (row.status === 'paid') {
         this.$confirm('Mark this order as shipped?', 'Confirm', {
           confirmButtonText: 'Yes',
