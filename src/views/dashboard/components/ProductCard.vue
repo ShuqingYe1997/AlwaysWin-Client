@@ -15,10 +15,10 @@
             <span>{{ productForm.description }} </span>
           </div>
           <div v-if="bidAction === 'Place Your Offer'" class="end-item">
-            <Countdown :deadline="timecountdown" />
+            <Countdown :deadline="this.timecountdown" />
           </div>
           <div v-else class="start-item">
-            <Countdown :deadline="timecountdown" />
+            <Countdown :deadline="this.timecountdown" />
           </div>
         </div>
       </div>
@@ -43,61 +43,8 @@ import PanThumb from '@/components/PanThumb'
 import Countdown from 'vuejs-countdown'
 import { productDetail } from '@/api/product.js'
 import { addToWishList, checkInWishList, deleteFromWishList } from '@/api/wishlist.js'
-import { productStatuOption } from '@/api/enum.js'
+import { productStatuOption, defaultSellerInfo, defaultProductForm } from '@/api/enum.js'
 import { getSellerInfo } from '@/api/user.js'
-
-const defaultProductForm = {
-  pid: 8,
-  uid: 1,
-  title: 'Iphone 10 Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10',
-  description: 'test txt a lot of text test txt a lot of text test txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of text',
-  cate1: '',
-  cate2: '',
-  cate3: '',
-  createTime: '',
-  startTime: '',
-  endTime: '',
-  startPrice: 0.0,
-  autoWinPrice: 0.0,
-  reservedPrice: 0.0,
-  minIncrement: 1.0,
-  productStatus: {
-    psid: 8,
-    pid: 8,
-    price: 0.0,
-    status: '',
-    endTime: ''
-  },
-  figures: [
-    {
-      fid: 8,
-      pid: 8,
-      url: '',
-      description: '',
-      updatedTime: '',
-      thumbnail: true
-    }
-  ],
-  thumbnail: {
-    fid: 8,
-    pid: 8,
-    url: '',
-    description: '',
-    updatedTime: '',
-    thumbnail: true
-  },
-  canceled: false,
-  passed: true
-}
-
-const defaultSellerInfo =
-{
-  uid: 1,
-  username: 'Arthur',
-  role: 'user',
-  portrait: 'https://alwayswin-figures.s3.amazonaws.com/icon/default-icon.png',
-  token: ''
-}
 
 export default {
   components: { PanThumb, Countdown },
@@ -113,7 +60,7 @@ export default {
       sellerInfo: Object.assign({}, defaultSellerInfo),
       bidAction: 'Wait',
       isFav: true,
-      timecountdown: '2011-10-10'
+      timecountdown: '2021-10-10'
     }
   },
   computed: {
@@ -140,11 +87,12 @@ export default {
       if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['waiting']) {
         this.bidAction = 'Wait For Start'
         this.timecountdown = this.productForm.startTime.replace(/T/, ' ').replace(/\..+/, '')
-        // console.log(this.timecountdown)
+        console.log(this.timecountdown)
       } else if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['broughtIn']) {
         this.bidAction = 'Place Your Offer'
+        console.log('placeoffer origin: ' + this.productForm.endTime)
         this.timecountdown = this.productForm.endTime.replace(/T/, ' ').replace(/\..+/, '')
-        // console.log(this.timecountdown)
+        console.log('placeoffer wrong: ' + this.timecountdown)
       } else {
         this.bidAction = 'End'
         this.timecountdown = '2011-01-01 00:00:00'

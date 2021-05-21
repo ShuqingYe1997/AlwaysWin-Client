@@ -4,63 +4,69 @@
       <div class="user-images">
         <el-carousel :interval="6000" type="card" height="400px">
           <el-carousel-item v-for="item in carouselImages" :key="item">
-            <img :src="item+carouselPrefix" class="image">
+            <img :src="item" class="image">
           </el-carousel-item>
         </el-carousel>
       </div>
-      <div class="chart-wrapper">
-        <div class="chart-wrapper">
-          <!-- <h1>{{ product.name }}</h1> -->
-          <h1>Product Name</h1>
-          <!-- <h4 class="price">{{ product.price | dollar }}</h4> -->
-          <h4 class="price">$100.00</h4>
-          <!-- <p>{{ product.description }}</p> -->
-          <p>Display: 6.7 inches Super Retina XDR OLED, Scratch-resistant ceramic glass, oleophobic coating - Resoultion: 1284 x 2778 pixels
-            Memory: 256GB 6GB RAM
-            Quad: 12 MP + 12 MP + 12 MP + TOF 3D LiDAR scanner w/ Dual-LED dual-tone flash, HDR (photo/panorama) -- Selfie Camera: Dual
-            12MP + SL 3D, (depth/biometrics sensor)
-            Platform: iOS 14.1 -- Apple A14 Bionic -- Hexa-core (2x3.1 GHz Firestorm + 4x1.8 GHz Icestorm) -- Apple GPU (4-core graphics)
-            Battery: Li-Ion 3687 mAh, non-removable - Qi fast wireless charging 15W</p>
-        </div>
-        <div class="chart-wrapper">
-          <div class="start-item">
-            <Countdown deadline="2021/08/13" />
+      <el-row :gutter="8">
+        <el-col :xs="{span: 12}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 12}" :xl="{span: 12}" style="margin-bottom:30px;">
+          <div class="user-header">
+            <pan-thumb :image="sellerInfo.portrait" class="panThumb" />
+            <p class="username"> {{ sellerInfo.username }}</p>
           </div>
-        </div>
-        <div class="chart-wrapper">
-          <el-button style="width: 30%" type="primary" @click.prevent.stop="guide">
-            Bid
-          </el-button>
-          <el-button class="svg-icon" style="background: star" />
-        </div>
-        <div class="chart-wrapper">
-          <bid-list />
-        </div>
-      </div>
+          <div class="chart-wrapper">
+            <h1>{{ productForm.title }}</h1>
+            <p>{{ productForm.description }}</p>
+          </div>
+        </el-col>
+        <el-col :xs="{span: 12}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 12}" :xl="{span: 12}" style="margin-bottom:30px;">
+          <div v-if="bidAction === 'Place Your Offer'" class="end-item">
+            <Countdown :deadline="this.timecountdown" />
+            <p class="price"> ${{ productForm.productStatus.price }}</p>
+          </div>
+          <div v-else class="start-item">
+            <Countdown :deadline="this.timecountdown" />
+            <p class="price"> ${{ productForm.productStatus.price }}</p>
+          </div>
+          <div style="margin-bottom: 32px;">
+            <el-button v-if="bidAction === 'Place Your Offer'" style="width: 90%" type="primary" @click.prevent.stop="guide">
+              {{ bidAction }}
+            </el-button>
+            <el-button v-else style="width: 90%" type="info" disabled>
+              {{ bidAction }}
+            </el-button>
+            <el-button class="icon-button" @click="AddToFav()">
+              <i :class="isFav? 'el-icon-star-on' : 'el-icon-star-off'" />
+            </el-button>
+          </div>
+          <div>
+            <bid-list />
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import Countdown from 'vuejs-countdown'
+import PanThumb from '@/components/PanThumb'
 import BidList from './BidList'
-
-const avatarPrefix = '?imageView2/1/w/80/h/80'
-const carouselPrefix = '?imageView2/2/h/440'
+import { productDetail } from '@/api/product.js'
+import { addToWishList, checkInWishList, deleteFromWishList } from '@/api/wishlist.js'
+import { productStatuOption, defaultSellerInfo, defaultProductForm } from '@/api/enum.js'
+import { getSellerInfo } from '@/api/user.js'
 
 export default {
   components: {
+    PanThumb,
     Countdown,
     BidList
   },
 
   data() {
     return {
-      id: this.$route.params.id,
-      quantity: 1,
-      size: null,
-      showSizeRequiredMessage: false,
       carouselImages: [
         'https://wpimg.wallstcn.com/9679ffb0-9e0b-4451-9916-e21992218054.jpg',
         'https://wpimg.wallstcn.com/bcce3734-0837-4b9f-9261-351ef384f75a.jpg',
@@ -68,16 +74,24 @@ export default {
         'https://wpimg.wallstcn.com/50530061-851b-4ca5-9dc5-2fead928a939.jpg',
         'https://ss7.vzw.com/is/image/VerizonWireless/iphone-12-pro-pacific-blue'
       ],
-      avatarPrefix,
-      carouselPrefix,
-      tempcart: [] // this object should be the same as the json store object, with additional params, quantity and size
+      pid: this.$route.params.id,
+      productForm: Object.assign({}, defaultProductForm),
+      sellerInfo: Object.assign({}, defaultSellerInfo),
+      bidAction: 'Wait',
+      isFav: true,
+      timecountdown: '2021-12-12'
     }
   },
   computed: {
-    ...mapState(['storedata']),
-    product() {
-      return this.storedata.find(el => el.id === this.id)
-    }
+    ...mapGetters([
+      'roles',
+      'uid'
+    ])
+  },
+  created() {
+    this.pid = this.$route.params.id
+    console.log('pid' + this.pid)
+    this.fetchData(this.pid)
   },
   methods: {
     cartAdd() {
@@ -94,6 +108,66 @@ export default {
       }
       this.tempcart.push(item)
       this.$store.commit('addToCart', { ...item })
+    },
+    fetchData(passed_pid) {
+      productDetail(passed_pid).then(response => {
+        this.productForm = response.data
+        this.ProcessData(this.pid)
+        console.log(this.productForm.name)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    ProcessData(passed_pid) {
+      // Handle Product Status
+      if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['waiting']) {
+        this.bidAction = 'Wait For Start'
+        this.timecountdown = this.productForm.startTime.replace(/T/, ' ').replace(/\..+/, '')
+        console.log(this.timecountdown)
+      } else if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['broughtIn']) {
+        this.bidAction = 'Place Your Offer'
+        console.log('placeoffer origin: ' + this.productForm.endTime)
+        this.timecountdown = this.productForm.endTime.replace(/T/, ' ').replace(/\..+/, '')
+        console.log('placeoffer wrong: ' + this.timecountdown)
+      } else {
+        this.bidAction = 'End'
+        this.timecountdown = '2011-01-01 00:00:00'
+      }
+      // Handle WishList
+      this.isFav = false
+      if (this.uid !== '') {
+        console.log('start check fav:' + this.uid)
+        checkInWishList(this.uid, passed_pid).then(response => {
+          this.isFav = false
+        }).catch(err => {
+          this.isFav = true
+          console.log(err)
+        })
+      }
+      // TODO:Handle Seller Info
+      getSellerInfo(this.productForm.uid).then(response => {
+        this.sellerInfo = response.data
+      })
+    },
+    AddToFav() {
+      if (this.uid !== '') {
+        if (this.isFav === false) {
+          const request_data = { uid: this.uid, pid: this.pid }
+          addToWishList(request_data).then(response => {
+            this.isFav = true
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          deleteFromWishList(this.uid, this.pid).then(response => {
+            this.isFav = false
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      } else {
+        console.log('Please Login firist.')
+      }
     }
   }
 }
@@ -113,8 +187,15 @@ export default {
   }
 
   .chart-wrapper {
-    padding: 0px 10px 0;
+    padding: 0px 12px 0;
     margin-bottom: 32px;
+  }
+
+  .user-header{
+    padding: 0px 12px 0;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -135,7 +216,7 @@ select {
   width: 60px;
   font-size: 25px;
   margin: 0 5px;
-  padding: 5px 10px;
+  padding: 5px 12px;
 }
 
 .update-num {
@@ -147,13 +228,13 @@ select {
 }
 
 .size {
-  margin-left: 10px;
+  margin-left: 12px;
 }
 
 .size-picker {
   width: 130px;
   font-size: 20px;
-  height: 100%;
+  height: 120%;
   border: 0;
   background-color: white;
   outline: 1px solid #ccc;
@@ -170,7 +251,7 @@ select {
 
 @media screen and (max-width: 650px) {
   .img img {
-    width: 100%;
+    width: 120%;
   }
 
   .item-contain {
@@ -186,10 +267,8 @@ select {
 
  .price {
     position: relative;
-    text-align: left;
+    float: right;
     color: #1ec9ba;
-    top: 0px;
-    right: 0px;
     font-size: 24px;
     font-weight: bold;
   }
@@ -197,7 +276,19 @@ select {
 .start-item {
     position: relative;
     text-align: left;
-        color: #d6882f;
+    color: #aa3816c2;
+    top: 0px;
+    right: 0px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .end-item {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    text-align: left;
+    color: #6cd62f;
     top: 0px;
     right: 0px;
     font-size: 16px;
@@ -207,4 +298,42 @@ select {
    .user-images {
       padding-top: 20px;
     }
+
+  .icon-button,
+  .icon-button:hover,
+  .icon-button:active,
+  .icon-button:after
+  {
+    padding: 0px;
+    margin: 12px;
+    border: none;
+    min-width: 6px;
+    position: absolute;
+    align-self: right;
+    background: transparent;
+  }
+
+  .panThumb {
+    z-index: 120;
+    height: 70px!important;
+    width: 70px!important;
+    position: absolute!important;
+    top: -20px;
+    left: 0px;
+    border: 5px solid #ffffff;
+    background-color: #fff;
+    margin: auto;
+    box-shadow: none!important;
+    ::v-deep .pan-info {
+      box-shadow: none!important;
+    }
+}
+
+.username {
+  float: left;
+  position: relative;
+  color: #000000;
+  padding: 0px 70px 0px;
+  font-size: 16px;
+}
 </style>
