@@ -1,12 +1,12 @@
 <template>
   <section class="todoapp">
     <el-table :data="filterlist" style="width: 100%;padding-top: 15px;">
-      <el-table-column label="User" min-width="200">
+      <el-table-column label="User" min-width="150">
         <template slot-scope="scope">
           {{ scope.row.order_no | orderNoFilter }}
         </template>
       </el-table-column>
-      <el-table-column label="Offer" width="195" align="center">
+      <el-table-column label="Offer" width="250" align="center">
         <template slot-scope="scope">
           ${{ scope.row.price | toThousandFilter }}
         </template>
