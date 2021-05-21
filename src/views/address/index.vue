@@ -154,7 +154,7 @@ const stateOptions = [
 ]
 
 export default {
-  name: 'Address',
+  name: 'AddressTable',
   components: { Pagination },
   data() {
     return {

@@ -130,11 +130,10 @@ export const asyncRoutes = [
       }
     ]
   },
-
   {
     path: '/purchase',
     component: Layout,
-    name: 'UserProfile',
+    name: 'Purchase',
     meta: {
       title: 'My Purchase',
       icon: 'shopping',
@@ -144,15 +143,39 @@ export const asyncRoutes = [
       {
         path: 'my-order',
         component: () => import('@/views/order/myBuying'),
-        name: 'My Order',
+        name: 'MyOrder',
         meta: { title: 'My Order', icon: 'clipboard' }
       },
       {
         path: 'my-bid',
-        component: () => import('@/views/bid-history/index'),
-        name: 'My bid',
+        component: () => import('@/views/bid/index'),
+        name: 'Mybid',
         meta: { title: 'My bid', icon: 'money' }
       }
+    ]
+  },
+  {
+    path: '/sell',
+    component: Layout,
+    name: 'Sell',
+    meta: {
+      title: 'Seller Hub',
+      icon: 'el-icon-s-shop',
+      roles: ['user']
+    },
+    children: [
+      {
+        path: 'my-selling-order',
+        component: () => import('@/views/order/mySelling'),
+        name: 'MySellingOrder',
+        meta: { title: 'My Selling', icon: 'el-icon-s-finance' }
+      }
+      // {
+      //   path: 'my-product',
+      //   component: () => import('@/views/bid/history/index'),
+      //   name: 'MyProduct',
+      //   meta: { title: 'My Product', icon: 'el-icon-s-goods' }
+      // }
     ]
   },
 
