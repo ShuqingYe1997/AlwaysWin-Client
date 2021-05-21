@@ -75,3 +75,12 @@ export function uppercaseFirst(string) {
 Vue.filter('formatDate', function(value) {
   return Moment(value).format('MM-DD-YYYY HH:mm:ss')
 })
+
+Vue.filter('formatDate1', function(value) {
+  return Moment(value).format('YYYY-MM-DD HH:mm:ss')
+})
+
+export function timeFromNow(value) {
+  var temp = Moment(value).format('MM-DD-YYYY HH:mm:ss')
+  return Moment(temp, 'MM-DD-YYYY HH:mm:ss').fromNow()
+}

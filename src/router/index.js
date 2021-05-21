@@ -90,7 +90,6 @@ export const asyncRoutes = [
     path: '/user',
     component: Layout,
     redirect: '/profile',
-    name: 'UserProfile',
     meta: {
       title: 'User Profile',
       icon: 'user',
@@ -116,7 +115,6 @@ export const asyncRoutes = [
     path: '/product',
     component: Layout,
     redirect: '/product/_id',
-    name: 'Product',
     hidden: true,
     meta: {
       title: 'Product'
@@ -133,7 +131,6 @@ export const asyncRoutes = [
   {
     path: '/purchase',
     component: Layout,
-    name: 'Purchase',
     meta: {
       title: 'My Purchase',
       icon: 'shopping',
@@ -157,10 +154,9 @@ export const asyncRoutes = [
   {
     path: '/sell',
     component: Layout,
-    name: 'Sell',
     meta: {
       title: 'Seller Hub',
-      icon: 'el-icon-s-shop',
+      icon: 'el-icon-sell',
       roles: ['user']
     },
     children: [
@@ -176,6 +172,23 @@ export const asyncRoutes = [
       //   name: 'MyProduct',
       //   meta: { title: 'My Product', icon: 'el-icon-s-goods' }
       // }
+    ]
+  },
+  {
+    path: '/wishlist',
+    component: Layout,
+    redirect: 'wishlist',
+    children: [
+      {
+        path: '/my-wish-list',
+        component: () => import('@/views/wishList/index'),
+        name: 'wishlist',
+        meta: {
+          title: 'Wish List',
+          icon: 'el-icon-star-on',
+          roles: ['user']
+        }
+      }
     ]
   },
 
