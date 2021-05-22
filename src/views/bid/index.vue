@@ -59,10 +59,10 @@
       <el-table-column label="Status" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag
-            :type="productStatus[row.status].type"
+            :type="productStatus[row.productPreview.status].type"
             disable-transitions
             effect="plain"
-          >{{ productStatus[row.status].text }}
+          >{{ productStatus[row.productPreview.status].text }}
           </el-tag>
         </template>
       </el-table-column>

@@ -25,7 +25,7 @@
 
           <el-link
             class="title-item"
-            :href="`/product/${wishListItem.productPreview.pid}`"
+            :href="'/product/' + wishListItem.productPreview.pid"
             :underline="false"
           >
             {{ wishListItem.productPreview.title }}
@@ -94,7 +94,6 @@ export default {
   },
   data() {
     return {
-      accordionActiveName: 'product-title',
       isFav: true,
       productStatus: productStatus()
     }
@@ -128,7 +127,7 @@ export default {
   }
   min-width: 200px;
   margin-right: 32px ;
-  min-height: 500px;
+  height: 510px; //焊死了
 }
 .box-card-component {
   .box-card-header {
@@ -157,7 +156,7 @@ export default {
   }
 
   .title-item {
-    font-size: 18px;
+    font-size: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
@@ -204,6 +203,7 @@ export default {
   .price {
     position: absolute;
     text-align: right;
+    font-weight: bold;
     right: 0px;
     color: #42b983;
     font-size: 20px;

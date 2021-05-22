@@ -1,20 +1,22 @@
 <template>
   <div class="components-container">
-    <count-to
-      ref="balance"
-      :start-val="startVal"
-      :end-val="endVal"
-      :duration="duration"
-      :decimals="decimals"
-      :separator="separator"
-      :prefix="prefix"
-      :autoplay="true"
-      class="balance"
-    />
-    <div class="box-center">
-      <el-button type="primary" icon="el-icon-money" style="bottom: 15px;" @click="dialogFormVisible = true">
-        Add Fund
-      </el-button>
+    <div style="text-align: center">
+      <count-to
+        ref="balance"
+        :start-val="startVal"
+        :end-val="endVal"
+        :duration="duration"
+        :decimals="decimals"
+        :separator="separator"
+        :prefix="prefix"
+        :autoplay="true"
+        class="balance"
+      />
+      <div class="balance-btn">
+        <el-button type="primary" icon="el-icon-money" style="bottom: 15px;" @click="dialogFormVisible = true">
+          Add Fund
+        </el-button>
+      </div>
     </div>
 
     <!--  pop up window  -->
@@ -121,7 +123,6 @@ export default {
 
 <style scoped>
 .balance-btn {
-  display: inline-block;
   margin-bottom: 0;
   font-weight: 500;
   text-align: center;
@@ -129,7 +130,6 @@ export default {
   touch-action: manipulation;
   cursor: pointer;
   background-image: none;
-  border: 1px solid transparent;
   white-space: nowrap;
   line-height: 1.5;
   padding: 4px 15px;
