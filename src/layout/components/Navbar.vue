@@ -82,8 +82,7 @@ export default {
       await this.$store.dispatch('user/logout')
       // https://github.com/PanJiaChen/vue-element-admin/issues/2485
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-
-      this.$router.push('/') // 回到首页
+      this.$router.push('/dashboard') // 回到首页
     }
   }
 }

@@ -29,7 +29,7 @@
           <el-input
             :key="passwordType"
             ref="password1"
-            v-model="regisForm.password"
+            v-model="regisForm.password1"
             :type="passwordType"
             placeholder="Password"
             name="password1"
@@ -52,7 +52,7 @@
           <el-input
             :key="passwordType"
             ref="password2"
-            v-model="regisForm.password"
+            v-model="regisForm.password2"
             :type="passwordType"
             placeholder="Input your password again"
             name="password2"
@@ -72,7 +72,7 @@
 
       <div style="position:relative">
         <div class="tips">
-          <el-link href="/login">Already have an account? Login</el-link>
+          <router-link to="/login">Already have an account? Login</router-link>
         </div>
       </div>
     </el-form>
@@ -93,7 +93,7 @@ export default {
         password2: ''
       },
       loginRules: {
-        username: [{ required: true, min: 6, max: 20, pattren: /^[a-zA-Z0-9]+$/, message: '6~20 chars of digits and letters', trigger: 'blur' }],
+        username: [{ required: true, min: 6, max: 20, pattren: /^[a-zA-Z0-9_]+$/, message: '6~20 chars, required: letters, optional: digits, underline', trigger: 'blur' }],
         password1: [{ required: true, min: 6, max: 20, pattren: /^[a-zA-Z0-9_]+$/, message: '6~20 chars of digits, letters and underline', trigger: 'blur' }],
         password2: [{ required: true, min: 6, max: 20, pattren: /^[a-zA-Z0-9_]+$/, message: '6~20 chars of digits, letters and underline', trigger: 'blur' }]
       },
@@ -149,16 +149,15 @@ export default {
       this.$refs.regisForm.validate(valid => {
         if (valid) {
           this.loading = true
-          register(this.regisForm)
-            .then(() => {
-              this.$message({
-                message: 'Congratulations! You\'ve become a member of AlwaysWin!',
-                type: 'success'
-              })
-              this.$router.push({ path: '/login' })
-              //   this.$router.push({ path: this.redirect || '/login', query: this.otherQuery })
-              this.loading = false
+          register(this.regisForm).then(() => {
+            this.$message({
+              message: 'Congratulations! You\'ve become a member of AlwaysWin!',
+              type: 'success'
             })
+            this.$router.push({ path: '/login' })
+            //   this.$router.push({ path: this.redirect || '/login', query: this.otherQuery })
+            this.loading = false
+          })
             .catch(() => {
               this.loading = false
             })

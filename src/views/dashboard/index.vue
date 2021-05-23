@@ -36,7 +36,7 @@ const defaultProductList = [{
 }]
 
 export default {
-  name: 'DashboardAdmin',
+  name: 'Dashboard',
   components: {
     // PanelGroup,
     // LineChart,

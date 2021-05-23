@@ -67,14 +67,14 @@ const actions = {
         removeToken()
         resetRouter()
 
+        // reset visited views and cached views
+        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
+        dispatch('tagsView/delAllViews', null, { root: true })
+
         // generate accessible routes map based on roles
         const accessRoutes = dispatch('permission/generateRoutes', state.roles, { root: true })
         // dynamically add accessible routes
         router.addRoutes(accessRoutes)
-
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-        dispatch('tagsView/delAllViews', null, { root: true })
 
         resolve()
       }).catch(error => {
