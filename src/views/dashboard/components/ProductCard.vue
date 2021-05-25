@@ -15,10 +15,10 @@
             <span>{{ productForm.description }} </span>
           </div>
           <div v-if="bidAction === 'Place Your Offer'" class="end-item">
-            <Countdown :deadline="timecountdown" />
+            <Countdown :deadline="timecountdown | formatDate1" />
           </div>
           <div v-else class="start-item">
-            <Countdown :deadline="timecountdown" />
+            <Countdown :deadline="timecountdown | formatDate1" />
           </div>
         </div>
       </div>
@@ -86,12 +86,12 @@ export default {
       // Handle Product Status
       if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['waiting']) {
         this.bidAction = 'Wait For Start'
-        this.timecountdown = this.productForm.startTime.replace(/T/, ' ').replace(/\..+/, '')
+        this.timecountdown = this.productForm.startTime
         console.log(this.timecountdown)
       } else if (productStatuOption[this.productForm.productStatus.status] <= productStatuOption['broughtIn']) {
         this.bidAction = 'Place Your Offer'
-        console.log('placeoffer origin: ' + this.productForm.endTime)
-        this.timecountdown = this.productForm.endTime.replace(/T/, ' ').replace(/\..+/, '')
+        console.log('placeoffer origin: ' + this.productForm.productStatus.endTime)
+        this.timecountdown = this.productForm.productStatus.endTime
         console.log('placeoffer wrong: ' + this.timecountdown)
       } else {
         this.bidAction = 'End'
@@ -130,7 +130,7 @@ export default {
           })
         }
       } else {
-        console.log('Please Login firist.')
+        this.$message('Please login first!')
       }
     }
   }

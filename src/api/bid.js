@@ -15,11 +15,17 @@ export function getMyBids(params) {
   })
 }
 
-export function getBidsByBid(bid, params) {
+export function getBidsByPid(pid) {
   return request({
-    url: `/product/${bid}/bids`,
+    url: `/product/${pid}/bids`,
     method: 'get',
-    params
+  })
+}
+
+export function getBidsByPidByPages(pid, page, pagelimit) {
+  return request({
+    url: `/product/${pid}/bids?page=${page}&pageSize=${pagelimit}`,
+    method: 'get'
   })
 }
 
