@@ -200,7 +200,7 @@ export const asyncRoutes = [
 
   // 没有权限的都去401,剩下的都去404
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/401', hidden: true }
+  { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

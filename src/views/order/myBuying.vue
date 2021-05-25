@@ -195,7 +195,7 @@ export default {
       },
       addressList: [],
       rules: {
-        address: [{ required: true, message: 'Address is required', trigger: 'change' }]
+        address: [{ required: true, max: 255, message: 'Address is required', trigger: 'change' }]
       }
     }
   },
@@ -259,8 +259,10 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          this.temp = { ...row } // copy obj
+          this.temp.address = row.address
+          this.temp.oid = row.oid
           this.temp.status = 'received'
+          this.temp.payment = row.payment
           updateOrder(row.oid, this.temp).then(() => {
             this.$notify({
               title: 'Success',
@@ -272,7 +274,7 @@ export default {
           })
         }).catch(err => { console.log(err) })
       } else { // 付钱 row.status === 'placed'
-        this.temp = { ...row } // copy obj
+        this.temp.oid = row.oid
         this.temp.payment = row.productPreview.price
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -285,7 +287,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.temp.status = 'paid'
-          updateOrder(this.temp).then(() => {
+          updateOrder(this.temp.oid, this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',

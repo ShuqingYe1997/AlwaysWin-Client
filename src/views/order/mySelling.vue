@@ -192,14 +192,14 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          this.temp = {
-            ...row,
-            status: 'shipped'
-          } // copy obj
-          console.log('address' + this.temp.address)
-          console.log('oid' + this.temp.oid)
-          console.log('status' + this.temp.status)
-          console.log('payment' + this.temp.payment)
+          // this.temp = {
+          //   ...row,
+          //   status: 'shipped'
+          // } // copy obj
+          this.temp.address = row.address
+          this.temp.oid = row.oid
+          this.temp.status = 'shipped'
+          this.temp.payment = row.payment
           updateOrder(row.oid, this.temp).then(() => {
             this.$notify({
               title: 'Success',
