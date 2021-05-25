@@ -2,9 +2,9 @@
   <div class="dashboard-editor-container">
     <div class="chart-wrapper">
       <div class="user-images">
-        <el-carousel :interval="6000" type="card" height="400px">
-          <el-carousel-item v-for="item in carouselImages" :key="item">
-            <img :src="item" class="image">
+        <el-carousel :interval="6000" type="card" height="500px">
+          <el-carousel-item v-for="item in this.productForm.figures" :key="item">
+            <img :src="item.url" class="image">
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -29,10 +29,10 @@
             <p class="price"> ${{ productForm.productStatus.price }}</p>
           </div>
           <div style="margin-bottom: 32px;">
-            <el-button v-if="bidAction === 'Place Your Offer'" style="width: 90%" type="primary" @click.prevent.stop="guide">
+            <el-button v-if="bidAction === 'Place Your Offer'" style="width: 95%" type="primary" @click.prevent.stop="guide">
               {{ bidAction }}
             </el-button>
-            <el-button v-else style="width: 90%" type="info" disabled>
+            <el-button v-else style="width: 95%" type="info" disabled>
               {{ bidAction }}
             </el-button>
             <el-button class="icon-button" @click="AddToFav()">
@@ -67,13 +67,6 @@ export default {
 
   data() {
     return {
-      carouselImages: [
-        'https://wpimg.wallstcn.com/9679ffb0-9e0b-4451-9916-e21992218054.jpg',
-        'https://wpimg.wallstcn.com/bcce3734-0837-4b9f-9261-351ef384f75a.jpg',
-        'https://wpimg.wallstcn.com/d1d7b033-d75e-4cd6-ae39-fcd5f1c0a7c5.jpg',
-        'https://wpimg.wallstcn.com/50530061-851b-4ca5-9dc5-2fead928a939.jpg',
-        'https://ss7.vzw.com/is/image/VerizonWireless/iphone-12-pro-pacific-blue'
-      ],
       pid: this.$route.params.id,
       productForm: Object.assign({}, defaultProductForm),
       sellerInfo: Object.assign({}, defaultSellerInfo),
@@ -336,4 +329,10 @@ select {
   padding: 0px 70px 0px;
   font-size: 16px;
 }
+
+    .image {
+      width: 100%;
+      height: 100%;
+
+    }
 </style>

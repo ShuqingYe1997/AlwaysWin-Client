@@ -122,7 +122,7 @@ export const asyncRoutes = [
     children: [
       {
         path: '/product/:id(\\d+)',
-        component: () => import('@/views/product/_id'),
+        component: () => import('@/views/product/Product'),
         name: 'ProductPage',
         meta: { title: 'Product details', noCache: true }
       }

@@ -15,10 +15,10 @@
             <span>{{ productForm.description }} </span>
           </div>
           <div v-if="bidAction === 'Place Your Offer'" class="end-item">
-            <Countdown :deadline="this.timecountdown" />
+            <Countdown :deadline="timecountdown" />
           </div>
           <div v-else class="start-item">
-            <Countdown :deadline="this.timecountdown" />
+            <Countdown :deadline="timecountdown" />
           </div>
         </div>
       </div>
@@ -219,7 +219,7 @@ export default {
   .end-item {
     position: relative;
     text-align: left;
-        color: #6cd62f;
+    color: #6cd62f;
     top: 0px;
     right: 0px;
     font-size: 16px;

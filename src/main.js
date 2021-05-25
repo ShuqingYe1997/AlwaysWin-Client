@@ -13,6 +13,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import vuetify from '../vuetify'
 
 import './icons' // icon
 import './permission' // permission control
@@ -49,5 +50,6 @@ new Vue({
   el: '#app',
   router,
   store,
+  vuetify,
   render: h => h(App)
 })
