@@ -16,7 +16,7 @@ export const productCat = [{
   value: 'tablet',
   label: 'Tablets'
 }, {
-  value: 'poortable audio',
+  value: 'portable audio',
   label: 'Portable Audio'
 }, {
   value: 'camera',
@@ -34,7 +34,7 @@ export const productCat = [{
   value: 'car electronics',
   label: 'Car Electronics'
 }, {
-  value: 'game console',
+  value: 'gaming console',
   label: 'Game Console'
 }, {
   value: 'vr',

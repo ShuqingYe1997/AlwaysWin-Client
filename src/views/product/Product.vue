@@ -1,16 +1,15 @@
 <template>
   <div>
-    <v-container>
-      <div class="row">
-        <div class="col-md-5 col-sm-5 col-xs-12">
-          <v-carousel>
-            <v-carousel-item
-              v-for="item in productForm.figures"
-              :key="item.pid"
-              :src="item.url"
-            />
-          </v-carousel>
-        </div>
+    <app-container>
+      <div>
+        <el-carousel>
+          <el-carousel-item
+            v-for="item in productForm.figures"
+            :key="item.pid"
+            :src="item.url"
+          />
+        </el-carousel>
+
         <div class="col-md-7 col-sm-7 col-xs-12">
           <v-breadcrumbs class="pb-0" />
           <div class="pl-6">
@@ -33,7 +32,7 @@
             <div
               v-if="
                 productForm.productStatus.status === 'bidding' ||
-                productForm.productStatus.status.includes('extended')
+                  productForm.productStatus.status.includes('extended')
               "
               class="end-item"
             >
@@ -52,7 +51,7 @@
             <div
               v-else-if="
                 productForm.productStatus.status === 'success' ||
-                productForm.productStatus.status === 'broughtIn'
+                  productForm.productStatus.status === 'broughtIn'
               "
               class="warning-item"
             >
@@ -82,8 +81,7 @@
               dense
               :disabled="productForm.productStatus.status !== 'bidding'"
               @click="placeOffer()"
-              >Place Offer</v-btn
-            >
+            >Place Offer</v-btn>
             <!-- <v-btn class="ml-4" outlined tile>ADD TO WISHLIST</v-btn> -->
             <el-button class="icon-button" @click="AddToFav()">
               <i :class="isFav ? 'el-icon-star-on' : 'el-icon-star-off'" />
@@ -102,12 +100,12 @@
               </p>
             </v-tab-item>
             <v-tab-item>
-              <bid-list v-model="this.productBidList" :pid="this.pid" :productBidList="productBidList" />
+              <bid-list v-model="productBidList" :pid="pid" :product-bid-list="productBidList" />
             </v-tab-item>
           </v-tabs>
         </div>
       </div>
-    </v-container>
+    </app-container>
   </div>
 </template>
 

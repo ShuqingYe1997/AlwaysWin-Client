@@ -179,7 +179,7 @@ export const asyncRoutes = [
         meta: { title: 'My Product', icon: 'el-icon-s-goods' }
       },
       {
-        path: 'update-product',
+        path: 'update-product', // 既是update也是create
         component: () => import('@/views/my-product/new/index'),
         name: 'UpdateProduct',
         hidden: true

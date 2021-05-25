@@ -23,8 +23,7 @@
 </template>
 
 <script>
-const defaultBidList =[]
-
+const defaultBidList = []
 
 export default {
   filters: {
@@ -32,19 +31,19 @@ export default {
   props: {
     pid: {
       type: String,
-      default: 0
+      default: ''
     },
     productBidList: {
       type: Array,
-      default: function () {
-    return defaultBidList
-  },
+      default: function() {
+        return defaultBidList
+      }
     }
   },
   data() {
     return {
       filterlist: null,
-      show_all: false,
+      show_all: false
     }
   },
   created() {
