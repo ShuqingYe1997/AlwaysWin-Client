@@ -1,21 +1,16 @@
 <template>
   <section class="todoapp">
-    <el-table :data="filterlist" style="width: 100%;padding-top: 15px;">
-      <el-table-column label="User" min-width="150">
+    <el-table :data="productBidList"  style="width: 100%;padding-top: 15px;">
+      <el-table-column label="User" min-width="150" prop="user.username">
+      </el-table-column>
+      <el-table-column label="Offer" width="250" align="center" prop="offer">
         <template slot-scope="scope">
-          {{ scope.row.order_no | orderNoFilter }}
+          ${{ scope.row.offer | toThousandFilter }}
         </template>
       </el-table-column>
-      <el-table-column label="Offer" width="250" align="center">
+      <el-table-column label="Time" width="200" align="center" prop="createTime">
         <template slot-scope="scope">
-          ${{ scope.row.price | toThousandFilter }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Time" width="100" align="center">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
+            {{ scope.row.createTime  | formatDate1 }}
         </template>
       </el-table-column>
     </el-table>
@@ -28,44 +23,34 @@
 </template>
 
 <script>
+const defaultBidList =[]
+
 
 export default {
   filters: {
-    statusFilter(status) {
-      const statusMap = {
-        success: 'success',
-        pending: 'danger'
-      }
-      return statusMap[status]
+  },
+  props: {
+    pid: {
+      type: String,
+      default: 0
     },
-    orderNoFilter(str) {
-      return str.substring(0, 30)
+    productBidList: {
+      type: Array,
+      default: function () {
+    return defaultBidList
+  },
     }
   },
   data() {
     return {
       filterlist: null,
-      show_all: false
+      show_all: false,
     }
   },
   created() {
-    this.fetchData()
+    console.log(this.productBidList[0].user.username)
   },
   methods: {
-    fetchData() {
-    // transactionList().then(response => {
-    //     this.list = response.data.items
-    //     this.filterlist = this.list.slice(0, 3)
-    //   })
-    // },
-    // fetchList() {
-    //   this.show_all = !this.show_all
-    //   if (this.show_all === true) {
-    //     this.filterlist = this.list
-    //   } else {
-    //     this.filterlist = this.list.slice(0, 3)
-    //   }
-    }
   }
 }
 </script>
