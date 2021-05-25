@@ -16,7 +16,7 @@
         </el-col>
       </el-row>
 
-      <pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList()" />
+      <pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getList" />
 
     </div>
   </div>
@@ -38,9 +38,8 @@ export default {
     return {
       listQuery: {
         page: 1,
-        pageSize: 10
+        pageSize: 12 // 4的倍数
       },
-      total: 0,
       wishList: [],
       modeView: false
 
@@ -56,6 +55,9 @@ export default {
           .filter(data => data.productPreview.status === 'bidding' || data.productPreview.status.includes('extended'))
           .slice((this.listQuery.page - 1) * this.listQuery.pageSize, this.listQuery.page * this.listQuery.pageSize)
       } else return this.wishList
+    },
+    total: function() {
+      return this.wishListData.length
     }
   },
   created() {
@@ -64,7 +66,7 @@ export default {
   methods: {
     getList() {
       myWishList(this.qurey).then(response => {
-        this.total = response.data.total
+        // this.total = response.data.total
         this.wishList = response.data.list
         // Just to simulate the time of the request
         setTimeout(() => {}, 200)

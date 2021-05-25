@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <el-card class="box-card-component" style="margin-left:8px;">
+  <el-card class="box-card-component" style="margin-left:8px;">
+    <router-link
+      :to="'/product/' + wishListItem.productPreview.pid"
+    >
       <div>
         <div slot="header" class="box-card-header">
           <img
@@ -23,47 +25,41 @@
             </el-tag>
           </div>
 
-          <el-link
-            class="title-item"
-            :href="`/product/${wishListItem.productPreview.pid}`"
-            :underline="false"
-          >
-            {{ wishListItem.productPreview.title }}
-          </el-link>
-
-          <div
-            v-if="wishListItem.productPreview.status === 'bidding' || wishListItem.productPreview.status.includes('extended')"
-            class="end-item"
-          >
-            Time before ending
-            <Countdown :deadline="wishListItem.productPreview.endTime | formatDate1" />
-          </div>
-          <div
-            v-if="wishListItem.productPreview.status === 'waiting'"
-            class="start-item"
-          >
-            Time before starting
-            <Countdown :deadline="wishListItem.productPreview.startTime | formatDate1" />
-          </div>
-          <div
-            v-if="wishListItem.productPreview.status === 'success' || wishListItem.productPreview.status === 'broughtIn'"
-            class="warning-item"
-          >
-            Auction has finished!
-          </div>
-          <div v-if="wishListItem.productPreview.status === 'canceled'" class="warning-item">
-            This product is canceled!
-          </div>
-          <div>
-            <el-button class="icon-button" @click="handleUpdate()">
-              <i :class="isFav? 'el-icon-star-on' : 'el-icon-star-off'" />
-            </el-button>
-            <div class="wishlist-info">Added {{ getTimeFromNow(wishListItem.createTime) }} </div>
-          </div>
+          <div class="title-item">{{ wishListItem.productPreview.title }} </div>
         </div>
       </div>
-    </el-card>
-  </div>
+    </router-link>
+
+    <div
+      v-if="wishListItem.productPreview.status === 'bidding' || wishListItem.productPreview.status.includes('extended')"
+      class="end-item"
+    >
+      Time before ending
+      <Countdown :deadline="wishListItem.productPreview.endTime | formatDate1" />
+    </div>
+    <div
+      v-if="wishListItem.productPreview.status === 'waiting'"
+      class="start-item"
+    >
+      Time before starting
+      <Countdown :deadline="wishListItem.productPreview.startTime | formatDate1" />
+    </div>
+    <div
+      v-if="wishListItem.productPreview.status === 'success' || wishListItem.productPreview.status === 'broughtIn'"
+      class="warning-item"
+    >
+      Auction has finished!
+    </div>
+    <div v-if="wishListItem.productPreview.status === 'canceled'" class="warning-item">
+      This product is canceled!
+    </div>
+    <div>
+      <el-button class="icon-button" @click="handleUpdate()">
+        <i :class="isFav? 'el-icon-star-on' : 'el-icon-star-off'" />
+      </el-button>
+      <div class="wishlist-info">Added {{ getTimeFromNow(wishListItem.createTime) }} </div>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -94,7 +90,6 @@ export default {
   },
   data() {
     return {
-      accordionActiveName: 'product-title',
       isFav: true,
       productStatus: productStatus()
     }
@@ -128,7 +123,7 @@ export default {
   }
   min-width: 200px;
   margin-right: 32px ;
-  min-height: 500px;
+  height: 510px; //焊死了
 }
 .box-card-component {
   .box-card-header {
@@ -157,7 +152,7 @@ export default {
   }
 
   .title-item {
-    font-size: 18px;
+    font-size: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
@@ -204,6 +199,7 @@ export default {
   .price {
     position: absolute;
     text-align: right;
+    font-weight: bold;
     right: 0px;
     color: #42b983;
     font-size: 20px;

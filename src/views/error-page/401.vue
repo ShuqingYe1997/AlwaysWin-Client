@@ -11,7 +11,7 @@
         <h3>You Are Not Logged In or Token Has Expired</h3>
         <ul class="list-unstyled">
           <li class="link-type">
-            <router-link to="/login">
+            <router-link :to="`/login?redirect=${this.$route.fullPath}`">
               Click here to login
             </router-link>
           </li>

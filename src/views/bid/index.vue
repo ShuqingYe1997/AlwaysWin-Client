@@ -27,7 +27,7 @@
         </template>
       </el-table-column>
       <el-table-column label="Product Name" min-width="150px">
-        <template slot="header">
+        <template slot="header" slot-scope="scope"> <!--你大爷的，这句话必须要加，不要再报错了！-->
           <el-input
             v-model="titleSearch"
             prefix-icon="el-icon-search"
@@ -45,7 +45,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Offer" width="110px" align="center">
+      <el-table-column label="Your Offer" width="110px" align="center">
         <template slot-scope="{row}">
           <span>${{ row.offer | toThousandFilter }}</span>
         </template>
@@ -59,10 +59,10 @@
       <el-table-column label="Status" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag
-            :type="productStatus[row.status].type"
+            :type="productStatus[row.productPreview.status].type"
             disable-transitions
             effect="plain"
-          >{{ productStatus[row.status].text }}
+          >{{ productStatus[row.productPreview.status].text }}
           </el-tag>
         </template>
       </el-table-column>
@@ -80,7 +80,7 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'BidHisroryTable',
+  name: 'BidHisrory',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -108,7 +108,7 @@ export default {
   computed: {
     tableData: function() {
       return this.list
-        .filter(data => !this.statusSearch || data.status === this.statusSearch)
+        .filter(data => !this.statusSearch || data.productPreview.status === this.statusSearch)
         .filter(data => !this.titleSearch || data.productPreview.title.toLowerCase().includes(this.titleSearch.toLowerCase()))
         .slice((this.listQuery.page - 1) * this.listQuery.pageSize, this.listQuery.page * this.listQuery.pageSize)
     }

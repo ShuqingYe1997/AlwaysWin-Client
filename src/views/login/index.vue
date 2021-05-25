@@ -49,10 +49,10 @@
 
       <div style="position:relative">
         <div class="tips">
-          <span>Forget password</span>
+          <router-link to="/login">Forget password</router-link>
         </div>
         <div class="tips">
-          <span style="margin-right:18px;">Don't have an account? Click here to create a new account</span>
+          <router-link to="/register">Don't have an account? Click here to create a new account </router-link>
         </div>
       </div>
     </el-form>

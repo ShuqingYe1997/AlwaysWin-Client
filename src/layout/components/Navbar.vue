@@ -80,7 +80,9 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      // https://github.com/PanJiaChen/vue-element-admin/issues/2485
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push('/dashboard') // 回到首页
     }
   }
 }

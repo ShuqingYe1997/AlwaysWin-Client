@@ -78,6 +78,29 @@ export const constantRoutes = [
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }
       }
     ]
+  },
+  {
+    path: '/product',
+    component: Layout,
+    redirect: 'AllProducts',
+    children: [
+      {
+        path: 'all',
+        component: () => import('@/views/product/index'),
+        name: 'AllProducts',
+        meta: {
+          title: 'Product',
+          icon: 'component'
+        }
+      },
+      {
+        path: '/product/:id(\\d+)',
+        component: () => import('@/views/product/Product'),
+        name: 'ProductPage',
+        hidden: true,
+        meta: { title: 'Product details', noCache: true }
+      }
+    ]
   }
 ]
 
@@ -112,23 +135,6 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/product',
-    component: Layout,
-    redirect: '/product/_id',
-    hidden: true,
-    meta: {
-      title: 'Product'
-    },
-    children: [
-      {
-        path: '/product/:id(\\d+)',
-        component: () => import('@/views/product/Product'),
-        name: 'ProductPage',
-        meta: { title: 'Product details', noCache: true }
-      }
-    ]
-  },
-  {
     path: '/purchase',
     component: Layout,
     meta: {
@@ -140,13 +146,13 @@ export const asyncRoutes = [
       {
         path: 'my-order',
         component: () => import('@/views/order/myBuying'),
-        name: 'MyOrder',
+        name: 'BuyingOrder',
         meta: { title: 'My Order', icon: 'clipboard' }
       },
       {
         path: 'my-bid',
         component: () => import('@/views/bid/index'),
-        name: 'Mybid',
+        name: 'BidHisrory',
         meta: { title: 'My bid', icon: 'money' }
       }
     ]
@@ -163,7 +169,7 @@ export const asyncRoutes = [
       {
         path: 'my-selling-order',
         component: () => import('@/views/order/mySelling'),
-        name: 'MySellingOrder',
+        name: 'SellingOrder',
         meta: { title: 'My Selling', icon: 'el-icon-s-finance' }
       }
       // {
@@ -177,12 +183,12 @@ export const asyncRoutes = [
   {
     path: '/wishlist',
     component: Layout,
-    redirect: 'wishlist',
+    redirect: 'Wishlist',
     children: [
       {
         path: '/my-wish-list',
         component: () => import('@/views/wishList/index'),
-        name: 'wishlist',
+        name: 'Wishlist',
         meta: {
           title: 'Wish List',
           icon: 'el-icon-star-on',
@@ -192,6 +198,7 @@ export const asyncRoutes = [
     ]
   },
 
+  // 没有权限的都去401,剩下的都去404
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

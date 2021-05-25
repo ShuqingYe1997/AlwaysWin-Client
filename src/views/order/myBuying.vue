@@ -44,7 +44,7 @@
         </template>
       </el-table-column>
       <el-table-column label="Product Name" min-width="150px">
-        <template slot="header">
+        <template slot="header" slot-scope="scope"> <!--你大爷的，这句话必须要加，不要再报错了！-->
           <el-input
             v-model="titleSearch"
             prefix-icon="el-icon-search"
@@ -152,7 +152,7 @@ const productCatKeyValue = productCat.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'BuyingOrderTable',
+  name: 'BuyingOrder',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -188,14 +188,14 @@ export default {
       numberSearch: '',
       dialogFormVisible: false,
       temp: {
-        oid: '',
+        oid: 0,
         status: '',
         payment: 0,
         address: ''
       },
       addressList: [],
       rules: {
-        address: [{ required: true, message: 'Address is required', trigger: 'change' }]
+        address: [{ required: true, max: 255, message: 'Address is required', trigger: 'change' }]
       }
     }
   },
@@ -204,7 +204,7 @@ export default {
       return this.list
         .filter(data => !this.statusSearch || data.status === this.statusSearch)
         .filter(data => !this.titleSearch || data.productPreview.title.toLowerCase().includes(this.titleSearch.toLowerCase()))
-        .slice((this.listQuery.page - 1) * this.listQuery.pageSize, this.listQuery.page * this.listQuery.pageSize)
+        // .slice((this.listQuery.page - 1) * this.listQuery.pageSize, this.listQuery.page * this.listQuery.pageSize)
     }
   },
   created() {
@@ -259,9 +259,11 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          this.temp = { ...row } // copy obj
+          this.temp.address = row.address
+          this.temp.oid = row.oid
           this.temp.status = 'received'
-          updateOrder(this.temp).then(() => {
+          this.temp.payment = row.payment
+          updateOrder(row.oid, this.temp).then(() => {
             this.$notify({
               title: 'Success',
               message: 'Update Successfully',
@@ -270,9 +272,9 @@ export default {
             })
             this.getList()
           })
-        })
+        }).catch(err => { console.log(err) })
       } else { // 付钱 row.status === 'placed'
-        this.temp = { ...row } // copy obj
+        this.temp.oid = row.oid
         this.temp.payment = row.productPreview.price
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -285,7 +287,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.temp.status = 'paid'
-          updateOrder(this.temp).then(() => {
+          updateOrder(this.temp.oid, this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',

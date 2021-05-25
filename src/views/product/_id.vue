@@ -59,6 +59,7 @@ import { productStatuOption, defaultSellerInfo, defaultProductForm } from '@/api
 import { getSellerInfo } from '@/api/user.js'
 
 export default {
+  name: 'ProductPage',
   components: {
     PanThumb,
     Countdown,

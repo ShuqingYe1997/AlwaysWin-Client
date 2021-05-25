@@ -8,7 +8,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 // todo: more urls in white list
 // no redirect whitelist
-// const whiteList = ['/', '/login', '/register', '/auth-redirect']
+const whiteList = ['/', 'dashboard', '/login', '/register', '/product', '/product/*']
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -20,8 +20,18 @@ router.beforeEach(async(to, from, next) => {
   // determine whether the user has logged in
   const roles = store.getters.roles
 
-  // if roles contains 'user'
-  if (roles.indexOf('user') !== -1) {
+  // if roles doesn't contain 'user'
+  if (roles.indexOf('user') === -1) {
+    if (whiteList.indexOf(to.path) !== -1) {
+      // in the free login whitelist, go directly
+      next()
+    } else {
+      // next({ path: '/401' })
+      // other pages that do not have permission to access are redirected to the login page.
+      next(`/login?redirect=${to.path}`)
+      NProgress.done()
+    }
+  } else { // if roles contains 'user'
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
@@ -37,7 +47,6 @@ router.beforeEach(async(to, from, next) => {
 
   // hack method to ensure that addRoutes is complete
   // set the replace: true, so the navigation will not leave a history record
-  // next({ ...to, replace: true })
   next({ ...to, replace: true })
 })
 

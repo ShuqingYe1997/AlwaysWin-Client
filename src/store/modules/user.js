@@ -1,6 +1,6 @@
 import { login, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import router, { resetRouter } from '@/router'
 
 const default_portrait = 'https://alwayswin-figures.s3.amazonaws.com/icon/default-icon.png'
 
@@ -43,7 +43,7 @@ const actions = {
         commit('SET_UID', data.uid)
         commit('SET_PORTRAIT', data.portrait)
 
-        setToken(data.token)
+        setToken(data.token) // 登录成功后将token存储在cookie之中
 
         console.log('username ' + state.username)
         console.log('roles ' + state.roles)
@@ -70,6 +70,11 @@ const actions = {
         // reset visited views and cached views
         // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
         dispatch('tagsView/delAllViews', null, { root: true })
+
+        // generate accessible routes map based on roles
+        const accessRoutes = dispatch('permission/generateRoutes', state.roles, { root: true })
+        // dynamically add accessible routes
+        router.addRoutes(accessRoutes)
 
         resolve()
       }).catch(error => {
