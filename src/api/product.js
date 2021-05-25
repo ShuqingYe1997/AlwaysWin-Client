@@ -114,3 +114,52 @@ export function productStatus() {
     }
   })
 }
+
+export function getProductCate() {
+  return ({
+    'cell phone': {
+      value: 'cell phone',
+      text: 'Mobile Phones'
+    },
+    'tablet': {
+      value: 'tablet',
+      text: 'Tablets'
+    },
+    'portable audio': {
+      value: 'portable audio',
+      text: 'Portable Audio'
+    },
+    'camera': {
+      value: 'camera',
+      text: 'Camera'
+    },
+    'accessory': {
+      value: 'accessory',
+      text: 'Accessory'
+    },
+    'computer': {
+      value: 'computer',
+      text: 'Computer'
+    },
+    'network hardware': {
+      value: 'network hardware',
+      text: 'Network Hardware'
+    },
+    'car electronics': {
+      value: 'car electronics',
+      text: 'Car Electronics'
+    },
+    'gaming console': {
+      value: 'gaming console',
+      text: 'Gaming Console'
+    },
+    'vr': {
+      value: 'vr',
+      text: 'VR Device'
+    },
+    'others': {
+      value: 'others',
+      text: 'Others'
+    }
+  })
+}

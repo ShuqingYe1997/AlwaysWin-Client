@@ -86,7 +86,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'all',
-        component: () => import('@/views/product/index'),
+        component: () => import('@/views/all-product/index'),
         name: 'AllProducts',
         meta: {
           title: 'Product',
@@ -171,13 +171,19 @@ export const asyncRoutes = [
         component: () => import('@/views/order/mySelling'),
         name: 'SellingOrder',
         meta: { title: 'My Selling', icon: 'el-icon-s-finance' }
+      },
+      {
+        path: 'my-product',
+        component: () => import('@/views/my-product/index'),
+        name: 'MyProduct',
+        meta: { title: 'My Product', icon: 'el-icon-s-goods' }
+      },
+      {
+        path: 'update-product',
+        component: () => import('@/views/my-product/new/index'),
+        name: 'UpdateProduct',
+        hidden: true
       }
-      // {
-      //   path: 'my-product',
-      //   component: () => import('@/views/bid/history/index'),
-      //   name: 'MyProduct',
-      //   meta: { title: 'My Product', icon: 'el-icon-s-goods' }
-      // }
     ]
   },
   {
