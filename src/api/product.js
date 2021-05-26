@@ -39,7 +39,8 @@ export function updateProduct(data) {
 export function createProduct(data) {
   return request({
     url: '/product/create',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 

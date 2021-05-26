@@ -1,8 +1,7 @@
 <template>
   <section class="todoapp">
-    <el-table :data="productBidList"  style="width: 100%;padding-top: 15px;">
-      <el-table-column label="User" min-width="150" prop="user.username">
-      </el-table-column>
+    <el-table :data="productBidList" style="width: 100%;padding-top: 15px;">
+      <el-table-column label="User" min-width="150" prop="user.username" />
       <el-table-column label="Offer" width="250" align="center" prop="offer">
         <template slot-scope="scope">
           ${{ scope.row.offer | toThousandFilter }}
@@ -10,7 +9,7 @@
       </el-table-column>
       <el-table-column label="Time" width="200" align="center" prop="createTime">
         <template slot-scope="scope">
-            {{ scope.row.createTime  | formatDate1 }}
+          {{ scope.row.createTime | formatDate1 }}
         </template>
       </el-table-column>
     </el-table>
@@ -23,8 +22,7 @@
 </template>
 
 <script>
-const defaultBidList =[]
-
+const defaultBidList = []
 
 export default {
   filters: {
@@ -36,15 +34,15 @@ export default {
     },
     productBidList: {
       type: Array,
-      default: function () {
-    return defaultBidList
-  },
+      default: function() {
+        return defaultBidList
+      }
     }
   },
   data() {
     return {
       filterlist: null,
-      show_all: false,
+      show_all: false
     }
   },
   created() {

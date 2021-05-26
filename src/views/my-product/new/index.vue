@@ -1,22 +1,37 @@
 <template>
   <div class="app-container">
     <div class="headerspan">
-      <span style="font-size:20px;padding-top:20px;display:inline-block;">缺陷详情</span>
+      <span style="font-size:20px;padding-top:20px;display:inline-block;">Product</span>
       <el-divider />
     </div>
     <el-row>
-      <el-col :span="16">
+      <el-col :span="10">
+        <div class="chart-wrapper align-right">
+      <MultipleImageUploader
+        :data-images="images"
+        :maxImage = 9
+        @upload-success="uploadImageSuccess"
+        @edit-image="editImage"
+        primary-text="Default"
+        browse-text="Browser Picture(s)"
+        drag-text="Drag Picture(s)"
+        mark-is-primary-text="Set as default"
+        popup-text="This image will be displayed as default"
+        />
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="chart-wrapper">
         <el-form
-          ref="defectForm"
-          :model="defectForm"
+          ref="productForm"
+          :model="productForm"
           :rules="rules"
           label-width="150px"
           onautocomplete="on"
           class="defectForm"
           span="12"
         >
-
-          <el-form-item label="项目名称" prop="project_id">
+          <!-- <el-form-item label="项目名称" prop="project_id">
             <el-select v-model="defectForm.project_id" class="selector" placeholder="请选择您的项目" :disabled="isEditting">
               <el-option
                 v-for="item in projects_doing"
@@ -25,189 +40,198 @@
                 :value="item.project_id"
               />
             </el-select>
+          </el-form-item> -->
+          <el-form-item label="Product Title" prop="title">
+            <el-input v-model="productForm.title" class="title-input" />
           </el-form-item>
 
-          <el-form-item label="缺陷描述" prop="desc">
-            <el-input v-model="defectForm.desc" />
+          <el-form-item label="Product Description" prop="description"  >
+            <el-input v-model="productForm.description" type="textarea" class="description-input" size="large" />
           </el-form-item>
 
-          <el-form-item label="git仓库地址" prop="git_repo">
-            <el-input v-model="defectForm.git_repo" />
-          </el-form-item>
-
-          <el-form-item label="commit" prop="commit">
-            <el-input v-model="defectForm.commit" />
-          </el-form-item>
-
-          <el-form-item label="缺陷类型" prop="status">
-            <el-select v-model="defectForm.status" class="selector" placeholder="请选择缺陷类型" :disabled="!isEditting">
+          <el-form-item label="Catalog" prop="cate1">
+            <el-select v-model="productForm.cate1" class="selector" placeholder="Please Select Catelog">
               <el-option
-                v-for="item in allStatus"
+                v-for="item in productCat"
                 :key="item.value"
-                :label="item.text"
+                :label="item.label"
                 :value="item.value"
               />
             </el-select>
           </el-form-item>
 
-          <el-form-item label="缺陷权限" prop="authority_desc">
-            <el-select v-model="defectForm.authority_desc" class="selector" placeholder="请选择缺陷权限">
-              <el-option
-                v-for="item in authorities"
-                :key="item.value"
-                :label="item.text"
-                :value="item.value"
-              />
-            </el-select>
+          <el-form-item label="Start Time" prop="startTime">
+          <el-date-picker 
+                    v-model="productForm.startTime"
+                    type="datetime"
+                    format="yyyy-MM-dd HH:mm"
+                    placeholder="Select date and time">
+          </el-date-picker>
           </el-form-item>
+
+
+          <el-form-item label="End Time" prop="endTime">
+          <el-date-picker 
+                    v-model="productForm.endTime"
+                    type="datetime"
+                    format="yyyy-MM-dd HH:mm"
+                    placeholder="Select date and time">
+          </el-date-picker>
+          </el-form-item>
+
+          <el-form-item label="Start Price" prop="startPrice">
+          <el-input v-model="productForm.startPrice"
+                    type="Number"
+                    placeholder="Start Price" />
+          </el-form-item>
+
+          <el-form-item label="Minimum Increment" prop="minIncrement">
+          <el-input v-model="productForm.minIncrement"
+                    type="Number"
+                    placeholder="default to $1" />
+          </el-form-item>
+
+          <el-form-item label="Auto Win Price" prop="autoWinPrice">
+          <el-input v-model="productForm.autoWinPrice"
+                    type="Number"
+                    placeholder="Auto Win Price" />
+          </el-form-item>
+
+          <el-form-item label="Reserved Price" prop="reservedPrice">
+          <el-input v-model="productForm.reservedPrice"
+                    type="Number"
+                    placeholder="default to $0" />
+          </el-form-item>
+
           <el-form-item>
-            <el-button :loading="loading" type="primary" @click="submitForm('defectForm')">保存</el-button>
-            <el-button @click="resetForm('defectForm')">重置</el-button>
+            <el-button :loading="loading" type="primary" @click="submitForm()">Submit</el-button>
+            <el-button @click="cancelForm()">Cancel</el-button>
           </el-form-item>
         </el-form>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import * as defectApi from '@/api/defect'
-import * as projectApi from '@/api/project'
+// import * as defectApi from '@/api/defect'
+// import * as projectApi from '@/api/project'
+import { mapGetters } from 'vuex'
+import MultipleImageUploader from '@/components/MultipleImageUploader'
+import * as productApi from '@/api/product.js'
+import { defaultProductForm, productCat } from '@/api/enum.js'
 
 export default {
   name: 'DefectNew',
+  components: { MultipleImageUploader },
+  pid: 0,
+  computed: {
+    ...mapGetters(['roles', 'uid'])
+  },
   data() {
     return {
-      defectForm: {
-        did: '',
-        project_id: '',
-        desc: '',
-        git_repo: '',
-        commit: '',
-        status: 'bug',
-        authority_desc: ''
-      },
-
+      productForm: defaultProductForm,
+      images: [],
       rules: {
-        project_id: [
-          { required: true, message: '请选择项目', trigger: 'change' }
+        title: [
+          { required: true, message: 'Please enter the product title.', trigger: 'blur' }
         ],
-        desc: [
-          { required: true, message: '请输入缺陷描述', trigger: 'blur' },
-          { min: 3, message: '长度需要大于 3 个字符', trigger: 'blur' }
+        description: [
+          { required: true, message: 'Please enter the product description.', trigger: 'blur' }
         ],
-        git_repo: [
-          { required: true, message: '请输入git仓库地址', trigger: 'blur' }
+        cate1: [
+          { required: true, message: 'Please select a catalog.', trigger: 'change' }
         ],
-        commit: [
-          { required: true, message: '请输入commit', trigger: 'blur' }
+        startTime: [
+          { required: true, message: 'Please enter a start time.', trigger: 'change' }
         ],
-        status: [
-          { required: true, message: '需要选择缺陷类型', trigger: 'change' }
+        endTime: [
+          { required: true, message: 'Please enter an end time.', trigger: 'change' }
         ],
-        authority_desc: [
-          { required: true, message: '需要选择缺陷权限', trigger: 'change' }
-        ]
-      },
+        startPrice: [
+          { required: true, message: 'Please enter a start price', trigger: 'blur' },
+          { min: 1, message: 'Start price should be greater than $1', trigger: 'blur' }
+        ],
+        autoWinPrice: [
+          { required: true, message: 'Please enter an auto win price', trigger: 'blur' },
+           { min: 0 , message: 'Price must be greater than 0', trigger: 'blur' }
+        ],
+        minIncrement: [
+          { required: true, message: 'Please enter a mini increment price for the biding', trigger: 'blur' },
+          { min: 0, message: 'Minimum increment must be greater than $0', trigger: 'blur' }
+        ],
+        reservedPrice: [
+          { min: -1, message: 'Price must be greater than 0', trigger: 'blur' }
+        ],
 
-      projectParams: {
-        length: 10,
-        page: 0,
-        status: 'doing'
       },
-
-      projects_doing: [],
-      allStatus: [],
-      authorities: [],
+      productCat,
       loading: false,
       isEditting: false
     }
   },
   created() {
-    this.isEditting = !!this.$route.params.did
-    this.populateSelectorData()
-  },
-  mounted() {
-    if (this.isEditting) {
-      this.initDefect()
+    this.isEditting = !!this.$route.params.pid
+    if(this.isEditting){
+      this.pid = this.$route.params.pid
+      this.populateSelectorData()
     }
   },
   methods: {
+    uploadImageSuccess(){},
+    editImage(){},
     populateSelectorData() {
-      projectApi.fetchProjects(this.projectParams).then(response => {
-        this.initProjects(response.responseMap.Project)
+      productApi.fetchProjects(this.productForm.pid).then(response => {
+        this.productForm = response.data
       })
-      this.initStatus()
-      this.initAuthorities()
     },
-
-    initProjects(projects) {
-      this.projects_doing = []
-      for (const key in projects) {
-        const data = projects[key]
-        const proj = {
-          project_id: data.pid,
-          name: data.name
-        }
-        this.projects_doing.push(proj)
-      }
+    setupCreateFormData() {
+      this.productForm.uid = this.uid
+      this.productForm.startTime = new Date(this.productForm.startTime).toISOString();
+      this.productForm.endTime = new Date(this.productForm.endTime).toISOString();
     },
-    initStatus() {
-      this.allStatus = []
-      var s = defectApi.defectStatus()
-      for (const key in s) {
-        this.allStatus.push(s[key])
-      }
-    },
-    initAuthorities() {
-      this.authorities = []
-      var a = defectApi.defectAuthority()
-      for (const key in a) {
-        this.authorities.push(a[key])
-      }
-    },
-
-    // isEditting == true
-    initDefect() {
-      const { project_id, desc, git_repo, commit, status, authority_desc } = this.$route.params.row
-      this.defectForm.did = this.$route.params.did
-      this.defectForm.project_id = project_id
-      this.defectForm.desc = desc
-      this.defectForm.git_repo = git_repo
-      this.defectForm.commit = commit
-      this.defectForm.status = status
-      this.defectForm.authority_desc = authority_desc
-    },
-
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+    submitForm() {
+      this.$refs['productForm'].validate((valid) => {
         if (valid) {
           this.loading = true
+          this.setupCreateFormData()
           if (!this.isEditting) { // 新增
-            defectApi.createDefect(this.defectForm.project_id, this.defectForm).then(() => {
-              this.$message.success('保存成功!')
-              this.$router.go(-1)
+            console.log(this.productForm)
+            productApi.createProduct(this.productForm).then(response => {
+              this.$message.success('Post Succeeded!')
+              this.pid = response.data.pid
+              console.log("return pid:" + this.pid)
+              //handle pictures
+              this.$router.go(`/Product/${this.pid}`)
               this.loading = false
             }).catch(() => {
-              this.$message.error('网络错误或意外发生')
+              this.loading = false
             })
           } else { // 编辑
-            defectApi.updateDefect(this.defectForm.did, this.defectForm).then(() => {
-              this.$message.success('保存成功!')
-              this.$router.go(-1)
+            productApi.updateProduct(this.productForm).then(() => {
+              this.$message.success('Post Succeeded!')
+              this.$router.go(`/Product/${this.pid}`)
               this.loading = false
             }).catch(() => {
-              this.$message.error('网络错误或意外发生')
+              this.$message.error('Network Error')
+              this.loading = false
             })
           }
-        } else {
-          console.log('error submit!!')
-          return false
         }
       })
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    cancelForm() {
+      var r = confirm('Are you sure you want to cancel? The changes will not be saved.');
+      if (r === true) {
+        // jump to dashboard
+        if (this.isEditting){
+          this.$router.go(`/product/${this.productForm.pid}`) 
+        }
+        else{
+          this.$router.go('/dashboard') 
+        }
+      }
     }
   }
 }
@@ -228,5 +252,44 @@ export default {
       width: 400px;
     }
   }
+
+  .image-container
+  {
+    width: 300px !important;
+    height: 300px !important;
+  }
+
+  .dashboard-editor-container {
+  padding: 32px;
+  padding-right: 32px;
+  background-color: rgb(240, 242, 245);
+  position: relative;
+
+    .chart-wrapper {
+      padding: 0px 10px 0;
+      margin-bottom: 32px;
+    }
+  }
+
+.title-input
+{
+  width: 500px;
+}
+
+.description-input ::v-deep {
+  textarea {
+    width: 500px;
+    height: 300px;
+    padding-right: 40px;
+    resize: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #bfcbd9;
+  }
+}
+
+.align-right
+{
+  float: right;
+}
 </style>
 

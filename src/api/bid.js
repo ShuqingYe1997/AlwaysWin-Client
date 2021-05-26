@@ -18,7 +18,7 @@ export function getMyBids(params) {
 export function getBidsByPid(pid) {
   return request({
     url: `/product/${pid}/bids`,
-    method: 'get',
+    method: 'get'
   })
 }
 

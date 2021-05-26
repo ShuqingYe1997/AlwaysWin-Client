@@ -45,31 +45,31 @@ export const productCat = [{
 }]
 
 export const defaultProductForm = {
-  pid: 8,
-  uid: 1,
-  title: 'Iphone 10 Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10Iphone 10',
-  description: 'test txt a lot of text test txt a lot of text test txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of texttest txt a lot of text',
+  pid: 0,
+  uid: 0,
+  title: '',
+  description: '',
   cate1: '',
   cate2: '',
   cate3: '',
   createTime: '',
   startTime: '',
   endTime: '',
-  startPrice: 0.0,
+  startPrice: 1.0,
   autoWinPrice: 0.0,
   reservedPrice: 0.0,
   minIncrement: 1.0,
   productStatus: {
-    psid: 8,
-    pid: 8,
+    psid: 0,
+    pid: 0,
     price: 0.0,
     status: '',
     endTime: ''
   },
   figures: [
     {
-      fid: 8,
-      pid: 8,
+      fid: 0,
+      pid: 0,
       url: '',
       description: '',
       updatedTime: '',
@@ -77,15 +77,15 @@ export const defaultProductForm = {
     }
   ],
   thumbnail: {
-    fid: 8,
-    pid: 8,
+    fid: 0,
+    pid: 0,
     url: '',
     description: '',
     updatedTime: '',
     thumbnail: true
   },
   canceled: false,
-  passed: true
+  passed: false
 }
 
 export const defaultSellerInfo =

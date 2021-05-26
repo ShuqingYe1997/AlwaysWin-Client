@@ -182,7 +182,9 @@ export const asyncRoutes = [
         path: 'update-product',
         component: () => import('@/views/my-product/new/index'),
         name: 'UpdateProduct',
-        hidden: true
+        // Test for now
+        meta: { title: 'New Product', icon: 'el-icon-s-goods' }
+        // hidden: true
       }
     ]
   },

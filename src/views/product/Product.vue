@@ -33,7 +33,7 @@
             <div
               v-if="
                 productForm.productStatus.status === 'bidding' ||
-                productForm.productStatus.status.includes('extended')
+                  productForm.productStatus.status.includes('extended')
               "
               class="end-item"
             >
@@ -52,7 +52,7 @@
             <div
               v-else-if="
                 productForm.productStatus.status === 'success' ||
-                productForm.productStatus.status === 'broughtIn'
+                  productForm.productStatus.status === 'broughtIn'
               "
               class="warning-item"
             >
@@ -82,8 +82,7 @@
               dense
               :disabled="productForm.productStatus.status !== 'bidding'"
               @click="placeOffer()"
-              >Place Offer</v-btn
-            >
+            >Place Offer</v-btn>
             <!-- <v-btn class="ml-4" outlined tile>ADD TO WISHLIST</v-btn> -->
             <el-button class="icon-button" @click="AddToFav()">
               <i :class="isFav ? 'el-icon-star-on' : 'el-icon-star-off'" />
@@ -102,7 +101,7 @@
               </p>
             </v-tab-item>
             <v-tab-item>
-              <bid-list v-model="this.productBidList" :pid="this.pid" :productBidList="productBidList" />
+              <bid-list v-model="this.productBidList" :pid="this.pid" :product-bid-list="productBidList" />
             </v-tab-item>
           </v-tabs>
         </div>
@@ -188,7 +187,6 @@ export default {
       getBidsByPidByPages(passed_pid, 1, 5)
         .then((response) => {
           this.productBidList = response.data
-          console.log(productBidList)
         })
         .catch((err) => {
           console.log(err)
@@ -265,9 +263,7 @@ export default {
       return timeFromNow(timestamp)
     },
     placeOffer() {
-      if(this.uid == '')
-      {
-
+      if (this.uid === '') {
         this.$message('Please login first!')
         return
       }
@@ -285,12 +281,12 @@ export default {
           offer: this.user_offer
         }
         createBid(offerData).then((Response) => {
-            // POP UP SUCCESS
-            this.$message('Bid Placed!')
-            this.fetchData(this.pid)
-          })
+          // POP UP SUCCESS
+          this.$message('Bid Placed!')
+          this.fetchData(this.pid)
+        })
           .catch((err) => {
-            console.log("create failed:" + err + " code=" + Response.code)
+            console.log('create failed:' + err + ' code=' + Response.code)
           })
       }
     }
