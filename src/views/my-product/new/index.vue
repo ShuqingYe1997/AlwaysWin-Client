@@ -158,18 +158,14 @@ export default {
         ],
         startPrice: [
           { required: true, message: 'Please enter a start price', trigger: 'blur' },
-          { min: 1, message: 'Start price should be greater than $1', trigger: 'blur' }
         ],
         autoWinPrice: [
           { required: true, message: 'Please enter an auto win price', trigger: 'blur' },
-          { min: 0, message: 'Price must be greater than 0', trigger: 'blur' }
         ],
         minIncrement: [
           { required: true, message: 'Please enter a mini increment price for the biding', trigger: 'blur' },
-          { min: 0, message: 'Minimum increment must be greater than $0', trigger: 'blur' }
         ],
         reservedPrice: [
-          { min: -1, message: 'Price must be greater than 0', trigger: 'blur' }
         ]
 
       },
@@ -189,7 +185,7 @@ export default {
     uploadImageSuccess() {},
     editImage() {},
     populateSelectorData() {
-      productApi.fetchProjects(this.productForm.pid).then(response => {
+      productApi.productDetail(this.pid).then(response => {
         this.productForm = response.data
       })
     },
@@ -210,7 +206,7 @@ export default {
               this.pid = response.data.pid
               console.log('return pid:' + this.pid)
               // handle pictures
-              this.$router.go(`/Product/${this.pid}`)
+              this.$router.push({ path: `/product/${this.pid}`})
               this.loading = false
             }).catch(() => {
               this.loading = false
@@ -218,7 +214,7 @@ export default {
           } else { // ??
             productApi.updateProduct(this.productForm).then(() => {
               this.$message.success('Post Succeeded!')
-              this.$router.go(`/Product/${this.pid}`)
+              this.$router.push({ path: `/product/${this.pid}`})
               this.loading = false
             }).catch(() => {
               this.$message.error('Network Error')
@@ -233,9 +229,9 @@ export default {
       if (r === true) {
         // jump to dashboard
         if (this.isEditting) {
-          this.$router.go(`/product/${this.productForm.pid}`)
+          this.$router.push(`/product/${this.pid}`)
         } else {
-          this.$router.go('/dashboard')
+          this.$router.push('/dashboard')
         }
       }
     }
