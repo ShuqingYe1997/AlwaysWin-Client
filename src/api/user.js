@@ -54,9 +54,9 @@ export function logout() {
   })
 }
 
-export function getSellerInfo(sid) {
+export function getSellerInfo(uid) {
   return request({
-    url: `/seller/${sid}`,
+    url: `/seller/${uid}`,
     method: 'get'
   })
 }

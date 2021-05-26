@@ -31,8 +31,8 @@
             class="defectForm"
             span="12"
           >
-            <!-- <el-form-item label="项目名称" prop="project_id">
-            <el-select v-model="defectForm.project_id" class="selector" placeholder="请选择您的项目" :disabled="isEditting">
+            <!-- <el-form-item label="????" prop="project_id">
+            <el-select v-model="defectForm.project_id" class="selector" placeholder="???????" :disabled="isEditting">
               <el-option
                 v-for="item in projects_doing"
                 :key="item.project_id"
@@ -203,7 +203,7 @@ export default {
         if (valid) {
           this.loading = true
           this.setupCreateFormData()
-          if (!this.isEditting) { // 新增
+          if (!this.isEditting) { // ??
             console.log(this.productForm)
             productApi.createProduct(this.productForm).then(response => {
               this.$message.success('Post Succeeded!')
@@ -215,7 +215,7 @@ export default {
             }).catch(() => {
               this.loading = false
             })
-          } else { // 编辑
+          } else { // ??
             productApi.updateProduct(this.productForm).then(() => {
               this.$message.success('Post Succeeded!')
               this.$router.go(`/Product/${this.pid}`)

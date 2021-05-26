@@ -240,16 +240,6 @@ export default {
 
     }
 
-.username {
-    position: relative;
-    text-align: left;
-        color: #000000;
-    top: 0px;
-    margin-left: 70px;
-    right: 0px;
-    font-size: 16px;
-  }
-
   .price {
     position: absolute;
     text-align: right;

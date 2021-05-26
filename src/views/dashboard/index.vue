@@ -23,18 +23,6 @@ import Pagination from '@/components/Pagination' // Secondary package based on e
 import { productCat } from '@/api/enum.js'
 import { overview, overviewByCat } from '@/api/product.js'
 
-const defaultProductList = [{
-  'pid': 1,
-  'uid': 1,
-  'title': '1Apple iPhone XR 64GB Factory Unlocked Smartphone 4G LTE iOS Smartphone',
-  'cate1': 'cell phone',
-  'endTime': '2021-06-15T23:59:59.000-07:00',
-  'autoWinPrice': 599,
-  'price': 599,
-  'status': 'success',
-  'url': 'https://alwayswin-figures.s3.amazonaws.com/product-figure/default-product-thumbnail.png'
-}]
-
 export default {
   name: 'Dashboard',
   components: {
@@ -57,7 +45,7 @@ export default {
         page: 1,
         limit: 10
       },
-      productList: Object.assign({}, defaultProductList),
+      productList: [],
       productCat,
       value: []
     }

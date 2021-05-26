@@ -12,7 +12,7 @@
       <el-button
         v-waves
         type="primary"
-        icon="el-icon-edit-outline"
+        icon="el-icon-document-add"
         class="filter-item"
         style="float: right;"
         @click="handleNew"
@@ -35,7 +35,7 @@
           <span>{{ row.pid }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Product Name" width="450px" min-width="150px" fixed="left">
+      <el-table-column label="Product Name" width="450px" min-width="150px">
         <template slot="header" slot-scope="scope"> <!--你大爷的，这句话必须要加，不要再报错了！-->
           <el-input
             v-model="titleSearch"
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { productStatus, getMyProducts, getProductCate, getProductStatus } from '@/api/product'
+import { productStatus, getMyProducts, getProductCate, cancelProduct } from '@/api/product'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -172,18 +172,43 @@ export default {
         }, 200)
       })
     },
-    handleSearch() {
-      if (this.pidSearch === '') {
-        this.getList()
-      } else {
-        getProductStatus(this.pidSearch).then(response => {
-          this.list = [response.data] // this.list has to be a list
-          this.total = 1
-          setTimeout(() => {
-            this.listLoading = false
-          }, 200)
-        })
+
+    handleNew() {
+      this.$router.push({
+        name: 'UpdateProduct',
+        params: {
+        }
+      })
+    },
+
+    handleUpdate(row) {
+      this.$router.push({
+        name: 'UpdateProduct',
+        params: {
+          pid: row.pid
+        }
+      })
+    },
+
+    handleDelete(row, index) {
+      if (row.status !== 'waiting' || row.status !== 'broughtIn') {
+        return
       }
+      this.$confirm('Delete this product for sure?', 'Warning', {
+        confirmButtonText: 'Comfirm',
+        cancelButtonText: 'Cancel',
+        type: 'danger'
+      }).then(() => {
+        cancelProduct(row.pid).then(() => {
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
+          this.list.splice(index, 1)
+        })
+      }).catch(err => { console.log(err) })
     }
   }
 }

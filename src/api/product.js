@@ -1,16 +1,18 @@
 import request from '@/utils/request'
 
-export function overview(page, pagelimit) {
+export function overview(params) {
   return request({
-    url: `/product/overview?page=${page}&pageSize=${pagelimit}`,
-    method: 'get'
+    url: '/product/overview',
+    method: 'get',
+    params
   })
 }
 
-export function overviewByCat(page, pagelimit, cate) {
+export function overviewByCat(params) {
   return request({
-    url: `/product/overview?page=${page}&pageSize=${pagelimit}&cate=${cate}`,
-    method: 'get'
+    url: '/product/overview',
+    method: 'get',
+    params
   })
 }
 
