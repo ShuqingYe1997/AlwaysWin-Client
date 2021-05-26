@@ -9,7 +9,7 @@
               v-for="item in productInfo.figures"
               :key="item.fid"
             >
-              <el-image :src="item.url" :preview-src-list="figuresPreviewList" :alt="item.description" fit="fill">
+              <el-image :src="item.url" :preview-src-list="figuresPreviewList" :alt="item.description" fit="contain">
                 <div slot="error" class="image-slot"> <!--加载失败的话显示一个图标-->
                   <i class="el-icon-picture-outline" />
                 </div>
@@ -76,7 +76,7 @@
                 <span class="min-offer-info"> Your offer should be above ${{ minOffer | toThousandFilter }} </span>
               </div>
 
-              <div style="padding-top: 30px">
+              <div style="padding-top: 20px">
                 <el-tooltip
                   class="item"
                   effect="dark"
@@ -114,7 +114,10 @@
         </el-col>
       </el-row>
 
-      <el-row :gutter="50" style="margin-bottom: 50px;">
+      <!--分割线-->
+      <aside style="text-align: center;"><a>Show More</a></aside>
+
+      <el-row class="anchor" :gutter="50" style="margin-bottom: 50px;">
         <el-col :span="10" :xs="24" style="margin-top: 50px;">
           <div class="row">
             <div class="col-sm-12 col-xs-12 col-md-12">
@@ -397,7 +400,7 @@ div.v-window__next {
   padding: 0 !important;
 }
 .pt-3 {
-  padding-top: 12px !important;
+  padding-top: 6px !important;
 }
 .subtitle-1 {
   font-size: 1rem !important;

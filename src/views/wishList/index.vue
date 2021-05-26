@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     getList() {
-      myWishList(this.qurey).then(response => {
+      myWishList(this.listQuery).then(response => {
         // this.total = response.data.total
         this.wishList = response.data.list
         // Just to simulate the time of the request

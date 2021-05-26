@@ -37,8 +37,8 @@ export default {
       }
     },
     pid: {
-      type: Number,
-      default: 0
+      type: String,
+      default: ''
     }
   },
   data() {

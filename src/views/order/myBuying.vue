@@ -1,7 +1,13 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="statusSearch" placeholder="Order Status" clearable class="filter-item" style="width: 130px;margin-right: 20px">
+      <el-select
+        v-model="statusSearch"
+        placeholder="Order Status"
+        clearable
+        class="filter-item"
+        filter-method=""
+        style="width: 130px;margin-right: 20px">
         <el-option
           v-for="item in Object.keys(orderStatus)"
           :key="orderStatus[item].value"
