@@ -35,7 +35,7 @@
           <span>{{ row.pid }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Product Name" width="450px" min-width="150px" fixed="left">
+      <el-table-column label="Product Name" width="450px" min-width="150px">
         <template slot="header" slot-scope="scope"> <!--你大爷的，这句话必须要加，不要再报错了！-->
           <el-input
             v-model="titleSearch"
@@ -175,7 +175,9 @@ export default {
 
     handleNew() {
       this.$router.push({
-        name: 'UpdateProduct'
+        name: 'UpdateProduct',
+        params: {
+        }
       })
     },
 

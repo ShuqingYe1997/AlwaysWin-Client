@@ -94,8 +94,8 @@ export const constantRoutes = [
         }
       },
       {
-        path: '/product/:id(\\d+)',
-        component: () => import('@/views/product/Product'),
+        path: '/product/:pid(\\d+)',
+        component: () => import('@/views/product/index'),
         name: 'ProductPage',
         hidden: true,
         meta: { title: 'Product details', noCache: true }
@@ -114,7 +114,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/profile',
     meta: {
-      title: 'User Profile',
+      title: 'User Center',
       icon: 'user',
       roles: ['user']
 
