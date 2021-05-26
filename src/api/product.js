@@ -8,14 +8,6 @@ export function overview(params) {
   })
 }
 
-export function overviewByCat(params) {
-  return request({
-    url: '/product/overview',
-    method: 'get',
-    params
-  })
-}
-
 export function productDetail(pid) {
   return request({
     url: `/product/${pid}`,
@@ -64,6 +56,22 @@ export function getProductStatus(pid) {
   return request({
     url: `/productStatus/${pid}`,
     method: 'get'
+  })
+}
+
+// export function searchProduct(params) {
+//   return request({
+//     url: '/product/search',
+//     method: 'get',
+//     params
+//   })
+// }
+
+export function searchProduct(data) {
+  return request({
+    url: '/product/search',
+    method: 'post',
+    data
   })
 }
 

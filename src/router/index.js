@@ -85,7 +85,7 @@ export const constantRoutes = [
     redirect: 'AllProducts',
     children: [
       {
-        path: 'all',
+        path: '/product',
         component: () => import('@/views/all-product/index'),
         name: 'AllProducts',
         meta: {

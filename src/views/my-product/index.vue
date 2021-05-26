@@ -191,24 +191,23 @@ export default {
     },
 
     handleDelete(row, index) {
-      if (row.status !== 'waiting' || row.status !== 'broughtIn') {
-        return
-      }
-      this.$confirm('Delete this product for sure?', 'Warning', {
-        confirmButtonText: 'Comfirm',
-        cancelButtonText: 'Cancel',
-        type: 'danger'
-      }).then(() => {
-        cancelProduct(row.pid).then(() => {
-          this.$notify({
-            title: 'Success',
-            message: 'Delete Successfully',
-            type: 'success',
-            duration: 2000
+      if (row.status === 'waiting' || row.status === 'broughtIn') {
+        this.$confirm('Delete this product for sure?', 'Warning', {
+          confirmButtonText: 'Comfirm',
+          cancelButtonText: 'Cancel',
+          type: 'danger'
+        }).then(() => {
+          cancelProduct(row.pid).then(() => {
+            this.$notify({
+              title: 'Success',
+              message: 'Delete Successfully',
+              type: 'success',
+              duration: 2000
+            })
+            this.list.splice(index, 1)
           })
-          this.list.splice(index, 1)
-        })
-      }).catch(err => { console.log(err) })
+        }).catch(err => { console.log(err) })
+      }
     }
   }
 }
