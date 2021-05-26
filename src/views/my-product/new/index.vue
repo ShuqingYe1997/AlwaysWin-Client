@@ -157,13 +157,13 @@ export default {
           { required: true, message: 'Please enter an end time.', trigger: 'change' }
         ],
         startPrice: [
-          { required: true, message: 'Please enter a start price', trigger: 'blur' },
+          { required: true, message: 'Please enter a start price', trigger: 'blur' }
         ],
         autoWinPrice: [
-          { required: true, message: 'Please enter an auto win price', trigger: 'blur' },
+          { required: true, message: 'Please enter an auto win price', trigger: 'blur' }
         ],
         minIncrement: [
-          { required: true, message: 'Please enter a mini increment price for the biding', trigger: 'blur' },
+          { required: true, message: 'Please enter a mini increment price for the biding', trigger: 'blur' }
         ],
         reservedPrice: [
         ]
@@ -194,9 +194,19 @@ export default {
       this.productForm.startTime = new Date(this.productForm.startTime).toISOString()
       this.productForm.endTime = new Date(this.productForm.endTime).toISOString()
     },
+    validateDates() {
+      var startDate = new Date(this.productForm.startTime)
+      var endDate = new Date(this.productForm.endTime)
+      var currentDate = Date.now()
+      var result = currentDate < endDate && startDate < endDate
+      if (!result) {
+        this.$message.error('End date should be later than the start date or the current date')
+      }
+      return result
+    },
     submitForm() {
       this.$refs['productForm'].validate((valid) => {
-        if (valid) {
+        if (valid && this.validateDates()) {
           this.loading = true
           this.setupCreateFormData()
           if (!this.isEditting) { // ??
@@ -206,7 +216,7 @@ export default {
               this.pid = response.data.pid
               console.log('return pid:' + this.pid)
               // handle pictures
-              this.$router.push({ path: `/product/${this.pid}`})
+              this.$router.push({ path: `/product/${this.pid}` })
               this.loading = false
             }).catch(() => {
               this.loading = false
@@ -214,7 +224,7 @@ export default {
           } else { // ??
             productApi.updateProduct(this.productForm).then(() => {
               this.$message.success('Post Succeeded!')
-              this.$router.push({ path: `/product/${this.pid}`})
+              this.$router.push({ path: `/product/${this.pid}` })
               this.loading = false
             }).catch(() => {
               this.$message.error('Network Error')
