@@ -7,31 +7,31 @@
     <el-row>
       <el-col :span="10">
         <div class="chart-wrapper align-right">
-      <MultipleImageUploader
-        :data-images="images"
-        :maxImage = 9
-        @upload-success="uploadImageSuccess"
-        @edit-image="editImage"
-        primary-text="Default"
-        browse-text="Browser Picture(s)"
-        drag-text="Drag Picture(s)"
-        mark-is-primary-text="Set as default"
-        popup-text="This image will be displayed as default"
-        />
+          <MultipleImageUploader
+            :data-images="images"
+            :max-image="9"
+            primary-text="Default"
+            browse-text="Browser Picture(s)"
+            drag-text="Drag Picture(s)"
+            mark-is-primary-text="Set as default"
+            popup-text="This image will be displayed as default"
+            @upload-success="uploadImageSuccess"
+            @edit-image="editImage"
+          />
         </div>
       </el-col>
       <el-col :span="12">
         <div class="chart-wrapper">
-        <el-form
-          ref="productForm"
-          :model="productForm"
-          :rules="rules"
-          label-width="150px"
-          onautocomplete="on"
-          class="defectForm"
-          span="12"
-        >
-          <!-- <el-form-item label="项目名称" prop="project_id">
+          <el-form
+            ref="productForm"
+            :model="productForm"
+            :rules="rules"
+            label-width="150px"
+            onautocomplete="on"
+            class="defectForm"
+            span="12"
+          >
+            <!-- <el-form-item label="项目名称" prop="project_id">
             <el-select v-model="defectForm.project_id" class="selector" placeholder="请选择您的项目" :disabled="isEditting">
               <el-option
                 v-for="item in projects_doing"
@@ -41,73 +41,80 @@
               />
             </el-select>
           </el-form-item> -->
-          <el-form-item label="Product Title" prop="title">
-            <el-input v-model="productForm.title" class="title-input" />
-          </el-form-item>
+            <el-form-item label="Product Title" prop="title">
+              <el-input v-model="productForm.title" class="title-input" />
+            </el-form-item>
 
-          <el-form-item label="Product Description" prop="description"  >
-            <el-input v-model="productForm.description" type="textarea" class="description-input" size="large" />
-          </el-form-item>
+            <el-form-item label="Product Description" prop="description">
+              <el-input v-model="productForm.description" type="textarea" class="description-input" size="large" />
+            </el-form-item>
 
-          <el-form-item label="Catalog" prop="cate1">
-            <el-select v-model="productForm.cate1" class="selector" placeholder="Please Select Catelog">
-              <el-option
-                v-for="item in productCat"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+            <el-form-item label="Catalog" prop="cate1">
+              <el-select v-model="productForm.cate1" class="selector" placeholder="Please Select Catelog">
+                <el-option
+                  v-for="item in productCat"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="Start Time" prop="startTime">
+              <el-date-picker
+                v-model="productForm.startTime"
+                type="datetime"
+                format="yyyy-MM-dd HH:mm"
+                placeholder="Select date and time"
               />
-            </el-select>
-          </el-form-item>
+            </el-form-item>
 
-          <el-form-item label="Start Time" prop="startTime">
-          <el-date-picker 
-                    v-model="productForm.startTime"
-                    type="datetime"
-                    format="yyyy-MM-dd HH:mm"
-                    placeholder="Select date and time">
-          </el-date-picker>
-          </el-form-item>
+            <el-form-item label="End Time" prop="endTime">
+              <el-date-picker
+                v-model="productForm.endTime"
+                type="datetime"
+                format="yyyy-MM-dd HH:mm"
+                placeholder="Select date and time"
+              />
+            </el-form-item>
 
+            <el-form-item label="Start Price" prop="startPrice">
+              <el-input
+                v-model="productForm.startPrice"
+                type="Number"
+                placeholder="Start Price"
+              />
+            </el-form-item>
 
-          <el-form-item label="End Time" prop="endTime">
-          <el-date-picker 
-                    v-model="productForm.endTime"
-                    type="datetime"
-                    format="yyyy-MM-dd HH:mm"
-                    placeholder="Select date and time">
-          </el-date-picker>
-          </el-form-item>
+            <el-form-item label="Minimum Increment" prop="minIncrement">
+              <el-input
+                v-model="productForm.minIncrement"
+                type="Number"
+                placeholder="default to $1"
+              />
+            </el-form-item>
 
-          <el-form-item label="Start Price" prop="startPrice">
-          <el-input v-model="productForm.startPrice"
-                    type="Number"
-                    placeholder="Start Price" />
-          </el-form-item>
+            <el-form-item label="Auto Win Price" prop="autoWinPrice">
+              <el-input
+                v-model="productForm.autoWinPrice"
+                type="Number"
+                placeholder="Auto Win Price"
+              />
+            </el-form-item>
 
-          <el-form-item label="Minimum Increment" prop="minIncrement">
-          <el-input v-model="productForm.minIncrement"
-                    type="Number"
-                    placeholder="default to $1" />
-          </el-form-item>
+            <el-form-item label="Reserved Price" prop="reservedPrice">
+              <el-input
+                v-model="productForm.reservedPrice"
+                type="Number"
+                placeholder="default to $0"
+              />
+            </el-form-item>
 
-          <el-form-item label="Auto Win Price" prop="autoWinPrice">
-          <el-input v-model="productForm.autoWinPrice"
-                    type="Number"
-                    placeholder="Auto Win Price" />
-          </el-form-item>
-
-          <el-form-item label="Reserved Price" prop="reservedPrice">
-          <el-input v-model="productForm.reservedPrice"
-                    type="Number"
-                    placeholder="default to $0" />
-          </el-form-item>
-
-          <el-form-item>
-            <el-button :loading="loading" type="primary" @click="submitForm()">Submit</el-button>
-            <el-button @click="cancelForm()">Cancel</el-button>
-          </el-form-item>
-        </el-form>
+            <el-form-item>
+              <el-button :loading="loading" type="primary" @click="submitForm()">Submit</el-button>
+              <el-button @click="cancelForm()">Cancel</el-button>
+            </el-form-item>
+          </el-form>
         </div>
       </el-col>
     </el-row>
@@ -155,7 +162,7 @@ export default {
         ],
         autoWinPrice: [
           { required: true, message: 'Please enter an auto win price', trigger: 'blur' },
-           { min: 0 , message: 'Price must be greater than 0', trigger: 'blur' }
+          { min: 0, message: 'Price must be greater than 0', trigger: 'blur' }
         ],
         minIncrement: [
           { required: true, message: 'Please enter a mini increment price for the biding', trigger: 'blur' },
@@ -163,7 +170,7 @@ export default {
         ],
         reservedPrice: [
           { min: -1, message: 'Price must be greater than 0', trigger: 'blur' }
-        ],
+        ]
 
       },
       productCat,
@@ -173,14 +180,14 @@ export default {
   },
   created() {
     this.isEditting = !!this.$route.params.pid
-    if(this.isEditting){
+    if (this.isEditting) {
       this.pid = this.$route.params.pid
       this.populateSelectorData()
     }
   },
   methods: {
-    uploadImageSuccess(){},
-    editImage(){},
+    uploadImageSuccess() {},
+    editImage() {},
     populateSelectorData() {
       productApi.fetchProjects(this.productForm.pid).then(response => {
         this.productForm = response.data
@@ -188,8 +195,8 @@ export default {
     },
     setupCreateFormData() {
       this.productForm.uid = this.uid
-      this.productForm.startTime = new Date(this.productForm.startTime).toISOString();
-      this.productForm.endTime = new Date(this.productForm.endTime).toISOString();
+      this.productForm.startTime = new Date(this.productForm.startTime).toISOString()
+      this.productForm.endTime = new Date(this.productForm.endTime).toISOString()
     },
     submitForm() {
       this.$refs['productForm'].validate((valid) => {
@@ -201,8 +208,8 @@ export default {
             productApi.createProduct(this.productForm).then(response => {
               this.$message.success('Post Succeeded!')
               this.pid = response.data.pid
-              console.log("return pid:" + this.pid)
-              //handle pictures
+              console.log('return pid:' + this.pid)
+              // handle pictures
               this.$router.go(`/Product/${this.pid}`)
               this.loading = false
             }).catch(() => {
@@ -222,14 +229,13 @@ export default {
       })
     },
     cancelForm() {
-      var r = confirm('Are you sure you want to cancel? The changes will not be saved.');
+      var r = confirm('Are you sure you want to cancel? The changes will not be saved.')
       if (r === true) {
         // jump to dashboard
-        if (this.isEditting){
-          this.$router.go(`/product/${this.productForm.pid}`) 
-        }
-        else{
-          this.$router.go('/dashboard') 
+        if (this.isEditting) {
+          this.$router.go(`/product/${this.productForm.pid}`)
+        } else {
+          this.$router.go('/dashboard')
         }
       }
     }
