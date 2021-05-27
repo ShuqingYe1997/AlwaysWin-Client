@@ -1,83 +1,70 @@
 <template>
   <div class="dashboard-editor-container">
-    <div class="chart-wrapper">
-      <el-drag-select v-model="value" style="width:100%;" multiple placeholder="Catalog" @change="getList()">
-        <el-option v-for="item in productCat" :key="item.value" :label="item.label" :value="item.value" />
-      </el-drag-select>
+
+    <!--没有冒号！！！-->
+    <div v-if="uid !== 0">
+      <PanelGroup :uid="uid" />
     </div>
-    <el-row :gutter="8">
+
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <div class="hottest-text">Recommend for you</div>
+      <Billboard />
+    </el-row>
+
+    <el-row :gutter="8" style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <div class="hottest-text">Hottest</div>
       <el-col v-for="item in productList" :key="item.pid" :xs="{span: 6}" :sm="{span: 6}" :md="{span: 6}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
-        <product-card :pid="item.pid" />
+        <ProductCard :uid="uid" :product="item" />
       </el-col>
     </el-row>
-    <div class="chart-wrapper">
-      <pagination :total="listQuery.total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="updatePage()" />
-    </div>
+
   </div>
 </template>
 
 <script>
-import ProductCard from './components/ProductCard'
-import ElDragSelect from '@/components/DragSelect' // base on element-ui
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { productCat } from '@/api/enum.js'
-import { overview } from '@/api/product.js'
+import { mapGetters } from 'vuex'
+import PanelGroup from './components/PanelGroup'
+import Billboard from './components/Billboard'
+import ProductCard from '@/views/all-product/components/ProductCard'
+import { overview, getProductCate } from '@/api/product'
 
 export default {
   name: 'Dashboard',
   components: {
-    // PanelGroup,
-    // LineChart,
-    // RaddarChart,
-    // PieChart,
-    // BarChart,
-    // TransactionTable,
-    // TodoList,
-    // BoxCard,
-    ProductCard,
-    ElDragSelect,
-    Pagination
+    PanelGroup,
+    Billboard,
+    ProductCard
   },
   data() {
     return {
       listQuery: {
-        total: 10,
         page: 1,
-        limit: 10
+        pageSize: 8
       },
+      showPanel: false,
       productList: [],
-      productCat,
-      value: []
+      productCate: getProductCate()
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'uid'
+    ])
+  },
+  watch: {
+    showPanel: function() {
+      return this.uid !== 0
     }
   },
   created() {
-    this.listQuery = {
-      total: 10,
-      page: 1,
-      limit: 10
-    }
     this.getList()
   },
   methods: {
-    updateMessage: async function() {
-      this.getList()
-    },
     getList() {
-      if (this.value.length === 0) {
-        overview(1, this.listQuery.limit).then(response => {
-          this.listQuery.page = 1
-          this.productList = response.data.list
-          this.listQuery.total = response.data.total
-        })
-      }
-    },
-    updatePage() {
-      if (this.value.length === 0) {
-        overview(this.listQuery.page, this.listQuery.limit).then(response => {
-          this.productList = response.data.list
-          this.listQuery.total = response.data.total
-        })
-      }
+      overview(this.listQuery).then(response => {
+        this.productList = response.data.list
+        this.listQuery.total = response.data.total
+      })
     }
   }
 }
@@ -101,6 +88,14 @@ export default {
     padding: 0px 10px 0;
     margin-bottom: 32px;
   }
+}
+.hottest-text {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 @media (max-width:1024px) {

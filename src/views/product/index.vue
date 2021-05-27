@@ -9,7 +9,12 @@
               v-for="item in productInfo.figures"
               :key="item.fid"
             >
-              <el-image :src="item.url" :preview-src-list="figuresPreviewList" :alt="item.description" fit="contain">
+              <el-image
+                :src="item.url"
+                :preview-src-list="figuresPreviewList"
+                :alt="item.description"
+                fit="contain"
+                style="width: 100%; height: 100%;transition: all 0.2s linear;">
                 <div slot="error" class="image-slot"> <!--加载失败的话显示一个图标-->
                   <i class="el-icon-picture-outline" />
                 </div>
