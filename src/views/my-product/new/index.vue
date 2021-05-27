@@ -194,9 +194,19 @@ export default {
       this.productForm.startTime = new Date(this.productForm.startTime).toISOString()
       this.productForm.endTime = new Date(this.productForm.endTime).toISOString()
     },
+    validateDates() {
+      var startDate = new Date(this.productForm.startTime)
+      var endDate = new Date(this.productForm.endTime)
+      var currentDate = Date.now()
+      var result = currentDate < endDate && startDate < endDate
+      if (!result) {
+        this.$message.error('End date should be later than the start date or the current date')
+      }
+      return result
+    },
     submitForm() {
       this.$refs['productForm'].validate((valid) => {
-        if (valid) {
+        if (valid && this.validateDates()) {
           this.loading = true
           this.setupCreateFormData()
           if (!this.isEditting) { // ??
