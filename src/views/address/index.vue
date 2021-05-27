@@ -168,8 +168,8 @@ export default {
         pageSize: 10
       },
       temp: {
-        aid: undefined,
-        uid: undefined,
+        aid: 0,
+        uid: 0,
         name: '',
         phone: '',
         location: '',

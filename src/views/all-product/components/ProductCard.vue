@@ -65,7 +65,7 @@
 import { timeFromNow } from '@/filters/index'
 import { productStatus } from '@/api/product'
 import Countdown from 'vuejs-countdown'
-import { addToWishList, deleteFromWishList } from '@/api/wishlist'
+import { checkInWishList, addToWishList, deleteFromWishList } from '@/api/wishlist'
 
 export default {
   name: 'ProductCard',
@@ -83,8 +83,8 @@ export default {
       default: null
     },
     uid: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -93,12 +93,19 @@ export default {
       productStatus: productStatus()
     }
   },
+  created() {
+    checkInWishList(this.uid, this.product.pid).then((response) => {
+      if (response.data === 1) {
+        this.isFav = true
+      }
+    })
+  },
   methods: {
     getTimeFromNow(timestamp) {
       return timeFromNow(timestamp)
     },
     handleUpdate() {
-      if (this.uid === '') {
+      if (this.uid === 0) {
         this.$message({
           message: 'Please login first!',
           type: 'warning'

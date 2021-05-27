@@ -7,7 +7,7 @@
       class="header-search-select"
       @keyup.enter.native="handleSearch"
     />
-    <svg-icon class-name="search-icon" icon-class="search" @click.native.prevent="handleSearch" />
+    <svg-icon class-name="search-icon" icon-class="search" @click="handleSearch" />
 
   </div>
 </template>
@@ -25,11 +25,12 @@ export default {
   },
   methods: {
     handleSearch() {
-      if (this.keyword && this.keyword.length > 0) {
+      if (this.keyword && this.keyword.trim().length > 0) {
         this.$router.push({
-          name: 'AllProducts',
-          params: {
-            keyword: this.keyword
+          path: '/product',
+          query: {
+            keyword: this.keyword,
+            t: +new Date()// 强制刷新view
           }
         })
       }

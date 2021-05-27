@@ -133,9 +133,6 @@ export default {
   name: 'DefectNew',
   components: { MultipleImageUploader },
   pid: 0,
-  computed: {
-    ...mapGetters(['roles', 'uid'])
-  },
   data() {
     return {
       productForm: defaultProductForm,
@@ -157,13 +154,13 @@ export default {
           { required: true, message: 'Please enter an end time.', trigger: 'change' }
         ],
         startPrice: [
-          { required: true, message: 'Please enter a start price', trigger: 'blur' },
+          { required: true, message: 'Please enter a start price', trigger: 'blur' }
         ],
         autoWinPrice: [
-          { required: true, message: 'Please enter an auto win price', trigger: 'blur' },
+          { required: true, message: 'Please enter an auto win price', trigger: 'blur' }
         ],
         minIncrement: [
-          { required: true, message: 'Please enter a mini increment price for the biding', trigger: 'blur' },
+          { required: true, message: 'Please enter a mini increment price for the biding', trigger: 'blur' }
         ],
         reservedPrice: [
         ]
@@ -173,6 +170,9 @@ export default {
       loading: false,
       isEditting: false
     }
+  },
+  computed: {
+    ...mapGetters(['roles', 'uid'])
   },
   created() {
     this.isEditting = !!this.$route.params.pid
@@ -206,7 +206,7 @@ export default {
               this.pid = response.data.pid
               console.log('return pid:' + this.pid)
               // handle pictures
-              this.$router.push({ path: `/product/${this.pid}`})
+              this.$router.push({ path: `/product/${this.pid}` })
               this.loading = false
             }).catch(() => {
               this.loading = false
@@ -214,7 +214,7 @@ export default {
           } else { // ??
             productApi.updateProduct(this.productForm).then(() => {
               this.$message.success('Post Succeeded!')
-              this.$router.push({ path: `/product/${this.pid}`})
+              this.$router.push({ path: `/product/${this.pid}` })
               this.loading = false
             }).catch(() => {
               this.$message.error('Network Error')

@@ -6,7 +6,7 @@ const default_portrait = 'https://alwayswin-figures.s3.amazonaws.com/icon/defaul
 
 const state = {
   token: getToken(),
-  uid: '',
+  uid: 0,
   username: '',
   portrait: default_portrait,
   roles: ['visitor']
@@ -62,7 +62,7 @@ const actions = {
         commit('SET_PORTRAIT', default_portrait)
         commit('SET_USERNAME', '')
         commit('SET_TOKEN', '')
-        commit('SET_UID', '')
+        commit('SET_UID', 0)
         commit('SET_ROLES', 'visitor')
         removeToken()
         resetRouter()

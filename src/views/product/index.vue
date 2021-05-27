@@ -211,7 +211,7 @@ export default {
         this.productBidList = response.data
       })
 
-      if (this.uid !== '') {
+      if (this.uid !== 0) {
         checkInWishList(this.uid, this.pid)
           .then((response) => {
             this.isFav = false
@@ -230,7 +230,7 @@ export default {
     },
 
     AddToFav() {
-      if (this.uid !== '') {
+      if (this.uid !== 0) {
         if (this.isFav === false) {
           const request_data = { uid: this.uid, pid: this.pid }
           addToWishList(request_data)
@@ -258,7 +258,7 @@ export default {
     },
 
     placeOffer() {
-      if (this.uid === '') {
+      if (this.uid === 0) {
         this.$message({
           message: 'Please login first!',
           type: 'warning'

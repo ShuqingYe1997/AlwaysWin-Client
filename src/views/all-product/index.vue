@@ -46,7 +46,7 @@
         :total="total"
         :page.sync="listQuery.page"
         :limit.sync="listQuery.pageSize"
-        @pagination="keyword ? getSearchList : getList"
+        @pagination="getList"
       />
 
     </div>
@@ -75,7 +75,7 @@ export default {
       },
       total: 0,
       productList: [],
-      keyword: null,
+      keyword: undefined,
       cateSearch: '',
       orderSearch: '',
       sortOptions: [
@@ -92,41 +92,46 @@ export default {
       'uid'
     ])
   },
+  // watch: {
+  //   user: function() {
+  //     this.endVal = this.user.balance
+  //   }
+  // },
   created() {
     // 是搜索结果
-    if (this.$route.params) {
-      this.keyword = this.$route.params.keyword
+    if (this.$route.query) {
+      this.keyword = this.$route.query.keyword
     }
-    if (this.keyword) {
-      this.getSearchList()
-    } else {
-      this.getList()
-    }
+    console.log('keyword: ' + this.keyword)
+    this.getList()
   },
 
   methods: {
     getList() {
-      overview(this.listQuery).then((response) => {
-        this.productList = response.data.list
-        this.total = response.data.total
-        // Just to simulate the time of the request
-        setTimeout(() => {}, 200)
-      })
-    },
-
-    getSearchList() {
-      var temp = Object.assign({}, this.listQuery)
-      temp.keyword = this.keyword
-      searchProduct(temp).then((response) => {
-        this.productList = response.data.list
-        this.total = response.data.total
-        // Just to simulate the time of the request
-        setTimeout(() => {}, 200)
-      })
+      if (this.keyword === undefined) {
+        // 不是搜索是展示
+        overview(this.listQuery).then((response) => {
+          this.productList = response.data.list
+          this.total = response.data.total
+          // Just to simulate the time of the request
+          setTimeout(() => {}, 200)
+        })
+      } else {
+        // 是搜索
+        var temp = Object.assign({}, this.listQuery)
+        temp.keyword = this.keyword
+        searchProduct(temp).then((response) => {
+          this.productList = response.data.list
+          this.total = response.data.total
+          // Just to simulate the time of the request
+          setTimeout(() => {}, 200)
+        })
+      }
     },
 
     handleSearch() {
       var temp = Object.assign({}, this.listQuery)
+      temp.page = 1
       if (this.cateSearch !== '') {
         temp.cate = this.cateSearch
       }

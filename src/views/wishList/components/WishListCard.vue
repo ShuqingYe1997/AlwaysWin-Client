@@ -85,7 +85,7 @@ export default {
     },
     uid: {
       type: Number,
-      default: null
+      default: 0
     }
   },
   data() {

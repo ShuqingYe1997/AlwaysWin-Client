@@ -89,7 +89,7 @@ export const constantRoutes = [
         component: () => import('@/views/all-product/index'),
         name: 'AllProducts',
         meta: {
-          title: 'Product',
+          title: 'Products',
           icon: 'component'
         }
       },
@@ -130,7 +130,7 @@ export const asyncRoutes = [
         path: 'address',
         component: () => import('@/views/address/index'),
         name: 'Address',
-        meta: { title: 'Address', icon: 'list' }
+        meta: { title: 'Address', icon: 'el-icon-truck' }
       }
     ]
   },
@@ -179,12 +179,16 @@ export const asyncRoutes = [
         meta: { title: 'My Product', icon: 'el-icon-s-goods' }
       },
       {
-        path: 'update-product', // 既是update也是create
+        path: 'update-product',
         component: () => import('@/views/my-product/new/index'),
         name: 'UpdateProduct',
-        // Test for now
-        meta: { title: 'New Product', icon: 'el-icon-s-goods' }
-        // hidden: true
+        hidden: true
+      },
+      {
+        path: 'create-product',
+        component: () => import('@/views/my-product/new/index'),
+        name: 'CreateProduct',
+        meta: { title: 'Create Product', icon: 'el-icon-circle-plus' }
       }
     ]
   },

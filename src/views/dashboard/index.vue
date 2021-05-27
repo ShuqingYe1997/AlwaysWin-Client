@@ -21,7 +21,7 @@ import ProductCard from './components/ProductCard'
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { productCat } from '@/api/enum.js'
-import { overview, overviewByCat } from '@/api/product.js'
+import { overview } from '@/api/product.js'
 
 export default {
   name: 'Dashboard',
@@ -69,22 +69,11 @@ export default {
           this.productList = response.data.list
           this.listQuery.total = response.data.total
         })
-      } else {
-        overviewByCat(1, this.listQuery.limit, this.value[0]).then(response => {
-          this.listQuery.page = 1
-          this.productList = response.data.list
-          this.listQuery.total = response.data.total
-        })
       }
     },
     updatePage() {
       if (this.value.length === 0) {
         overview(this.listQuery.page, this.listQuery.limit).then(response => {
-          this.productList = response.data.list
-          this.listQuery.total = response.data.total
-        })
-      } else {
-        overviewByCat(this.listQuery.page, this.listQuery.limit, this.value[0]).then(response => {
           this.productList = response.data.list
           this.listQuery.total = response.data.total
         })
