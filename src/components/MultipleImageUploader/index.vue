@@ -369,16 +369,13 @@ export default {
     imagePreview() {
       const index = findIndex(this.images, { highlight: 1 })
       if (index > -1) {
-        console.log(this.images[index].path)
         return this.images[index].path
       } else {
-        console.log(this.images[index].path)
         return this.images.length ? this.images[0].path : ''
       }
     },
     imageDefault() {
       if (this.images[this.currentIndexImage]) {
-        console.log(this.images[this.currentIndexImage].path)
         return this.images[this.currentIndexImage].default
       }
     }
@@ -403,6 +400,9 @@ export default {
     this.images = cloneDeep(this.dataImages)
   },
   methods: {
+    updateImages() {
+      this.$emit('input', this.images)
+    },
     preventEvent(e) {
       e.preventDefault()
       e.stopPropagation()
@@ -434,18 +434,18 @@ export default {
     createImage(file) {
       if (this.disabled) return
       const reader = new FileReader()
-      const formData = new FormData()
-      formData.append('file', file)
+      var formData = new FormData()
+      formData.append('figure', file)
       reader.onload = (e) => {
         const dataURI = e.target.result
         if (dataURI) {
           if (!this.images.length) {
-            this.images.push({ name: file.name, path: dataURI, highlight: 1, default: 1 })
+            this.images.push({ name: file.name, path: dataURI, highlight: 1, default: 1, formData: formData })
             this.currentIndexImage = 0
           } else {
-            this.images.push({ name: file.name, path: dataURI, highlight: 0, default: 0 })
+            this.images.push({ name: file.name, path: dataURI, highlight: 0, default: 0, formData: formData })
           }
-          this.$emit('upload-success', formData, this.images.length - 1, this.images)
+          this.$emit('upload-success', this.images)
         }
       }
       reader.readAsDataURL(file)
@@ -454,7 +454,7 @@ export default {
       if (this.disabled) return
       const reader = new FileReader()
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('figure', file)
       reader.onload = (e) => {
         const dataURI = e.target.result
         if (dataURI) {
@@ -527,6 +527,10 @@ export default {
       this.$emit('mark-is-primary', currentIndex, this.images)
     },
     deleteImage(currentIndex) {
+      var delete_fid = 0
+      if (this.images[currentIndex].fid !== null) {
+        delete_fid = this.images[currentIndex].fid
+      }
       if (this.images[currentIndex].default === 1) {
         this.images[0].default = 1
       }
@@ -534,6 +538,10 @@ export default {
       this.currentIndexImage = 0
       if (this.images.length) {
         this.images[0].highlight = 1
+      }
+
+      if (this.images[currentIndex].fid !== null) {
+        this.$emit('delete-image', delete_fid, this.images)
       }
     },
     openGallery(index) {
@@ -613,7 +621,7 @@ export default {
   display: block;
 }
 .image-container {
-  width: 350px;
+  width: 550px;
   height: 550px;
   border: 1px dashed #d6d6d6;
   border-radius: 4px;
@@ -716,7 +724,7 @@ export default {
 }
 .show-img {
   max-height: 500px;
-  max-width: 350px;
+  max-width: 540px;
   display: block;
   vertical-align: middle;
 }
@@ -754,13 +762,13 @@ export default {
   fill: #222;
 }
 .image-list-container {
-  max-width: 190px;
+  max-width: 555xpx;
   min-height: 50px;
   margin-top: 10px;
 }
 .image-list-container .image-list-item {
-  height: 32px;
-  width: 32px;
+  height: 57px;
+  width: 57px;
   border-radius: 4px;
   border: 1px solid #d6d6d6;
 }
@@ -769,8 +777,8 @@ export default {
   margin-bottom: 5px;
 }
 .image-list-container .image-list-item .show-img {
-  max-width: 25px;
-  max-height: 17px;
+  max-width: 45px;
+  max-height: 45px;
 }
 .image-list-container .image-highlight {
   border: 1px solid #2fa3e7;

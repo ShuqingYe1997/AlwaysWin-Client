@@ -1,3 +1,21 @@
 <template>
-  <h3> TBC </h3>
+  <span> {{productInfo.description}} </span>
 </template>
+
+
+
+<script>
+export default {
+
+  props: {
+    productInfo: {
+      type: Object,
+      default: {} 
+    }
+  },
+  data() {
+    return {
+    }
+  }
+}
+</script>

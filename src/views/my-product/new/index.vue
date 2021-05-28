@@ -10,13 +10,15 @@
           <MultipleImageUploader
             :data-images="images"
             :max-image="9"
+            :show-edit="false"
             primary-text="Default"
             browse-text="Browser Picture(s)"
             drag-text="Drag Picture(s)"
             mark-is-primary-text="Set as default"
             popup-text="This image will be displayed as default"
+            drop-text="Drop Image Here..."
             @upload-success="uploadImageSuccess"
-            @edit-image="editImage"
+            @delete-image="deleteImage"
           />
         </div>
       </el-col>
@@ -127,6 +129,7 @@
 import { mapGetters } from 'vuex'
 import MultipleImageUploader from '@/components/MultipleImageUploader'
 import * as productApi from '@/api/product.js'
+import * as figureApi from '@/api/figure.js'
 import { defaultProductForm, productCat } from '@/api/enum.js'
 
 export default {
@@ -137,6 +140,7 @@ export default {
     return {
       productForm: defaultProductForm,
       images: [],
+      delete_fid: [],
       rules: {
         title: [
           { required: true, message: 'Please enter the product title.', trigger: 'blur' }
@@ -182,17 +186,55 @@ export default {
     }
   },
   methods: {
-    uploadImageSuccess() {},
-    editImage() {},
+    uploadImageSuccess(imageDatas) {
+      this.images = imageDatas
+    },
+    deleteImage(in_fid, in_images) {
+      this.delete_fid.push(in_fid)
+      this.images = in_images
+    },
     populateSelectorData() {
       productApi.productDetail(this.pid).then(response => {
         this.productForm = response.data
+        this.images = this.productForm.figures
+        for (var i = 0; i < this.images.length; i++) {
+          this.images[i].path = this.images[i].url
+        }
       })
     },
     setupCreateFormData() {
       this.productForm.uid = this.uid
       this.productForm.startTime = new Date(this.productForm.startTime).toISOString()
       this.productForm.endTime = new Date(this.productForm.endTime).toISOString()
+    },
+    processImage() {
+      for (i = 0; i < this.delete_fid.length; i++) {
+        console.log('pre delete fid:' + this.delete_fid[i])
+      }
+      for (var i = 0; i < this.images.length; i++) {
+        var returned_url = ''
+        var data = { pid: this.pid, url: returned_url, 'description': '', isThumbnail: false }
+        if (this.images[i].formData) {
+          for (var value of this.images[i].formData.values()) {
+            console.log(value)
+          }
+          // this.$axios.post('/product/figure/create', formData).then(response => {
+          figureApi.uploadFigure(this.images[i].formData).then(response => {
+            data.url = response.data
+            data.isThumbnail = (this.images[i].default === 1)
+            figureApi.createFigure(data).then().catch()
+          })
+        } else if (this.images[i].default === 1) {
+          data.url = this.images[i].url
+          data.isThumbnail = true
+          figureApi.updateFigure(this.images[i].fid, data).then().catch()
+        }
+      }
+      // Delete figures
+      for (i = 0; i < this.delete_fid.length; i++) {
+        console.log('delete fid:' + this.delete_fid[i])
+        figureApi.deleteFigure(this.delete_fid[i]).then().catch()
+      }
     },
     validateDates() {
       var startDate = new Date(this.productForm.startTime)
@@ -214,6 +256,11 @@ export default {
             productApi.createProduct(this.productForm).then(response => {
               this.$message.success('Post Succeeded!')
               this.pid = response.data.pid
+              // Delete default if has pictures
+              if (this.images.length > 0) {
+                this.delete_fid.push(response.data.thumbnail.fid)
+              }
+              this.processImage()
               console.log('return pid:' + this.pid)
               // handle pictures
               this.$router.push({ path: `/product/${this.pid}` })
@@ -224,6 +271,7 @@ export default {
           } else { // ??
             productApi.updateProduct(this.productForm).then(() => {
               this.$message.success('Post Succeeded!')
+              this.processImage()
               this.$router.push({ path: `/product/${this.pid}` })
               this.loading = false
             }).catch(() => {
