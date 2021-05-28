@@ -9,7 +9,12 @@
               v-for="item in productInfo.figures"
               :key="item.fid"
             >
-              <el-image :src="item.url" :preview-src-list="figuresPreviewList" :alt="item.description" fit="contain">
+              <el-image
+                :src="item.url"
+                :preview-src-list="figuresPreviewList"
+                :alt="item.description"
+                fit="contain"
+                style="width: 100%; height: 100%;transition: all 0.2s linear;">
                 <div slot="error" class="image-slot"> <!--加载失败的话显示一个图标-->
                   <i class="el-icon-picture-outline" />
                 </div>
@@ -211,7 +216,7 @@ export default {
         this.productBidList = response.data
       })
 
-      if (this.uid !== '') {
+      if (this.uid !== 0) {
         checkInWishList(this.uid, this.pid)
           .then((response) => {
             this.isFav = false
@@ -230,7 +235,7 @@ export default {
     },
 
     AddToFav() {
-      if (this.uid !== '') {
+      if (this.uid !== 0) {
         if (this.isFav === false) {
           const request_data = { uid: this.uid, pid: this.pid }
           addToWishList(request_data)
@@ -258,7 +263,7 @@ export default {
     },
 
     placeOffer() {
-      if (this.uid === '') {
+      if (this.uid === 0) {
         this.$message({
           message: 'Please login first!',
           type: 'warning'

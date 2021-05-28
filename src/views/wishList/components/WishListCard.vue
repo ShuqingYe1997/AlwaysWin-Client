@@ -31,10 +31,17 @@
     </router-link>
 
     <div
-      v-if="wishListItem.productPreview.status === 'bidding' || wishListItem.productPreview.status.includes('extended')"
+      v-if="wishListItem.productPreview.status === 'bidding'"
       class="end-item"
     >
       Time before ending
+      <Countdown :deadline="wishListItem.productPreview.endTime | formatDate1" />
+    </div>
+    <div
+      v-if="wishListItem.productPreview.status.includes('extended')"
+      class="extendede-item"
+    >
+      The deadline is approaching!
       <Countdown :deadline="wishListItem.productPreview.endTime | formatDate1" />
     </div>
     <div
@@ -85,7 +92,7 @@ export default {
     },
     uid: {
       type: Number,
-      default: null
+      default: 0
     }
   },
   data() {
@@ -162,7 +169,7 @@ export default {
   .start-item {
     position: relative;
     text-align: center;
-        color: #616b7a;
+    color: #42b983;
     top: 0px;
     font-size: 16px;
   }
@@ -170,22 +177,29 @@ export default {
   .end-item {
     position: relative;
     text-align: center;
-        color: #42b983;
+    color: #F7BA2A;
     top: 0px;
     font-size: 16px;
   }
+  .extended-item {
+    position: relative;
+    text-align: center;
+    color: #C03639;
+    top: 0px;
+    font-size: 16px;
+}
   .warning-item {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-        color: #F7BA2A;
+    color: #616b7a;
     margin-top: 30px;
     margin-bottom: 20px;
   }
   .wishlist-info {
     font-size: 12px;
     text-align: right;
-        color: #99A9BF;
+    color: #99A9BF;
     padding-top: 20px;
     bottom: 0px;
   }

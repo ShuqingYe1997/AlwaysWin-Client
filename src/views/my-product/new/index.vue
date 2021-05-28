@@ -133,7 +133,7 @@ import * as figureApi from '@/api/figure.js'
 import { defaultProductForm, productCat } from '@/api/enum.js'
 
 export default {
-  name: 'DefectNew',
+  name: 'UpdateProduct',
   components: { MultipleImageUploader },
   pid: 0,
   data() {

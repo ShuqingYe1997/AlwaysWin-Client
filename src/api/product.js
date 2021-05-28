@@ -60,19 +60,11 @@ export function getProductStatus(pid) {
   })
 }
 
-// export function searchProduct(params) {
-//   return request({
-//     url: '/product/search',
-//     method: 'get',
-//     params
-//   })
-// }
-
-export function searchProduct(data) {
+export function searchProduct(params) {
   return request({
     url: '/product/search',
-    method: 'post',
-    data
+    method: 'get',
+    params
   })
 }
 

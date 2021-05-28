@@ -3,8 +3,9 @@
     <div class="share-dropdown-menu-wrapper">
       <span class="share-dropdown-menu-title" @click.self="clickTitle">{{ title }}</span>
       <div v-for="(item,index) of items" :key="index" class="share-dropdown-menu-item">
-        <a v-if="item.href" :href="item.href" target="_blank">{{ item.title }}</a>
-        <span v-else>{{ item.label }}</span>
+        <router-link to="/product">
+          <span>{{ item.label }}</span>
+        </router-link>
       </div>
     </div>
   </div>
@@ -26,7 +27,7 @@ export default {
   },
   data() {
     return {
-      isActive: false
+      isActive: true
     }
   },
   methods: {
@@ -51,7 +52,7 @@ $t: .1s;
     cursor: pointer;
     background: black;
     color: white;
-    height: 60px;
+    height: 50px;
     line-height: 50px;
     font-size: 18px;
     text-align: center;
@@ -68,8 +69,9 @@ $t: .1s;
     background: #e0e0e0;
     color: #000;
     line-height: 40px;
-    height: 60px;
+    height: 40px;
     cursor: pointer;
+    display: block;
     font-size: 16px;
     overflow: hidden;
     opacity: 1;
@@ -82,7 +84,7 @@ $t: .1s;
       &:nth-of-type(#{$i}) {
         z-index: -1;
         transition-delay: $i*$t;
-        transform: translate3d(0, -60px, 0);
+        transform: translate3d(0, -40px, 0);
       }
     }
   }
@@ -94,7 +96,7 @@ $t: .1s;
       @for $i from 1 through $n {
         &:nth-of-type(#{$i}) {
           transition-delay: ($n - $i)*$t;
-          transform: translate3d(0, ($i - 1)*60px, 0);
+          transform: translate3d(0, ($i - 1)*40px, 0);
         }
       }
     }

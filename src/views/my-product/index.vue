@@ -175,7 +175,7 @@ export default {
 
     handleNew() {
       this.$router.push({
-        name: 'UpdateProduct',
+        name: 'CreateProduct',
         params: {
         }
       })
