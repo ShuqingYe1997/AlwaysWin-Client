@@ -32,7 +32,7 @@
 
     <div
       v-if="wishListItem.productPreview.status === 'bidding'"
-      class="end-item"
+      class="bidding-item"
     >
       Time before ending
       <Countdown :deadline="wishListItem.productPreview.endTime | formatDate1" />
@@ -46,18 +46,18 @@
     </div>
     <div
       v-if="wishListItem.productPreview.status === 'waiting'"
-      class="start-item"
+      class="waiting-item"
     >
       Time before starting
       <Countdown :deadline="wishListItem.productPreview.startTime | formatDate1" />
     </div>
     <div
       v-if="wishListItem.productPreview.status === 'success' || wishListItem.productPreview.status === 'broughtIn'"
-      class="warning-item"
+      class="info-item"
     >
       Auction has finished!
     </div>
-    <div v-if="wishListItem.productPreview.status === 'canceled'" class="warning-item">
+    <div v-if="wishListItem.productPreview.status === 'canceled'" class="info-item">
       This product is canceled!
     </div>
     <div>
@@ -166,7 +166,7 @@ export default {
     height: 100px;
   }
 
-  .start-item {
+  .waiting-item {
     position: relative;
     text-align: center;
     color: #42b983;
@@ -174,7 +174,7 @@ export default {
     font-size: 16px;
   }
 
-  .end-item {
+  .bidding-item {
     position: relative;
     text-align: center;
     color: #F7BA2A;
@@ -188,7 +188,7 @@ export default {
     top: 0px;
     font-size: 16px;
 }
-  .warning-item {
+  .info-item {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
