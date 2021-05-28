@@ -210,7 +210,6 @@ export default {
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  
 
   @media only screen and (max-width: 1510px){
     .mallki-text{
