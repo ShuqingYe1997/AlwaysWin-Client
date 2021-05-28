@@ -209,16 +209,16 @@ export default {
     },
     processImage() {
       for (i = 0; i < this.delete_fid.length; i++) {
-        console.log("pre delete fid:" + this.delete_fid[i])
+        console.log('pre delete fid:' + this.delete_fid[i])
       }
       for (var i = 0; i < this.images.length; i++) {
         var returned_url = ''
         var data = { pid: this.pid, url: returned_url, 'description': '', isThumbnail: false }
         if (this.images[i].formData) {
           for (var value of this.images[i].formData.values()) {
-              console.log(value);
-            }
-          //this.$axios.post('/product/figure/create', formData).then(response => {
+            console.log(value)
+          }
+          // this.$axios.post('/product/figure/create', formData).then(response => {
           figureApi.uploadFigure(this.images[i].formData).then(response => {
             data.url = response.data
             data.isThumbnail = (this.images[i].default === 1)
@@ -232,7 +232,7 @@ export default {
       }
       // Delete figures
       for (i = 0; i < this.delete_fid.length; i++) {
-        console.log("delete fid:" + this.delete_fid[i])
+        console.log('delete fid:' + this.delete_fid[i])
         figureApi.deleteFigure(this.delete_fid[i]).then().catch()
       }
     },
@@ -257,8 +257,7 @@ export default {
               this.$message.success('Post Succeeded!')
               this.pid = response.data.pid
               // Delete default if has pictures
-              if (this.images.length > 0)
-              {
+              if (this.images.length > 0) {
                 this.delete_fid.push(response.data.thumbnail.fid)
               }
               this.processImage()
