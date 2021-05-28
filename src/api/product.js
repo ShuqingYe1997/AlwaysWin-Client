@@ -77,17 +77,17 @@ export function productStatus() {
     },
     'waiting': {
       value: 'waiting',
-      type: 'info',
+      type: 'success',
       text: 'Waiting'
     },
     'bidding': {
       value: 'bidding',
-      type: 'success',
+      type: 'warning',
       text: 'Bidding'
     },
     'extended1': {
       value: 'extended1',
-      type: 'success',
+      type: 'danger',
       text: 'Extending Phase 1'
     },
     'extended2': {
@@ -107,7 +107,7 @@ export function productStatus() {
     },
     'success': {
       value: 'success',
-      type: 'warning',
+      type: 'info',
       text: 'Sold'
     },
     'canceled': {
