@@ -85,7 +85,7 @@ export const defaultProductForm = {
     thumbnail: true
   },
   canceled: false,
-  passed: false
+  passed: true
 }
 
 export const defaultSellerInfo =
