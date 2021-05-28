@@ -53,11 +53,11 @@
     </div>
     <div
       v-if="product.status === 'success' || product.status === 'broughtIn'"
-      class="warning-item"
+      class="info-item"
     >
       Auction has finished!
     </div>
-    <div v-if="product.status === 'canceled'" class="warning-item">
+    <div v-if="product.status === 'canceled'" class="info-item">
       This product is canceled!
     </div>
     <div>
@@ -202,7 +202,7 @@ export default {
     top: 0px;
     font-size: 16px;
 }
-  .warning-item {
+  .info-item {
     font-size: 20px;
     font-weight: bold;
     text-align: center;

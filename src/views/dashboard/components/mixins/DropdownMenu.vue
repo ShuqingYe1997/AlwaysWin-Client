@@ -77,7 +77,7 @@ $t: .1s;
     opacity: 1;
     transition: transform 0.28s ease;
     &:hover {
-      background: black;
+      background: #aeb4b7;
       color: white;
     }
     @for $i from 1 through $n {
