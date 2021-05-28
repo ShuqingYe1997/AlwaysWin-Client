@@ -25,7 +25,7 @@
 import { mapGetters } from 'vuex'
 import PanelGroup from './components/PanelGroup'
 import Billboard from './components/Billboard'
-import ProductCard from '@/views/all-product/components/ProductCard'
+import ProductCard from '@/components/ProductCard'
 import { overview, getProductCate } from '@/api/product'
 
 export default {

@@ -31,18 +31,25 @@
     </router-link>
 
     <div
-      v-if="product.status === 'bidding' || product.status.includes('extended')"
-      class="end-item"
+      v-if="product.status === 'waiting'"
+      class="waiting-item"
+    >
+      Time before starting
+      <Countdown :deadline="product.startTime | formatDate1" />
+    </div>
+    <div
+      v-if="product.status === 'bidding'"
+      class="bidding-item"
     >
       Time before ending
       <Countdown :deadline="product.endTime | formatDate1" />
     </div>
     <div
-      v-if="product.status === 'waiting'"
-      class="start-item"
+      v-if="product.status.includes('extended')"
+      class="extended-item"
     >
-      Time before starting
-      <Countdown :deadline="product.startTime | formatDate1" />
+      The deadline is approaching!
+      <Countdown :deadline="product.endTime | formatDate1" />
     </div>
     <div
       v-if="product.status === 'success' || product.status === 'broughtIn'"
@@ -172,36 +179,38 @@ export default {
     height: 100px;
   }
 
-  .start-item {
+  .waiting-item {
     position: relative;
     text-align: center;
-        color: #616b7a;
+    color: #42b983;
     top: 0px;
     font-size: 16px;
   }
 
-  .end-item {
+  .bidding-item {
     position: relative;
     text-align: center;
-        color: #42b983;
+    color: #F7BA2A;
     top: 0px;
     font-size: 16px;
   }
+
+  .extended-item {
+    position: relative;
+    text-align: center;
+    color: #C03639;
+    top: 0px;
+    font-size: 16px;
+}
   .warning-item {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-        color: #F7BA2A;
+    color: #616b7a;
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  .wishlist-info {
-    font-size: 12px;
-    text-align: right;
-        color: #99A9BF;
-    padding-top: 20px;
-    bottom: 0px;
-  }
+  
 
   @media only screen and (max-width: 1510px){
     .mallki-text{

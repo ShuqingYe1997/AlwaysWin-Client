@@ -57,7 +57,7 @@
 import { mapGetters } from 'vuex'
 import { overview, searchProduct, getProductCate } from '@/api/product'
 import waves from '@/directive/waves' // waves directive
-import ProductCard from './components/ProductCard'
+import ProductCard from '@/components/ProductCard'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
