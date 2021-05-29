@@ -170,7 +170,7 @@ export const asyncRoutes = [
         path: 'my-selling-order',
         component: () => import('@/views/order/mySelling'),
         name: 'SellingOrder',
-        meta: { title: 'My Selling', icon: 'el-icon-s-finance' }
+        meta: { title: 'My Sold', icon: 'el-icon-s-finance' }
       },
       {
         path: 'my-product',
