@@ -30,36 +30,10 @@
       </div>
     </router-link>
 
-    <div
-      v-if="product.status === 'waiting'"
-      class="waiting-item"
-    >
-      Time before starting
-      <Countdown :deadline="product.startTime | formatDate1" />
+    <div>
+      <ProductCountDown :product="product" />
     </div>
-    <div
-      v-if="product.status === 'bidding'"
-      class="bidding-item"
-    >
-      Time before ending
-      <Countdown :deadline="product.endTime | formatDate1" />
-    </div>
-    <div
-      v-if="product.status.includes('extended')"
-      class="extended-item"
-    >
-      The deadline is approaching!
-      <Countdown :deadline="product.endTime | formatDate1" />
-    </div>
-    <div
-      v-if="product.status === 'success' || product.status === 'broughtIn'"
-      class="info-item"
-    >
-      Auction has finished!
-    </div>
-    <div v-if="product.status === 'canceled'" class="info-item">
-      This product is canceled!
-    </div>
+
     <div>
       <el-button class="icon-button" @click="handleUpdate()">
         <i :class="isFav? 'el-icon-star-on' : 'el-icon-star-off'" />
@@ -69,14 +43,14 @@
 </template>
 
 <script>
+import ProductCountDown from '@/components/ProductCountDown'
 import { timeFromNow } from '@/filters/index'
 import { productStatus } from '@/api/product'
-import Countdown from 'vuejs-countdown'
 import { checkInWishList, addToWishList, deleteFromWishList } from '@/api/wishlist'
 
 export default {
   name: 'ProductCard',
-  components: { Countdown },
+  components: { ProductCountDown },
   filters: {
     productTitleFilter(str) {
       if (str.length > 40) {
@@ -179,38 +153,6 @@ export default {
     height: 100px;
   }
 
-  .waiting-item {
-    position: relative;
-    text-align: center;
-    color: #42b983;
-    top: 0px;
-    font-size: 16px;
-  }
-
-  .bidding-item {
-    position: relative;
-    text-align: center;
-    color: #F7BA2A;
-    top: 0px;
-    font-size: 16px;
-  }
-
-  .extended-item {
-    position: relative;
-    text-align: center;
-    color: #C03639;
-    top: 0px;
-    font-size: 16px;
-}
-  .info-item {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    color: #616b7a;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-
   @media only screen and (max-width: 1510px){
     .mallki-text{
       display: none;
@@ -222,7 +164,7 @@ export default {
     text-align: right;
     font-weight: bold;
     right: 0px;
-    color: #42b983;
+    color: #000;
     font-size: 20px;
     padding-top: 10px;
     margin-right: 10px;

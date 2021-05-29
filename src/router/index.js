@@ -69,10 +69,10 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard', // todo
+    redirect: 'Dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: '/dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }
@@ -170,7 +170,7 @@ export const asyncRoutes = [
         path: 'my-selling-order',
         component: () => import('@/views/order/mySelling'),
         name: 'SellingOrder',
-        meta: { title: 'My Selling', icon: 'el-icon-s-finance' }
+        meta: { title: 'My Sold', icon: 'el-icon-s-finance' }
       },
       {
         path: 'my-product',

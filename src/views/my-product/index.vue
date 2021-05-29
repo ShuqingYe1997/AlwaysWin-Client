@@ -30,7 +30,7 @@
       style="width: 100%;"
       :default-sort="{prop: 'pid', row: 'descending'}"
     >
-      <el-table-column label="Product id" width="150px" align="center" prop="pid" sortable fixed>
+      <el-table-column label="Product id" width="130px" align="center" prop="pid" sortable fixed>
         <template slot-scope="{row}">
           <span>{{ row.pid }}</span>
         </template>
@@ -47,8 +47,8 @@
           />
         </template>
         <template slot-scope="{row}">
-          <el-image style="width: 70px; height: 70px;margin-left: 10px;margin-right: 10px" :src="row.url" fit="cover" />
-          <router-link type="primary" :to="'/product/' + row.pid" :underline="false">
+          <router-link type="primary" :to="'/product/' + row.pid" :underline="false"> 
+            <el-image style="width: 70px; height: 70px;margin-left: 10px;margin-right: 10px" :src="row.url" fit="cover" />
             {{ row.title | productTitleFilter }}
           </router-link>
         </template>

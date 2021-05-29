@@ -22,7 +22,7 @@ export default {
     },
     title: {
       type: String,
-      default: 'vue'
+      default: ''
     }
   },
   data() {

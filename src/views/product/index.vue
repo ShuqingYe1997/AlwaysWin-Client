@@ -14,7 +14,8 @@
                 :preview-src-list="figuresPreviewList"
                 :alt="item.description"
                 fit="contain"
-                style="width: 100%; height: 100%;transition: all 0.2s linear;">
+                style="width: 100%; height: 100%;transition: all 0.2s linear;"
+              >
                 <div slot="error" class="image-slot"> <!--加载失败的话显示一个图标-->
                   <i class="el-icon-picture-outline" />
                 </div>
@@ -37,32 +38,11 @@
               </p>
 
               <!--Counting down-->
-              <div
-                v-if="productInfo.productStatus.status === 'bidding' || productInfo.productStatus.status.includes('extended')"
-                class="end-item"
-              >
-                <p class="title">Time before ending</p>
-                <Countdown :deadline="productInfo.productStatus.endTime | formatDate1" />
+              <div>
+                <ProductCountDown :product="productInfo.productStatus" style="text-align=left;" />
               </div>
-              <div v-else-if="productInfo.productStatus.status === 'waiting'" class="start-item">
-                <p class="title">Time before starting</p>
-                <Countdown :deadline="productInfo.startTime | formatDate1" />
-              </div>
-              <div
-                v-else-if="productInfo.productStatus.status === 'success' || productInfo.productStatus.status === 'broughtIn'"
-                class="warning-item"
-              >
-                Auction has finished!
-              </div>
-              <div v-else-if="productInfo.productStatus.status === 'canceled'" class="danger-item">
-                This product is canceled!
-              </div>
-              <!--End of counting down-->
 
-              <div
-                :v-show="productInfo.productStatus.status === 'bidding' || productInfo.productStatus.status.includes('extended')"
-                class="chart-wrapper"
-              >
+              <div class="chart-wrapper">
                 <div>
                   <el-input
                     v-model="userOffer"
@@ -78,7 +58,7 @@
                     Place Offer
                   </el-button>
                 </div>
-                <span class="min-offer-info"> Your offer should be above ${{ minOffer | toThousandFilter }} </span>
+                <span class="min-offer-info"> Your offer should be at least ${{ minOffer | toThousandFilter }} </span>
               </div>
 
               <div style="padding-top: 20px">
@@ -140,7 +120,7 @@
 
         <el-col :span="12" :xs="24">
           <!-- <BidList :list="productBidList" /> -->
-          <BidList :pid="pid" />
+          <BidList :product-bid-list="productBidList" />
         </el-col>
 
       </el-row>
@@ -151,7 +131,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Countdown from 'vuejs-countdown'
+import ProductCountDown from '@/components/ProductCountDown'
 import BidList from './components/BidList'
 import SellerProfile from './components/SellerProfile'
 import DetailTable from './components/DetailTable'
@@ -161,8 +141,9 @@ import { createBid, getBidsByPid } from '@/api/bid'
 import { addToWishList, checkInWishList, deleteFromWishList } from '@/api/wishlist'
 
 export default {
+  name: 'ProductPage',
   components: {
-    Countdown,
+    ProductCountDown,
     BidList,
     SellerProfile,
     DetailTable
@@ -194,7 +175,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['roles', 'uid'])
+    ...mapGetters([
+      'uid'
+    ])
   },
   created() {
     this.pid = this.$route.params.pid
@@ -219,11 +202,7 @@ export default {
       if (this.uid !== 0) {
         checkInWishList(this.uid, this.pid)
           .then((response) => {
-            this.isFav = false
-          })
-          .catch((err) => {
-            this.isFav = true
-            console.log(err)
+            this.isFav = response.data === 1
           })
       }
     },
@@ -285,8 +264,7 @@ export default {
             message: 'Congratulations! Bid Placed!',
             type: 'success'
           })
-          // todo: 只用修改bidlist就好了
-          this.getBidList()
+          this.fetchData()
         })
           .catch((err) => {
             console.log('create failed:' + err + ' code=' + Response.code)
@@ -317,37 +295,6 @@ export default {
   background: transparent;
 }
 
-.start-item {
-  position: relative;
-  text-align: left;
-  color: #616b7a;
-  top: 0px;
-  font-size: 16px;
-}
-
-.end-item {
-  position: relative;
-  align-self: left;
-  color: #42b983;
-  top: 0px;
-  font-size: 16px;
-}
-.warning-item {
-  font-size: 20px;
-  font-weight: bold;
-  align-self: left;
-  color: #f7ba2a;
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
-.danger-item {
-  font-size: 20px;
-  font-weight: bold;
-  align-self: left;
-  color: #C03639;
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
 div.v-window__next {
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;

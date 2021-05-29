@@ -27,14 +27,12 @@
 
 <script>
 
-import Mallki from './mixins/Mallki'
 import DropdownMenu from './mixins/DropdownMenu'
 
 export default {
   name: 'Billboard',
   components: {
-    DropdownMenu,
-    Mallki
+    DropdownMenu
   },
   data() {
     return {
@@ -63,13 +61,13 @@ export default {
         value: 'gaming console',
         label: 'Game Console'
       }, {
-        value: 'Show More',
+        value: 'show more',
         label: 'Show More...'
       }],
       figures: [{
-        fid: 1,
-        pid: 1,
-        url: 'https://alwayswin-figures.s3.amazonaws.com/product-figure/s-l501.jpg'
+        fid: 130,
+        pid: 94,
+        url: 'https://alwayswin-figures.s3.amazonaws.com/product-figure/ipad2020.jpg'
       },
       {
         fid: 3,
