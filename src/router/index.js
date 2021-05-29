@@ -69,10 +69,10 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard', // todo
+    redirect: 'Dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: '/dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }

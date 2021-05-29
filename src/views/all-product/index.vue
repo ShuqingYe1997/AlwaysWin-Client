@@ -61,7 +61,7 @@ import ProductCard from '@/components/ProductCard'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'AllProduct',
+  name: 'AllProducts',
   components: {
     ProductCard,
     Pagination

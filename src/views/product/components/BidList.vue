@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { getBidsByPid } from '@/api/bid'
 
 export default {
   filters: {
@@ -30,30 +29,12 @@ export default {
     }
   },
   props: {
-    list: {
+    productBidList: {
       type: Array,
       default: function() {
         return []
       }
-    },
-    pid: {
-      type: String,
-      default: ''
     }
-  },
-  data() {
-    return {
-      bidlistQuery: {
-        page: 1,
-        pageSize: 5
-      },
-      productBidList: []
-    }
-  },
-  created() {
-    getBidsByPid(this.pid, this.bidlistQuery).then((response) => {
-      this.productBidList = response.data
-    })
   }
 }
 </script>

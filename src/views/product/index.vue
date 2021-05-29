@@ -120,7 +120,7 @@
 
         <el-col :span="12" :xs="24">
           <!-- <BidList :list="productBidList" /> -->
-          <BidList :pid="pid" />
+          <BidList :product-bid-list="productBidList" />
         </el-col>
 
       </el-row>
@@ -141,6 +141,7 @@ import { createBid, getBidsByPid } from '@/api/bid'
 import { addToWishList, checkInWishList, deleteFromWishList } from '@/api/wishlist'
 
 export default {
+  name: 'ProductPage',
   components: {
     ProductCountDown,
     BidList,
@@ -174,7 +175,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['roles', 'uid'])
+    ...mapGetters([
+      'uid'
+    ])
   },
   created() {
     this.pid = this.$route.params.pid
@@ -261,8 +264,7 @@ export default {
             message: 'Congratulations! Bid Placed!',
             type: 'success'
           })
-          // todo: 只用修改bidlist就好了
-          this.getBidList()
+          this.fetchData()
         })
           .catch((err) => {
             console.log('create failed:' + err + ' code=' + Response.code)

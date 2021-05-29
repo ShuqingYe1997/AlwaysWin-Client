@@ -27,14 +27,12 @@
 
 <script>
 
-import Mallki from './mixins/Mallki'
 import DropdownMenu from './mixins/DropdownMenu'
 
 export default {
   name: 'Billboard',
   components: {
-    DropdownMenu,
-    Mallki
+    DropdownMenu
   },
   data() {
     return {
@@ -63,7 +61,7 @@ export default {
         value: 'gaming console',
         label: 'Game Console'
       }, {
-        value: 'Show More',
+        value: 'show more',
         label: 'Show More...'
       }],
       figures: [{

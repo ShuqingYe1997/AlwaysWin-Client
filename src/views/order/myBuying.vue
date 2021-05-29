@@ -55,8 +55,8 @@
           />
         </template>
         <template slot-scope="{row}">
-          <el-image style="width: 70px; height: 70px;margin-left: 10px;margin-right: 10px" :src="row.productPreview.url" fit="cover" />
           <router-link type="primary" :to="'/product/' + row.productPreview.pid" :underline="false">
+            <el-image style="width: 70px; height: 70px;margin-left: 10px;margin-right: 10px" :src="row.productPreview.url" fit="cover" />
             {{ row.productPreview.title | productTitleFilter }}
           </router-link>
         </template>
