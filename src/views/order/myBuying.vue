@@ -161,12 +161,12 @@ export default {
     },
 
     productTitleFilter(str) {
-      if (str.length > 60) {
+      if (str !== null && str.length > 60) {
         return str.substring(0, 60) + '...'
       } else return str
     },
     addressFilter(str) {
-      if (str.length > 20) {
+      if (str !== null && str.length > 20) {
         return str.substring(0, 20) + '...'
       } else return str
     }
@@ -204,7 +204,7 @@ export default {
       return this.list
         .filter(data => !this.statusSearch || data.status === this.statusSearch)
         .filter(data => !this.titleSearch || data.productPreview.title.toLowerCase().includes(this.titleSearch.toLowerCase()))
-        // .slice((this.listQuery.page - 1) * this.listQuery.pageSize, this.listQuery.page * this.listQuery.pageSize)
+        .slice((this.listQuery.page - 1) * this.listQuery.pageSize, this.listQuery.page * this.listQuery.pageSize)
     }
   },
   created() {

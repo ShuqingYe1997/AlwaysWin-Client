@@ -30,36 +30,8 @@
       </div>
     </router-link>
 
-    <div
-      v-if="wishListItem.productPreview.status === 'bidding'"
-      class="bidding-item"
-    >
-      Time before ending
-      <Countdown :deadline="wishListItem.productPreview.endTime | formatDate1" />
-    </div>
-    <div
-      v-if="wishListItem.productPreview.status.includes('extended')"
-      class="extendede-item"
-    >
-      The deadline is approaching!
-      <Countdown :deadline="wishListItem.productPreview.endTime | formatDate1" />
-    </div>
-    <div
-      v-if="wishListItem.productPreview.status === 'waiting'"
-      class="waiting-item"
-    >
-      Time before starting
-      <Countdown :deadline="wishListItem.productPreview.startTime | formatDate1" />
-    </div>
-    <div
-      v-if="wishListItem.productPreview.status === 'success' || wishListItem.productPreview.status === 'broughtIn'"
-      class="info-item"
-    >
-      Auction has finished!
-    </div>
-    <div v-if="wishListItem.productPreview.status === 'canceled'" class="info-item">
-      This product is canceled!
-    </div>
+    <ProductCountDown :product="wishListItem.productPreview" />
+
     <div>
       <el-button class="icon-button" @click="handleUpdate()">
         <i :class="isFav? 'el-icon-star-on' : 'el-icon-star-off'" />
@@ -72,12 +44,12 @@
 <script>
 import { timeFromNow } from '@/filters/index'
 import { productStatus } from '@/api/product'
-import Countdown from 'vuejs-countdown'
+import ProductCountDown from '@/components/ProductCountDown'
 import { addToWishList, deleteFromWishList } from '@/api/wishlist'
 
 export default {
   name: 'WishListCard',
-  components: { Countdown },
+  components: { ProductCountDown },
   filters: {
     productTitleFilter(str) {
       if (str.length > 40) {
@@ -166,36 +138,6 @@ export default {
     height: 100px;
   }
 
-  .waiting-item {
-    position: relative;
-    text-align: center;
-    color: #42b983;
-    top: 0px;
-    font-size: 16px;
-  }
-
-  .bidding-item {
-    position: relative;
-    text-align: center;
-    color: #F7BA2A;
-    top: 0px;
-    font-size: 16px;
-  }
-  .extended-item {
-    position: relative;
-    text-align: center;
-    color: #C03639;
-    top: 0px;
-    font-size: 16px;
-}
-  .info-item {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    color: #616b7a;
-    margin-top: 30px;
-    margin-bottom: 20px;
-  }
   .wishlist-info {
     font-size: 12px;
     text-align: right;
@@ -215,7 +157,7 @@ export default {
     text-align: right;
     font-weight: bold;
     right: 0px;
-    color: #42b983;
+    color: #000;
     font-size: 20px;
     padding-top: 10px;
     margin-right: 10px;

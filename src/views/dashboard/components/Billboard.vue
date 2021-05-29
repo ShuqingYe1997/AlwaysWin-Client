@@ -67,9 +67,9 @@ export default {
         label: 'Show More...'
       }],
       figures: [{
-        fid: 1,
-        pid: 1,
-        url: 'https://alwayswin-figures.s3.amazonaws.com/product-figure/s-l501.jpg'
+        fid: 130,
+        pid: 94,
+        url: 'https://alwayswin-figures.s3.amazonaws.com/product-figure/ipad2020.jpg'
       },
       {
         fid: 3,
