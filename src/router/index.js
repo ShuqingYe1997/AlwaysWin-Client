@@ -36,6 +36,19 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
+    path: '/',
+    component: Layout,
+    redirect: 'Dashboard',
+    children: [
+      {
+        path: '/dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }
+      }
+    ]
+  },
+  {
     path: '/redirect',
     component: Layout,
     hidden: true,
@@ -65,19 +78,6 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error-page/401'),
     hidden: true
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: 'Dashboard',
-    children: [
-      {
-        path: '/dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }
-      }
-    ]
   },
   {
     path: '/product',
@@ -110,27 +110,15 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/user',
+    path: '/create-product',
     component: Layout,
-    redirect: '/profile',
-    meta: {
-      title: 'User Center',
-      icon: 'user',
-      roles: ['user']
-
-    },
+    redirect: 'CreateProduct',
     children: [
       {
-        path: 'profile',
-        component: () => import('@/views/user-profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'edit' }
-      },
-      {
-        path: 'address',
-        component: () => import('@/views/address/index'),
-        name: 'Address',
-        meta: { title: 'Address', icon: 'el-icon-truck' }
+        path: 'create-product',
+        component: () => import('@/views/my-product/new/index'),
+        name: 'CreateProduct',
+        meta: { title: 'I Wanna sell!', icon: 'el-icon-circle-plus', roles: ['user'] }
       }
     ]
   },
@@ -183,12 +171,6 @@ export const asyncRoutes = [
         component: () => import('@/views/my-product/new/index'),
         name: 'UpdateProduct',
         hidden: true
-      },
-      {
-        path: 'create-product',
-        component: () => import('@/views/my-product/new/index'),
-        name: 'CreateProduct',
-        meta: { title: 'Create Product', icon: 'el-icon-circle-plus' }
       }
     ]
   },
@@ -209,6 +191,30 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/profile',
+    meta: {
+      title: 'User Center',
+      icon: 'user',
+      roles: ['user']
+    },
+    children: [
+      {
+        path: 'profile',
+        component: () => import('@/views/user-profile/index'),
+        name: 'Profile',
+        meta: { title: 'Profile', icon: 'edit' }
+      },
+      {
+        path: 'address',
+        component: () => import('@/views/address/index'),
+        name: 'Address',
+        meta: { title: 'Address', icon: 'el-icon-truck' }
+      }
+    ]
+  },
 
   // 没有权限的都去401,剩下的都去404
   // 404 page must be placed at the end !!!
@@ -217,6 +223,7 @@ export const asyncRoutes = [
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
+  mode: 'hash',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

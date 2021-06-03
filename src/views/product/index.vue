@@ -39,7 +39,36 @@
 
               <!--Counting down-->
               <div>
-                <ProductCountDown :product="productInfo.productStatus" style="text-align=left;" />
+                <div
+                  v-if="productInfo.productStatus.status === 'waiting'"
+                  class="waiting-item"
+                >
+                  Time before starting
+                  <Countdown :deadline="productInfo.startTime | formatDate1" />
+                </div>
+                <div
+                  v-if="productInfo.productStatus.status === 'bidding'"
+                  class="bidding-item"
+                >
+                  Time before ending
+                  <Countdown :deadline="productInfo.endTime | formatDate1" />
+                </div>
+                <div
+                  v-if="productInfo.productStatus.status.includes('extended')"
+                  class="extended-item"
+                >
+                  The deadline is approaching!
+                  <Countdown :deadline="productInfo.endTime | formatDate1" />
+                </div>
+                <div
+                  v-if="productInfo.productStatus.status === 'success' || productInfo.productStatus.status === 'broughtIn'"
+                  class="info-item"
+                >
+                  Auction has finished!
+                </div>
+                <div v-if="productInfo.productStatus.status === 'canceled'" class="info-item">
+                  This product is canceled!
+                </div>
               </div>
 
               <div class="chart-wrapper">
@@ -131,7 +160,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ProductCountDown from '@/components/ProductCountDown'
+import Countdown from 'vuejs-countdown'
 import BidList from './components/BidList'
 import SellerProfile from './components/SellerProfile'
 import DetailTable from './components/DetailTable'
@@ -143,7 +172,7 @@ import { addToWishList, checkInWishList, deleteFromWishList } from '@/api/wishli
 export default {
   name: 'ProductPage',
   components: {
-    ProductCountDown,
+    Countdown,
     BidList,
     SellerProfile,
     DetailTable
@@ -371,4 +400,35 @@ div.v-window__next {
   margin-top: 20px;
   bottom: 0px;
 }
+.waiting-item {
+    position: relative;
+    text-align: left;
+    color: #42b983;
+    top: 0px;
+    font-size: 16px;
+  }
+
+  .bidding-item {
+    position: relative;
+    text-align: left;
+    color: #F7BA2A;
+    top: 0px;
+    font-size: 16px;
+  }
+
+  .extended-item {
+    position: relative;
+    text-align: left;
+    color: #C03639;
+    top: 0px;
+    font-size: 16px;
+}
+  .info-item {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    color: #616b7a;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 </style>

@@ -19,6 +19,7 @@ router.beforeEach(async(to, from, next) => {
 
   // determine whether the user has logged in
   const roles = store.getters.roles
+  console.log('roles: ' + roles)
 
   // if roles doesn't contain 'user'
   if (roles.indexOf('user') === -1) {
