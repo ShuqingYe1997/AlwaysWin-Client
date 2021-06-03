@@ -47,7 +47,7 @@
           />
         </template>
         <template slot-scope="{row}">
-          <router-link type="primary" :to="'/product/' + row.pid" :underline="false"> 
+          <router-link type="primary" :to="'/product/' + row.pid" :underline="false">
             <el-image style="width: 70px; height: 70px;margin-left: 10px;margin-right: 10px" :src="row.url" fit="cover" />
             {{ row.title | productTitleFilter }}
           </router-link>
@@ -86,7 +86,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Status" class-name="status-col" width="100">
+      <el-table-column label="Status" class-name="status-col" width="100" fixed="right">
         <template slot-scope="{row}">
           <el-tag
             :type="productStatus[row.status].type"
@@ -99,7 +99,7 @@
 
       <el-table-column label="Actions" align="center" width="150" class-name="small-padding fixed-width" fixed="right">
         <template slot-scope="{row,$index}">
-          <el-button :disabled="row.status!='waiting' && row.status!='broughtIn'" size="mini" type="primary" @click="handleUpdate(row)">
+          <el-button :disabled="row.status!='waiting'" size="mini" type="primary" @click="handleUpdate(row)">
             Edit
           </el-button>
           <el-button :disabled="row.status!='waiting' && row.status!='broughtIn'" size="mini" type="danger" @click="handleDelete(row,$index)">

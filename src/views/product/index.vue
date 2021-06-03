@@ -51,14 +51,14 @@
                   class="bidding-item"
                 >
                   Time before ending
-                  <Countdown :deadline="productInfo.endTime | formatDate1" />
+                  <Countdown :deadline="endTime | formatDate1" />
                 </div>
                 <div
                   v-if="productInfo.productStatus.status.includes('extended')"
                   class="extended-item"
                 >
                   The deadline is approaching!
-                  <Countdown :deadline="productInfo.endTime | formatDate1" />
+                  <Countdown :deadline="endTime | formatDate1" />
                 </div>
                 <div
                   v-if="productInfo.productStatus.status === 'success' || productInfo.productStatus.status === 'broughtIn'"
@@ -193,6 +193,7 @@ export default {
       sellerInfo: {},
       isFav: false,
       minOffer: 0,
+      endTime: '',
       userOffer: undefined,
       productBidList: [],
       figuresPreviewList: [],
@@ -219,9 +220,13 @@ export default {
           this.productInfo = Object.assign({}, response.data)
           // this.productInfo = response.data
           this.minOffer = this.productInfo.productStatus.price + this.productInfo.minIncrement
+          this.endTime = this.productInfo.productStatus.endTime
+
           for (const figure of this.productInfo.figures) {
             this.figuresPreviewList.push(figure.url)
           }
+
+          setTimeout(() => {}, 200)
         })
 
       getBidsByPid(this.pid, this.bidlistQuery).then((response) => {

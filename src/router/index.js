@@ -36,19 +36,6 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/',
-    component: Layout,
-    redirect: 'Dashboard',
-    children: [
-      {
-        path: '/dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }
-      }
-    ]
-  },
-  {
     path: '/redirect',
     component: Layout,
     hidden: true,
@@ -80,6 +67,19 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/',
+    component: Layout,
+    redirect: 'Dashboard',
+    children: [
+      {
+        path: '/dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'Dashboard', icon: 'dashboard', affix: true, noCache: true }
+      }
+    ]
+  },
+  {
     path: '/product',
     component: Layout,
     redirect: 'AllProducts',
@@ -90,7 +90,8 @@ export const constantRoutes = [
         name: 'AllProducts',
         meta: {
           title: 'Products',
-          icon: 'component'
+          icon: 'component',
+          noCache: true
         }
       },
       {
@@ -135,13 +136,13 @@ export const asyncRoutes = [
         path: 'my-order',
         component: () => import('@/views/order/myBuying'),
         name: 'BuyingOrder',
-        meta: { title: 'My Order', icon: 'clipboard' }
+        meta: { title: 'My Order', icon: 'clipboard', noCache: true }
       },
       {
         path: 'my-bid',
         component: () => import('@/views/bid/index'),
         name: 'BidHisrory',
-        meta: { title: 'My bid', icon: 'money' }
+        meta: { title: 'My bid', icon: 'money', noCache: true }
       }
     ]
   },
