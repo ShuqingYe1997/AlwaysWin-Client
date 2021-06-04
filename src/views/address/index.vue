@@ -275,14 +275,20 @@ export default {
     },
 
     handleDelete(row, index) {
-      addressAPI.deleteAddress(row.aid).then(() => {
-        this.$notify({
-          title: 'Success',
-          message: 'Delete Successfully',
-          type: 'success',
-          duration: 2000
+      this.$confirm('Delete this address for sure?', 'Warning', {
+        confirmButtonText: 'Comfirm',
+        cancelButtonText: 'Cancel',
+        type: 'danger'
+      }).then(() => {
+        addressAPI.deleteAddress(row.aid).then(() => {
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
+          this.list.splice(index, 1)
         })
-        this.list.splice(index, 1)
       })
     }
   }

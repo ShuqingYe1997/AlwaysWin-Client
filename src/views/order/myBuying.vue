@@ -188,6 +188,7 @@ export default {
       numberSearch: '',
       dialogFormVisible: false,
       temp: {
+        number: '',
         oid: 0,
         status: '',
         payment: 0,
@@ -274,6 +275,7 @@ export default {
           })
         }).catch(err => { console.log(err) })
       } else { // 付钱 row.status === 'placed'
+        this.temp.number = row.number
         this.temp.oid = row.oid
         this.temp.payment = row.productPreview.price
         this.dialogFormVisible = true
